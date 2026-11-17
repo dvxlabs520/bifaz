@@ -1,0 +1,30 @@
+{
+  "name": "micro_entrepreneur_293b",
+  "kind": "facture",
+  "lines": [
+    "Camille Durand",
+    "Rédactrice web indépendante",
+    "12 rue des Lilas, 44000 NANTES",
+    "camille.durand@example.fr  06 70 12 88 41",
+    "SIRET 884 512 307 00018",
+    "Code APE 7490B",
+    "FACTURE N° 2026-031",
+    "Date : 30/10/2026",
+    "Client : Agence Lumière SAS",
+    "Désignation  Qté  PU  Total",
+    "Rédaction d'articles de blog  12  85,00  1 020,00",
+    "Relecture et corrections  4 h  45,00  180,00",
+    "TOTAL  1 200,00 €",
+    "TVA non applicable, art. 293 B du CGI",
+    "Net à payer  1 200,00 €",
+    "Paiement par virement sous 30 jours"
+  ],
+  "expected": {
+    "merchant": "Camille Durand",
+    "date": "2026-10-30",
+    "total": "1200.00",
+    "vatRates": [
+      "0"
+    ]
+  }
+}

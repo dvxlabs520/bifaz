@@ -1,0 +1,44 @@
+{
+  "name": "monoprix_courses",
+  "kind": "ticket",
+  "lines": [
+    "MONOPRIX",
+    "MONOPRIX PARIS REPUBLIQUE",
+    "52 avenue de la République",
+    "75011 PARIS",
+    "Tél : 01 43 55 12 34",
+    "SAS MONOPRIX EXPLOITATION",
+    "SIRET 552 018 020 00481",
+    "N° TVA FR 83 552018020",
+    "Ticket 0042-117  Caisse 04",
+    "12/11/2026  18:42",
+    "Vendeur : Hôtesse 12",
+    "BAGUETTE TRADITION  1,35 B",
+    "LAIT DEMI-ECREME 1L",
+    "2 x 0,99  1,98 B",
+    "SAUMON FUME 4 TR  6,90 B",
+    "LESSIVE LIQUIDE 1,5L  8,95 A",
+    "PAPIER TOILETTE 12R  5,60 A",
+    "JUS D'ORANGE 1L  2,49 B",
+    "6 ARTICLES",
+    "SOUS-TOTAL  27,27",
+    "TOTAL TTC  27,27 €",
+    "CARTE BANCAIRE  27,27",
+    "TVA  HT  TVA  TTC",
+    "A 20,00%  12,13  2,42  14,55",
+    "B 5,50%  12,06  0,66  12,72",
+    "TOTAL TVA  3,08",
+    "Cumul fidélité : 27 pts",
+    "Merci de votre visite  A bientôt"
+  ],
+  "expected": {
+    "merchant": "Monoprix",
+    "date": "2026-11-12",
+    "total": "27.27",
+    "vatRates": [
+      "0.20",
+      "0.055"
+    ],
+    "vatAmount": "3.08"
+  }
+}

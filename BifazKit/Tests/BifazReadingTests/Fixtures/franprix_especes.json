@@ -1,0 +1,35 @@
+{
+  "name": "franprix_especes",
+  "kind": "ticket",
+  "lines": [
+    "FRANPRIX",
+    "FRANPRIX PARIS BASTILLE",
+    "8 rue de la Roquette - 75011 Paris",
+    "Tél. 01 47 00 22 18",
+    "RCS Paris B 722 003 856",
+    "SIRET 722 003 856 00311",
+    "23.10.2026  19:03",
+    "Caisse 2  Opérateur 17",
+    "YAOURT NATURE X8  2,80",
+    "PATES TORSADES 500G  1,29",
+    "TOMATES GRAPPE 600G  3,15",
+    "VIN ROUGE CORBIERES 75CL  8,50",
+    "BIERE BLONDE 6X25CL  5,64",
+    "A PAYER  21,38 EUR",
+    "ESPECES  25,00 EUR",
+    "RENDU  3,62 EUR",
+    "dont TVA 5,5%  0,38",
+    "dont TVA 20,0%  2,36",
+    "Ticket client à conserver"
+  ],
+  "expected": {
+    "merchant": "Franprix",
+    "date": "2026-10-23",
+    "total": "21.38",
+    "vatRates": [
+      "0.055",
+      "0.20"
+    ],
+    "vatAmount": "2.74"
+  }
+}

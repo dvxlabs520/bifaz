@@ -44,6 +44,8 @@ targets:
         product: BifazModels
       - package: BifazKit
         product: BifazDesign
+      - package: BifazKit
+        product: BifazReading
     info:
       path: App/Info.plist
       properties:
@@ -59,6 +61,7 @@ targets:
         UILaunchScreen:
           UIColorName: LaunchBackground
           UIImageName: LaunchCoin
+        NSCameraUsageDescription: Bifaz uses the camera to scan your receipts and invoices. Images stay on your iPhone.
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
     entitlements:

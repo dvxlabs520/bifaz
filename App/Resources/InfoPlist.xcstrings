@@ -48,6 +48,30 @@
           }
         }
       }
+    },
+    "NSCameraUsageDescription" : {
+      "comment" : "Camera permission prompt.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bifaz uses the camera to scan your receipts and invoices. Images stay on your iPhone."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bifaz usa la cámara para escanear tus justificantes y facturas. Las imágenes se quedan en tu iPhone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bifaz utilise l’appareil photo pour scanner tes justificatifs et tes factures. Les images restent sur ton iPhone."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

@@ -4,21 +4,28 @@ import BifazDesign
 
 /// The capture button, floating over every tab.
 ///
-/// Opens quick add in the space of the current filter. Phase 2 adds scanning
-/// and import here; phase 7 adds "Start expense session".
+/// Opens the capture menu: scan, photo, file, or an expense without receipt,
+/// in the space of the current filter. Phase 7 adds "Start expense session".
 struct CaptureButton: View {
     @Environment(AppNavigation.self) private var navigation
     @AppStorage("spaceFilter") private var spaceFilter: SpaceFilter = .all
     @ScaledMetric(relativeTo: .title2) private var side: CGFloat = 56
 
     var body: some View {
-        Button {
-            navigation.addExpense(filter: spaceFilter)
+        Menu {
+            CaptureMenuItems { source in navigation.capture(from: source, filter: spaceFilter) }
+            Divider()
+            Button {
+                navigation.addExpense(filter: spaceFilter)
+            } label: {
+                Label { Text("capture.manual") } icon: { BifazIcon.edit.image }
+            }
         } label: {
             BifazIconView(.plus, size: 24, relativeTo: .title2)
                 .foregroundStyle(Color.bifazPaper)
                 .frame(width: side, height: side)
         }
+        .menuOrder(.fixed)
         .buttonStyle(.glassProminent)
         .buttonBorderShape(.circle)
         .tint(.bifazInk)

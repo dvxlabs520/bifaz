@@ -1,0 +1,28 @@
+{
+  "name": "adobe_creative_cloud",
+  "kind": "facture",
+  "lines": [
+    "Adobe",
+    "Adobe Systems Software Ireland Ltd",
+    "4-6 Riverwalk, Citywest Business Campus, Dublin 24, Ireland",
+    "N° TVA IE 6364992H",
+    "Facture IEFR2026110013",
+    "Date de facturation : 13 octobre 2026",
+    "Client : Dupont Conseil - TVA FR 40 828 112 457",
+    "Creative Cloud Toutes les applications - 1 licence",
+    "Période : 13 oct. 2026 - 12 nov. 2026",
+    "Montant HT  EUR 60,49",
+    "TVA 20 %  EUR 12,10",
+    "Total TTC  EUR 72,59",
+    "Payé par carte Mastercard **** 4412"
+  ],
+  "expected": {
+    "merchant": "Adobe",
+    "date": "2026-10-13",
+    "total": "72.59",
+    "vatRates": [
+      "0.20"
+    ],
+    "vatAmount": "12.10"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "indigo_parking",
+  "kind": "ticket",
+  "lines": [
+    "INDIGO",
+    "Parking Saint-Georges - Lyon 3e",
+    "Ticket de sortie n° 0038 2211",
+    "SIRET 400 000 107 00033",
+    "Entrée 31/10/26 14:05",
+    "Sortie 31/10/26 17:17",
+    "Durée 03h12",
+    "Montant  14,40 €",
+    "dont TVA 20,0%  2,40 €",
+    "Payé CB le 31/10/2026",
+    "Bonne route"
+  ],
+  "expected": {
+    "merchant": "Indigo",
+    "date": "2026-10-31",
+    "total": "14.40",
+    "vatRates": [
+      "0.20"
+    ],
+    "vatAmount": "2.40"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "carrefour_city_snack",
+  "kind": "ticket",
+  "lines": [
+    "CARREFOUR CITY",
+    "Carrefour City Lyon Part-Dieu",
+    "14 rue de Bonnel 69003 LYON",
+    "Tel 04 78 62 10 55",
+    "SIRET 345 130 488 01234",
+    "TVA intracom. FR 41 345130488",
+    "05-11-2026 12:17  Hôte(sse) 03  Ticket 88231",
+    "EAU MINERALE 6X1.5L  3,20 B",
+    "SANDWICH JAMBON BEURRE  3,90 C",
+    "CHIPS NATURE 150G  2,45 B",
+    "PILES AA X4  5,95 A",
+    "4 articles",
+    "Total à payer  15,50 EUR",
+    "Carte bancaire  15,50 EUR",
+    "Taux  HT  TVA  TTC",
+    "A 20,00%  4,96  0,99  5,95",
+    "B 5,50%  5,36  0,29  5,65",
+    "C 10,00%  3,55  0,35  3,90",
+    "Total TVA  1,63",
+    "Votre ticket est votre garantie"
+  ],
+  "expected": {
+    "merchant": "Carrefour City",
+    "date": "2026-11-05",
+    "total": "15.50",
+    "vatRates": [
+      "0.20",
+      "0.055",
+      "0.10"
+    ],
+    "vatAmount": "1.63"
+  }
+}

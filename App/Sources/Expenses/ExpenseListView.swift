@@ -33,6 +33,7 @@ private struct ExpenseListContent: View {
 
     @Query private var expenses: [Expense]
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.receiptStore) private var receiptStore
     @Environment(\.locale) private var locale
     @Environment(AppNavigation.self) private var navigation
     @State private var pendingDeletion: Expense?
@@ -193,7 +194,7 @@ private struct ExpenseListContent: View {
     private func delete(_ expense: Expense) {
         pendingDeletion = nil
         do {
-            try ExpenseService.delete(expense, in: modelContext)
+            try ExpenseService.delete(expense, in: modelContext, store: receiptStore)
         } catch {
             deletionFailed = true
         }

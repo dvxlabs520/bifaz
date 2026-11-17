@@ -8,7 +8,7 @@ import BifazModels
 final class StoreLoader {
     enum State {
         case loading
-        case ready(ModelContainer)
+        case ready(ModelContainer, ReceiptStore?)
         /// Error domain and code, safe to show and to quote to support.
         case failed(code: String)
     }
@@ -27,7 +27,13 @@ final class StoreLoader {
             #if DEBUG
             try insertSampleDataIfRequested(into: container.mainContext)
             #endif
-            state = .ready(container)
+            // UI tests run on an empty in-memory store: give them their own folder,
+            // otherwise the orphan sweep would delete the real receipts.
+            let receipts = inMemory
+                ? try? ReceiptStore(directory: FileManager.default.temporaryDirectory.appending(path: "BifazUITestReceipts"))
+                : try? ReceiptStore.appGroup()
+            if let receipts, !inMemory { removeOrphanReceiptFiles(store: receipts, context: container.mainContext) }
+            state = .ready(container, receipts)
         } catch {
             let nsError = error as NSError
             Log.app.error("""
@@ -45,6 +51,14 @@ final class StoreLoader {
         #else
         false
         #endif
+    }
+
+    /// Files written for a receipt whose expense was never saved (crash, force quit).
+    private func removeOrphanReceiptFiles(store: ReceiptStore, context: ModelContext) {
+        guard let receipts = try? context.fetch(FetchDescriptor<Receipt>()) else { return }
+        let names = Set(receipts.flatMap { [$0.fileName, $0.thumbnailFileName] })
+        let removed = store.removeOrphans(keeping: names)
+        if removed > 0 { Log.app.notice("Removed \(removed, privacy: .public) orphan receipt files") }
     }
 
     #if DEBUG

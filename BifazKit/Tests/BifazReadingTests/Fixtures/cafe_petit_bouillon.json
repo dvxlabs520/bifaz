@@ -1,0 +1,26 @@
+{
+  "name": "cafe_petit_bouillon",
+  "kind": "ticket",
+  "lines": [
+    "Café Le Petit Bouillon",
+    "3 rue Mouffetard - 75005 Paris",
+    "SIRET 812 667 340 00027",
+    "15 nov. 2026  09:42",
+    "Ticket n° 000318",
+    "1 Café crème  3,80",
+    "1 Croissant  2,20",
+    "1 Jus d'orange pressé  5,50",
+    "TVA 10%  1,05",
+    "NET A PAYER  11,50 €",
+    "Carte bancaire sans contact  11,50 €"
+  ],
+  "expected": {
+    "merchant": "Le Petit Bouillon",
+    "date": "2026-11-15",
+    "total": "11.50",
+    "vatRates": [
+      "0.10"
+    ],
+    "vatAmount": "1.05"
+  }
+}

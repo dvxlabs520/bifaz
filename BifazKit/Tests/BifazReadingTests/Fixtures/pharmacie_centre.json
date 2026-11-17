@@ -1,0 +1,36 @@
+{
+  "name": "pharmacie_centre",
+  "kind": "ticket",
+  "lines": [
+    "PHARMACIE DU CENTRE",
+    "Dr Nathalie Roux, Pharmacien titulaire",
+    "14 place de la Mairie 33000 BORDEAUX",
+    "Tél : 05 56 44 71 20",
+    "FINESS 330 781 235  SIRET 410 552 887 00014",
+    "Le 28/10/2026 à 16:34",
+    "Dossier 118742",
+    "DOLIPRANE 1000MG 8 CP  2,18",
+    "SIROP TOUX ADULTE 125ML  4,07",
+    "CREME SOLAIRE SPF50 50ML  14,90",
+    "BROSSE A DENTS SOUPLE  3,50",
+    "MONTANT  24,65",
+    "Taux  HT  TVA  TTC",
+    "TVA 2,10%  6,12  0,13  6,25",
+    "TVA 20,00%  15,33  3,07  18,40",
+    "Total TVA  3,20",
+    "TOTAL TTC  24,65 €",
+    "Carte vitale : part Sécu 0,00",
+    "CB  24,65 €",
+    "Merci de votre confiance"
+  ],
+  "expected": {
+    "merchant": "Pharmacie du Centre",
+    "date": "2026-10-28",
+    "total": "24.65",
+    "vatRates": [
+      "0.021",
+      "0.20"
+    ],
+    "vatAmount": "3.20"
+  }
+}

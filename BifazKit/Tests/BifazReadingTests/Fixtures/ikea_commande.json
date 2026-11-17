@@ -1,0 +1,33 @@
+{
+  "name": "ikea_commande",
+  "kind": "ticket",
+  "lines": [
+    "IKEA",
+    "IKEA FRANCE SAS",
+    "IKEA Paris Nord 2 - 95700 ROISSY",
+    "Tél 09 69 36 20 06",
+    "SIRET 421 764 541 00011  TVA FR 91 421764541",
+    "07/11/2026  11:26",
+    "Caisse 9  Ticket 77120",
+    "ETAGERE KALLAX 77X77  49,99",
+    "BOITE DRONA X3  3 x 7,99  23,97",
+    "BOUGIE PARFUMEE  4,99",
+    "RESTAURANT: BOULETTES SUEDOISES  6,95",
+    "MONTANT  85,90",
+    "Dont TVA 20 %  13,16",
+    "Dont TVA 10 %  0,63",
+    "TOTAL TVA  13,79",
+    "CB  85,90",
+    "Merci de votre visite"
+  ],
+  "expected": {
+    "merchant": "IKEA",
+    "date": "2026-11-07",
+    "total": "85.90",
+    "vatRates": [
+      "0.20",
+      "0.10"
+    ],
+    "vatAmount": "13.79"
+  }
+}

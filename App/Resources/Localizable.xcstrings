@@ -193,6 +193,102 @@
         }
       }
     },
+    "capture.error.message" : {
+      "comment" : "Alert message when a receipt file could not be read.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try another photo or a PDF. You can always add the expense by hand."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prueba con otra foto o un PDF. Siempre puedes añadir el gasto a mano."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essaie avec une autre photo ou un PDF. Tu peux toujours ajouter la dépense à la main."
+          }
+        }
+      }
+    },
+    "capture.error.ok" : {
+      "comment" : "Dismiss button of the read error alert.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "capture.error.title" : {
+      "comment" : "Alert title when a receipt file could not be read.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t read this file"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hemos podido leer este archivo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de lire ce fichier"
+          }
+        }
+      }
+    },
+    "capture.file" : {
+      "comment" : "Menu item on the + button: import a PDF file.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import a file (PDF)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importar un archivo (PDF)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importer un fichier (PDF)"
+          }
+        }
+      }
+    },
     "capture.hint" : {
       "comment" : "VoiceOver hint of the floating + capture button.",
       "extractionState" : "manual",
@@ -237,6 +333,126 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Capturer"
+          }
+        }
+      }
+    },
+    "capture.manual" : {
+      "comment" : "Menu item on the + button: add an expense without a receipt.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expense without receipt"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gasto sin justificante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dépense sans justificatif"
+          }
+        }
+      }
+    },
+    "capture.photo" : {
+      "comment" : "Menu item on the + button: import a photo of a receipt.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import a photo"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importar una foto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importer une photo"
+          }
+        }
+      }
+    },
+    "capture.reading" : {
+      "comment" : "Title of the overlay shown while a receipt is being read.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading your receipt…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leyendo tu justificante…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture de ton justificatif…"
+          }
+        }
+      }
+    },
+    "capture.reading.onDevice" : {
+      "comment" : "Reassurance under the reading overlay: processing happens on the device.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On your iPhone. Nothing leaves it."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En tu iPhone. Nada sale de él."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sur ton iPhone. Rien n’en sort."
+          }
+        }
+      }
+    },
+    "capture.scan" : {
+      "comment" : "Menu item on the + button: scan an invoice with the camera.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan an invoice"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanear una factura"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanner une facture"
           }
         }
       }
@@ -1249,6 +1465,174 @@
         }
       }
     },
+    "form.read.done" : {
+      "comment" : "Banner at the top of the form after a receipt was read.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read by Bifaz — check before saving"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leído por Bifaz: revisa antes de guardar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lu par Bifaz : vérifie avant d’enregistrer"
+          }
+        }
+      }
+    },
+    "form.read.high" : {
+      "comment" : "Very short confidence tag next to a field label: high confidence.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sure"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sûr"
+          }
+        }
+      }
+    },
+    "form.read.low" : {
+      "comment" : "Very short confidence tag next to a field label: low confidence.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unsure"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dudoso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incertain"
+          }
+        }
+      }
+    },
+    "form.read.medium" : {
+      "comment" : "Very short confidence tag next to a field label: medium confidence.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revisar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À vérifier"
+          }
+        }
+      }
+    },
+    "form.read.model" : {
+      "comment" : "Source tag: read with the on-device model. Apple Intelligence is never translated.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With Apple Intelligence, on your iPhone"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con Apple Intelligence, en tu iPhone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avec Apple Intelligence, sur ton iPhone"
+          }
+        }
+      }
+    },
+    "form.read.nothing" : {
+      "comment" : "Banner when nothing could be read from the receipt.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We couldn’t read it — fill in the details"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hemos podido leerlo: completa los datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture impossible : renseigne les informations"
+          }
+        }
+      }
+    },
+    "form.read.rules" : {
+      "comment" : "Source tag: read with on-device rules.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On your iPhone"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En tu iPhone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sur ton iPhone"
+          }
+        }
+      }
+    },
     "form.save" : {
       "comment" : "Save button in the expense form.",
       "extractionState" : "manual",
@@ -1293,6 +1677,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Espace"
+          }
+        }
+      }
+    },
+    "form.title.confirm" : {
+      "comment" : "Form title when confirming a read receipt.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check and save"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revisa y guarda"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifie et enregistre"
           }
         }
       }
@@ -1389,6 +1797,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dont %@ de TVA"
+          }
+        }
+      }
+    },
+    "form.vat.multiple %@" : {
+      "comment" : "VAT amount label when the receipt has several VAT rates. %@ is the amount.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ VAT (several rates)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de TVA (varios tipos)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de TVA (plusieurs taux)"
           }
         }
       }

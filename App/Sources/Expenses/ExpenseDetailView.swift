@@ -31,6 +31,7 @@ struct ExpenseDetailView: View {
             VStack(alignment: .leading, spacing: 0) {
                 header
                     .padding(.bottom, BifazSpacing.xl)
+                ReceiptSection(expense: expense)
                 rows
                 timestamps
                     .padding(.top, BifazSpacing.l)

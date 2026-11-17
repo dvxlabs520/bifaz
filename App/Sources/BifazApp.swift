@@ -29,15 +29,15 @@ struct BifazApp: App {
         switch loader.state {
         case .loading:
             BrandCover()
-        case .ready(let container):
+        case .ready(let container, let receipts):
             #if DEBUG
             if UserDefaults.standard.bool(forKey: "BifazDesignGallery") {
                 DesignGalleryView()
             } else {
-                RootView().modelContainer(container)
+                RootView().modelContainer(container).environment(\.receiptStore, receipts)
             }
             #else
-            RootView().modelContainer(container)
+            RootView().modelContainer(container).environment(\.receiptStore, receipts)
             #endif
         case .failed(let code):
             StoreErrorView(code: code) {

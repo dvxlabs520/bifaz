@@ -1,0 +1,24 @@
+{
+  "name": "boulangerie_sans_tva",
+  "kind": "ticket",
+  "lines": [
+    "BOULANGERIE PATISSERIE",
+    "AU FOURNIL DE PAUL",
+    "23 rue des Martyrs 75009 PARIS",
+    "Tel : 01 48 78 31 09",
+    "Siret : 801 245 912 00019",
+    "14/11/26  08:21",
+    "1 BAGUETTE TRADITION  1,35",
+    "2 PAIN AU CHOCOLAT  2,80",
+    "1 TARTE CITRON  4,20",
+    "TOTAL  8,35 €",
+    "CB  8,35 €",
+    "Merci et bonne journée !"
+  ],
+  "expected": {
+    "merchant": "Au Fournil de Paul",
+    "date": "2026-11-14",
+    "total": "8.35",
+    "vatRates": []
+  }
+}

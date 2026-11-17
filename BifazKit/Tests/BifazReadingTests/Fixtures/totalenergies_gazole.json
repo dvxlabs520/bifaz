@@ -1,0 +1,32 @@
+{
+  "name": "totalenergies_gazole",
+  "kind": "ticket",
+  "lines": [
+    "TotalEnergies",
+    "TOTALENERGIES RELAIS A6 - AIRE DE BEAUNE",
+    "21200 BEAUNE",
+    "Tel 03 80 24 61 70",
+    "SIRET 542 051 180 04712",
+    "N° TVA FR 59 542051180",
+    "02/11/2026  07:58",
+    "Pompe 4  Transaction 55821",
+    "GAZOLE",
+    "Quantité  38,42 L",
+    "Prix unitaire  1,689 €/L",
+    "Montant carburant  64,89 €",
+    "TOTAL TTC  64,89 €",
+    "dont TVA 20,00%  10,81 €",
+    "Base HT  54,08 €",
+    "CARTE BANCAIRE  64,89 €",
+    "Bonne route !"
+  ],
+  "expected": {
+    "merchant": "TotalEnergies",
+    "date": "2026-11-02",
+    "total": "64.89",
+    "vatRates": [
+      "0.20"
+    ],
+    "vatAmount": "10.81"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "taxi_g7",
+  "kind": "ticket",
+  "lines": [
+    "TAXIS G7",
+    "Reçu de course",
+    "Véhicule 7421  Chauffeur n° 3058",
+    "SIRET 572 139 811 00027",
+    "19/10/2026  22:36",
+    "De : Gare de l'Est  A : 41 rue Oberkampf 75011",
+    "Course  28,60 €",
+    "Montant TTC  28,60 EUR",
+    "dont TVA 10%  2,60 EUR",
+    "Paiement CB  28,60 EUR",
+    "Merci et bonne soirée"
+  ],
+  "expected": {
+    "merchant": "G7",
+    "date": "2026-10-19",
+    "total": "28.60",
+    "vatRates": [
+      "0.10"
+    ],
+    "vatAmount": "2.60"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "restaurant_zinc_pourboire",
+  "kind": "ticket",
+  "lines": [
+    "BRASSERIE LE ZINC",
+    "12 place du Marché Saint-Honoré",
+    "75001 PARIS",
+    "Tél 01 42 61 09 87",
+    "SARL ZINC RESTAURATION - SIRET 489 332 701 00026",
+    "TVA FR 22 489332701",
+    "NOTE  Table 14  Couverts 2",
+    "09/11/2026  13:52  Serveur : Julien",
+    "2 MENU DU JOUR  2 x 19,50  39,00",
+    "1 VIN ROUGE 50CL  14,00",
+    "2 CAFE  2 x 2,50  5,00",
+    "1 EAU PETILLANTE 1L  4,50",
+    "SOUS-TOTAL  62,50",
+    "TOTAL TTC  62,50 €",
+    "Taux  HT  TVA  TTC",
+    "10,00%  44,09  4,41  48,50",
+    "20,00%  11,67  2,33  14,00",
+    "TOTAL TVA  6,74",
+    "POURBOIRE SUGGERE 10 % : 6,25 €",
+    "CB  62,50 €",
+    "Merci de votre visite, à bientôt !"
+  ],
+  "expected": {
+    "merchant": "Brasserie Le Zinc",
+    "date": "2026-11-09",
+    "total": "62.50",
+    "vatRates": [
+      "0.10",
+      "0.20"
+    ],
+    "vatAmount": "6.74"
+  }
+}

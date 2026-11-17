@@ -1,0 +1,26 @@
+{
+  "name": "free_mobile_facture",
+  "kind": "facture",
+  "lines": [
+    "FREE MOBILE",
+    "Free Mobile - 16 rue de la Ville l'Evêque 75008 Paris",
+    "SAS au capital de 3 365 000 EUR - RCS Paris 499 247 138 - TVA FR 62 499247138",
+    "FACTURE N° 2026-110528734",
+    "Date de facture : 05/11/2026",
+    "Ligne 06 12 34 56 78  Période du 05/11 au 04/12",
+    "Forfait Free 5G  16,66",
+    "Total HT  16,66",
+    "TVA 20 %  3,33",
+    "Total TTC  19,99 €",
+    "Montant prélevé le 10/11/2026  19,99 €"
+  ],
+  "expected": {
+    "merchant": "Free Mobile",
+    "date": "2026-11-05",
+    "total": "19.99",
+    "vatRates": [
+      "0.20"
+    ],
+    "vatAmount": "3.33"
+  }
+}

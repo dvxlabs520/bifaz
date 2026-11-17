@@ -1,0 +1,32 @@
+{
+  "name": "hotel_magnolia",
+  "kind": "facture",
+  "lines": [
+    "HOTEL LE MAGNOLIA ***",
+    "18 rue Childebert 69002 LYON",
+    "Tél 04 72 40 18 66  reception@hotel-magnolia.example",
+    "SARL Hôtel Magnolia - SIRET 478 120 556 00019 - TVA FR 69 478120556",
+    "FACTURE N° 2026-1042 du 3 octobre 2026",
+    "Client : Société Dupont Conseil",
+    "Séjour du 01/10/2026 au 03/10/2026  Chambre 214",
+    "Désignation  Qté  PU TTC  Total TTC",
+    "Hébergement  2 nuits  110,00  220,00",
+    "Petit-déjeuner  4  6,00  24,00",
+    "Taxe de séjour  4  1,88  7,52",
+    "Total HT  221,82",
+    "TVA 10 %  22,18",
+    "Taxe de séjour (non soumise à TVA)  7,52",
+    "TOTAL TTC  251,52 EUR",
+    "Réglé par CB le 03/10/2026",
+    "Merci de votre séjour"
+  ],
+  "expected": {
+    "merchant": "Hôtel Le Magnolia",
+    "date": "2026-10-03",
+    "total": "251.52",
+    "vatRates": [
+      "0.10"
+    ],
+    "vatAmount": "22.18"
+  }
+}

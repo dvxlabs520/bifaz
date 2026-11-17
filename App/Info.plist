@@ -30,6 +30,8 @@
 	<false/>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.finance</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Bifaz uses the camera to scan your receipts and invoices. Images stay on your iPhone.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

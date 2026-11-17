@@ -1,0 +1,33 @@
+{
+  "name": "restaurant_chez_marcel_ocr",
+  "kind": "ticket",
+  "lines": [
+    "Restaurant Chez Marcel",
+    "7 rue des Tanneurs",
+    "31000 TOULOUSE",
+    "Tél O5 61 22 47 O9",
+    "SIRET 524 119 778 OOO15",
+    "14/11/2026  21:07",
+    "Table 6  Couverts 1",
+    "ENTREE DU JOUR  9,5O",
+    "PLAT DU JOUR  18,OO",
+    "DESSERT MAISON  7,OO",
+    "CAFE  3,OO",
+    "VIN AU VERRE  5,OO",
+    "TOTAL TTC  4250",
+    "TVA 1O%  3,41",
+    "TVA 20%  O,83",
+    "CB  42,50",
+    "MERCI A BIENTOT"
+  ],
+  "expected": {
+    "merchant": "Chez Marcel",
+    "date": "2026-11-14",
+    "total": "42.50",
+    "vatRates": [
+      "0.10",
+      "0.20"
+    ],
+    "vatAmount": "4.24"
+  }
+}

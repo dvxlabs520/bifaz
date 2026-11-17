@@ -14,6 +14,12 @@ public struct ExpenseDraft {
     /// VAT rate; `nil` when the user is not VAT-registered or the rate is unknown.
     public var vatRate: VATRate?
     public var note: String
+    /// How the expense entered Bifaz (only used when creating).
+    public var source: ExpenseSource = .manual
+    /// VAT read from a receipt with several rates (e.g. 5,5 % and 20 %): the
+    /// single-rate computation would be wrong, so the printed total VAT wins.
+    /// Cleared when the user picks a rate by hand.
+    public var vatAmountOverride: Decimal?
 
     public init(
         amount: Decimal? = nil,
@@ -52,6 +58,8 @@ public struct ExpenseDraft {
         case amountTooLarge
         /// The category belongs to the other space.
         case categoryInOtherSpace
+        /// A printed VAT that is negative or not below the total (misread).
+        case vatNotBelowAmount
     }
 
     /// The first problem that prevents saving, if any.
@@ -59,6 +67,7 @@ public struct ExpenseDraft {
         guard let amount else { return .missingAmount }
         guard amount > 0 else { return .amountNotPositive }
         guard amount <= MoneyParser.maximum else { return .amountTooLarge }
+        if let vatAmountOverride, vatAmountOverride < 0 || vatAmountOverride >= amount { return .vatNotBelowAmount }
         if let category, category.space != space { return .categoryInOtherSpace }
         return nil
     }
@@ -70,8 +79,9 @@ public struct ExpenseDraft {
         merchant.split(whereSeparator: \.isWhitespace).joined(separator: " ")
     }
 
-    /// VAT amount implied by the amount and rate.
+    /// VAT amount: the printed one for multi-rate receipts, else implied by the amount and rate.
     public var vatAmount: Decimal? {
+        if let vatAmountOverride { return vatAmountOverride.rounded(scale: 2) }
         guard let amount, let vatRate else { return nil }
         return VATCalculator.vatAmount(includedIn: amount, rate: vatRate.fraction)
     }

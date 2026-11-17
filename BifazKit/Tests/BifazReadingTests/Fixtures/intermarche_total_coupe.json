@@ -1,0 +1,36 @@
+{
+  "name": "intermarche_total_coupe",
+  "kind": "ticket",
+  "lines": [
+    "INTERMARCHE EXPRESS",
+    "28 rue Gambetta 59000 LILLE",
+    "Tél 03 20 55 41 17",
+    "SIRET 351 520 971 00045",
+    "11.11.2026  17:55",
+    "Caisse 1",
+    "PAIN DE MIE COMPLET  1,85",
+    "COMTE AOP 200G  4,95",
+    "POMMES GALA 1KG  3,20",
+    "SHAMPOING DOUX 250ML  4,95",
+    "LESSIVE POUDRE 20D  8,75",
+    "5 ARTICLES",
+    "TOTAL TTC",
+    "23,70 €",
+    "CB",
+    "23,70 €",
+    "TVA  HT  TVA  TTC",
+    "5,50%  9,48  0,52  10,00",
+    "20,00%  11,42  2,28  13,70",
+    "Merci de votre visite"
+  ],
+  "expected": {
+    "merchant": "Intermarché Express",
+    "date": "2026-11-11",
+    "total": "23.70",
+    "vatRates": [
+      "0.055",
+      "0.20"
+    ],
+    "vatAmount": "2.80"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "fnac_ordinateur",
+  "kind": "ticket",
+  "lines": [
+    "FNAC",
+    "FNAC PARIS TERNES",
+    "26 avenue des Ternes 75017 PARIS",
+    "Tél 01 55 68 19 20",
+    "SAS FNAC DARTY PARIS - SIRET 775 670 417 00112 - TVA FR 30 775670417",
+    "16/10/2026  15:48  Caisse 11  Vendeur 4073",
+    "ORDINATEUR PORTABLE 14 16GO  1 299,00",
+    "SOURIS SANS FIL SILENCIEUSE  24,90",
+    "ROMAN POCHE LE PETIT PRINCE  18,90",
+    "3 ARTICLES",
+    "TOTAL TTC  1 342,80 EUR",
+    "TVA  HT  TVA  TTC",
+    "20,00%  1 103,25  220,65  1 323,90",
+    "5,50%  17,91  0,99  18,90",
+    "Total TVA  221,64",
+    "CARTE BANCAIRE  1 342,80 EUR",
+    "Garantie légale de conformité : 2 ans"
+  ],
+  "expected": {
+    "merchant": "Fnac",
+    "date": "2026-10-16",
+    "total": "1342.80",
+    "vatRates": [
+      "0.20",
+      "0.055"
+    ],
+    "vatAmount": "221.64"
+  }
+}

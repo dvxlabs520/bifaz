@@ -37,6 +37,12 @@ struct RootView: View {
         .sheet(item: $navigation.newExpenseSpace) { space in
             ExpenseFormView(defaultSpace: space)
         }
+        .receiptCapture(source: $navigation.captureSource) { receipt in
+            navigation.confirm(receipt)
+        }
+        .sheet(item: $navigation.capturedReceipt) { result in
+            ExpenseFormView(capture: result.receipt, defaultSpace: result.space)
+        }
     }
 
     private func tabLabel(_ title: LocalizedStringKey, icon: BifazIcon) -> some View {

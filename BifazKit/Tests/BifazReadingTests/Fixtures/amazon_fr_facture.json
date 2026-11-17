@@ -1,0 +1,29 @@
+{
+  "name": "amazon_fr_facture",
+  "kind": "facture",
+  "lines": [
+    "Amazon EU S.à r.l., Succursale française",
+    "67 boulevard du Général Leclerc, 92110 Clichy",
+    "N° TVA : FR 12 487 773 327",
+    "Facture",
+    "Numéro de commande : 405-1928374-5561902",
+    "Date de la facture : 08.11.2026",
+    "Date de la commande : 06.11.2026",
+    "Description  Qté  Prix unit. HT  TVA  Prix TTC",
+    "Casque Bluetooth ANC  1  41,66 €  20 %  49,99 €",
+    "Câble USB-C 1m (lot de 2)  1  14,98 €  20 %  17,98 €",
+    "Total HT  56,64 €",
+    "TVA 20 %  11,33 €",
+    "Total de la commande  67,97 €",
+    "Montant payé par Visa  67,97 €"
+  ],
+  "expected": {
+    "merchant": "Amazon",
+    "date": "2026-11-08",
+    "total": "67.97",
+    "vatRates": [
+      "0.20"
+    ],
+    "vatAmount": "11.33"
+  }
+}

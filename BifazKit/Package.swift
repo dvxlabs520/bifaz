@@ -32,6 +32,11 @@ let package = Package(
 
         .testTarget(name: "BifazModelsTests", dependencies: ["BifazModels"]),
         .testTarget(name: "BifazDesignTests", dependencies: ["BifazDesign"]),
+        .testTarget(
+            name: "BifazReadingTests",
+            dependencies: ["BifazReading"],
+            resources: [.copy("Fixtures")]
+        ),
     ],
     swiftLanguageModes: [.v6]
 )

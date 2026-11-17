@@ -1,0 +1,31 @@
+{
+  "name": "sncf_eticket",
+  "kind": "pdf",
+  "lines": [
+    "SNCF VOYAGEURS",
+    "E-billet - Récapitulatif de commande",
+    "Dossier voyage : QXKP7M",
+    "Commande du 21/10/2026 à 21:14",
+    "Voyageur : Dupont Camille  Tarif : Prem's",
+    "",
+    "Aller : samedi 24 octobre 2026",
+    "Paris Gare de Lyon 08:19  Lyon Part-Dieu 10:21",
+    "TGV INOUI 6603  Voiture 12 Place 54",
+    "Prix du billet  78,00 EUR",
+    "Prix total TTC  78,00 EUR",
+    "dont TVA 10,00 %  7,09 EUR",
+    "Montant HT  70,91 EUR",
+    "Payé par carte bancaire",
+    "SNCF Voyageurs - SA au capital de 1 000 000 000 EUR",
+    "RCS Bobigny 519 037 670  N° TVA FR 03 519037670"
+  ],
+  "expected": {
+    "merchant": "SNCF",
+    "date": "2026-10-21",
+    "total": "78.00",
+    "vatRates": [
+      "0.10"
+    ],
+    "vatAmount": "7.09"
+  }
+}
