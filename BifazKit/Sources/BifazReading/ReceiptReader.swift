@@ -2,6 +2,7 @@ import CoreGraphics
 import Foundation
 import BifazModels
 import os
+import Synchronization
 
 /// Reads a receipt: OCR on the device, then Apple's model when available,
 /// always cross-checked with the rule-based reader (PLAN §4 "Lectura automática").
@@ -16,8 +17,9 @@ public struct ReceiptReader: Sendable {
         self.useModel = useModel
     }
 
-    /// Whether Apple's model will be used on this device.
-    public var usesModel: Bool { useModel && ModelReceiptParser.isAvailable }
+    /// Whether Apple's model will be asked: available on this device and not
+    /// failing repeatedly in this session (see `ModelHealth`).
+    public var usesModel: Bool { useModel && ModelReceiptParser.isAvailable && ModelHealth.isHealthy }
 
     public func read(images: [CGImage], today: Date = .now) async throws -> ReceiptReading {
         var lines: [String] = []
@@ -29,19 +31,57 @@ public struct ReceiptReader: Sendable {
         await read(lines: try await ReceiptOCR.lines(inPDF: data), today: today)
     }
 
+    /// Longest wait for Apple's model before the rules' reading is used alone.
+    public static let modelTimeout: Duration = .seconds(10)
+
     /// Reads already recognised lines (also the entry point for tests).
     public func read(lines: [String], today: Date = .now, calendar: Calendar = .current) async -> ReceiptReading {
         let rules = RuleBasedReceiptParser.parse(lines, today: today, calendar: calendar)
-        guard usesModel, !lines.isEmpty else {
-            return ReceiptReading(fields: rules, lines: lines, method: .rules)
+        guard useModel, !lines.isEmpty else {
+            return ReceiptReading(fields: rules, lines: lines, method: .rules, modelOutcome: .notAsked)
+        }
+        guard usesModel else {
+            return ReceiptReading(fields: rules, lines: lines, method: .rules, modelOutcome: .unavailable)
         }
         do {
-            let extraction = try await ModelReceiptParser.extract(from: lines)
+            let extraction = try await Self.withTimeout(Self.modelTimeout) {
+                try await ModelReceiptParser.extract(from: lines)
+            }
+            ModelHealth.recordSuccess()
             let fields = Self.combine(model: extraction, rules: rules, lines: lines, today: today, calendar: calendar)
-            return ReceiptReading(fields: fields, lines: lines, method: .model)
+            let filled = [extraction.merchant != nil, extraction.date != nil, extraction.totalIncludingVAT != nil,
+                          extraction.vatRatePercent != nil, extraction.vatAmount != nil].filter { $0 }.count
+            return ReceiptReading(
+                fields: fields, lines: lines, method: .model, modelOutcome: .answered,
+                modelFieldCount: filled, modelFields: Self.raw(extraction, calendar: calendar)
+            )
+        } catch is ReadTimeout {
+            ModelHealth.recordFailure()
+            Self.logger.notice("Model reading timed out, using rules")
+            return ReceiptReading(fields: rules, lines: lines, method: .rules, modelOutcome: .timedOut)
         } catch {
+            ModelHealth.recordFailure()
             Self.logger.notice("Model reading failed, using rules: \(String(describing: type(of: error)), privacy: .public)")
-            return ReceiptReading(fields: rules, lines: lines, method: .rules)
+            return ReceiptReading(fields: rules, lines: lines, method: .rules, modelOutcome: .failed)
+        }
+    }
+
+    struct ReadTimeout: Error {}
+
+    /// Runs `operation`, throwing `ReadTimeout` if it does not finish in time.
+    static func withTimeout<T: Sendable>(
+        _ limit: Duration,
+        _ operation: @escaping @Sendable () async throws -> T
+    ) async throws -> T {
+        try await withThrowingTaskGroup(of: T.self) { group in
+            group.addTask { try await operation() }
+            group.addTask {
+                try await Task.sleep(for: limit)
+                throw ReadTimeout()
+            }
+            defer { group.cancelAll() }
+            guard let result = try await group.next() else { throw ReadTimeout() }
+            return result
         }
     }
 
@@ -127,6 +167,20 @@ public struct ReceiptReader: Sendable {
         return fields
     }
 
+    /// The model's answer as fields, unchecked (confidence `.medium` throughout).
+    static func raw(_ model: ModelReceiptParser.Extraction, calendar: Calendar) -> ReceiptFields {
+        let rate = model.vatRatePercent.flatMap { percent in
+            VATRate.allCases.map(\.fraction).first { ($0 * 100) == Decimal(percent).rounded(scale: 1) }
+        }
+        return ReceiptFields(
+            merchant: model.merchant.map { ReadValue($0, confidence: .medium) },
+            date: model.date.flatMap { isoDate($0, calendar: calendar) }.map { ReadValue($0, confidence: .medium) },
+            total: model.totalIncludingVAT.flatMap(decimal).map { ReadValue($0, confidence: .medium) },
+            vatRate: rate.map { ReadValue($0, confidence: .medium) },
+            vatAmount: model.vatAmount.flatMap(decimal).map { ReadValue($0, confidence: .medium) }
+        )
+    }
+
     static func decimal(_ text: String) -> Decimal? {
         Decimal(string: text.replacing(",", with: ".").filter { $0.isNumber || $0 == "." },
                 locale: Locale(identifier: "en_US_POSIX"))?.rounded(scale: 2)
@@ -137,4 +191,19 @@ public struct ReceiptReader: Sendable {
         guard parts.count == 3 else { return nil }
         return calendar.date(from: DateComponents(year: parts[0], month: parts[1], day: parts[2], hour: 12))
     }
+}
+
+/// Remembers, for the running session, whether Apple's model keeps failing.
+/// After two failures in a row the reader stops asking it, so a device (or the
+/// Simulator) where inference is not allowed never makes the user wait for each
+/// receipt. A success resets the count.
+enum ModelHealth {
+    private static let consecutiveFailures = Mutex(0)
+    static let failureLimit = 2
+
+    static var isHealthy: Bool { consecutiveFailures.withLock { $0 < failureLimit } }
+    static func recordSuccess() { consecutiveFailures.withLock { $0 = 0 } }
+    static func recordFailure() { consecutiveFailures.withLock { $0 += 1 } }
+    /// Tests only.
+    static func reset() { recordSuccess() }
 }

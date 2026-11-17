@@ -166,7 +166,7 @@ private func verify(_ result: EndToEndResult, mode: String) {
     }
     let failed = result.checks.filter { !$0.ok }
     for check in failed {
-        Issue.record("[\(mode)] \(fixture.name) · \(check.field.rawValue): \(check.detail)\nOCR lines (method \(reading.method.rawValue)):\n\(numbered(reading.lines))")
+        Issue.record("[\(mode), model \(reading.modelOutcome.rawValue)] \(fixture.name) · \(check.field.rawValue): \(check.detail)\nOCR lines (method \(reading.method.rawValue)):\n\(numbered(reading.lines))")
     }
 }
 
@@ -179,6 +179,7 @@ private func scoreboard(_ results: [EndToEndResult], title: String) -> (text: St
         }
     }
     var text = "=== Reading scoreboard: \(title) (\(results.count) receipts) ===\n"
+    text += "  \(modelOutcomeSummary(results))\n"
     for field in ReadField.allCases {
         guard let score = perField[field] else { continue }
         text += "  \(field.rawValue.padding(toLength: 10, withPad: " ", startingAt: 0)) \(score.ok)/\(score.total)\n"
@@ -191,6 +192,16 @@ private func scoreboard(_ results: [EndToEndResult], title: String) -> (text: St
         text += "  FAIL \(result.fixture.name): \(bad.isEmpty ? (result.error ?? "no text") : bad)\n"
     }
     return (text, perField)
+}
+
+/// "Apple's model answered 0 of 20; fell back to rules: failed 2, timed out 0, unavailable 18".
+func modelOutcomeSummary(_ results: [EndToEndResult]) -> String {
+    let outcomes = results.compactMap { $0.reading?.modelOutcome }
+    func count(_ outcome: ReceiptReading.ModelOutcome) -> Int { outcomes.filter { $0 == outcome }.count }
+    if outcomes.allSatisfy({ $0 == .notAsked }) { return "Apple's model: not asked (rules only)" }
+    let withData = results.filter { $0.reading?.modelOutcome == .answered && ($0.reading?.modelFieldCount ?? 0) > 0 }.count
+    return "Apple's model answered \(count(.answered)) of \(outcomes.count) (\(withData) with at least one field); fell back to rules: "
+        + "failed \(count(.failed)), timed out \(count(.timedOut)), unavailable \(count(.unavailable))"
 }
 
 private func verifyBar(_ results: [EndToEndResult], title: String) {
@@ -256,10 +267,36 @@ struct EndToEndModelTests {
         verify(await ReadingCache.model.result(for: fixture), mode: "model/pdf")
     }
 
-    @Test("Scoreboard and bar with the model")
+    /// Only receipts the model really answered measure the model; the others
+    /// fell back to rules (already measured by the rules suite).
+    @Test("Scoreboard and bar with the model (receipts it really answered)")
     func bar() async {
         var results: [EndToEndResult] = []
         for fixture in endToEndFixtures { results.append(await ReadingCache.model.result(for: fixture)) }
-        verifyBar(results, title: "model")
+        let summary = modelOutcomeSummary(results)
+        print("=== Apple's model outcome === \(summary)")
+        Attachment.record(summary, named: "model-outcomes.txt")
+        let answered = results.filter { $0.reading?.modelOutcome == .answered }
+        guard !answered.isEmpty else {
+            print("Apple's model never answered here: model accuracy is pending (measure it on a real iPhone).")
+            return
+        }
+        verifyBar(answered, title: "model-answered")
+
+        // The model alone, before cross-checking with the rules: informative, no bar.
+        var rawScore: [ReadField: (ok: Int, total: Int)] = [:]
+        for result in answered {
+            guard let raw = result.reading?.modelFields else { continue }
+            for check in checks(for: result.fixture, against: raw) {
+                let current = rawScore[check.field] ?? (0, 0)
+                rawScore[check.field] = (current.ok + (check.ok ? 1 : 0), current.total + 1)
+            }
+        }
+        var text = "=== Apple's model alone, before cross-checking (\(answered.count) receipts) ===\n"
+        for field in ReadField.allCases {
+            if let score = rawScore[field] { text += "  \(field.rawValue.padding(toLength: 10, withPad: " ", startingAt: 0)) \(score.ok)/\(score.total)\n" }
+        }
+        print(text)
+        Attachment.record(text, named: "scoreboard-model-raw.txt")
     }
 }

@@ -77,15 +77,45 @@ public struct ReceiptReading: Sendable, Equatable {
         case rules
     }
 
+    /// What happened with Apple's model for this receipt.
+    public enum ModelOutcome: String, Sendable, Equatable {
+        /// The model answered and its answer was cross-checked with the rules.
+        case answered
+        /// Not available on this device (or switched off): rules only.
+        case unavailable
+        /// The model was asked but failed (e.g. not supported in the Simulator): rules only.
+        case failed
+        /// The model took too long: rules only.
+        case timedOut
+        /// Not asked (rules forced, or nothing was recognised).
+        case notAsked
+    }
+
     public var fields: ReceiptFields
     /// Text lines as recognised, top to bottom (kept for search).
     public var lines: [String]
     public var method: Method
+    public var modelOutcome: ModelOutcome
+    /// How many of the five fields the model filled in its answer (0 when it did not answer).
+    public var modelFieldCount: Int
+    /// The model's own answer before cross-checking (diagnostics and measurement only;
+    /// the app uses `fields`).
+    public var modelFields: ReceiptFields?
 
-    public init(fields: ReceiptFields, lines: [String], method: Method) {
+    public init(
+        fields: ReceiptFields,
+        lines: [String],
+        method: Method,
+        modelOutcome: ModelOutcome = .notAsked,
+        modelFieldCount: Int = 0,
+        modelFields: ReceiptFields? = nil
+    ) {
         self.fields = fields
         self.lines = lines
         self.method = method
+        self.modelOutcome = modelOutcome
+        self.modelFieldCount = modelFieldCount
+        self.modelFields = modelFields
     }
 
     public var recognizedText: String { lines.joined(separator: "\n") }

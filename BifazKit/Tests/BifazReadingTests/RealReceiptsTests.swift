@@ -73,13 +73,14 @@ enum RealReceipts {
     struct Report {
         private var rows: [String] = []
         private(set) var failures: [String] = []
-        private var score: [String: (rules: Int, model: Int, total: Int)] = [:]
+        private var score: [String: (rules: Int, model: Int, total: Int, modelTotal: Int)] = [:]
         private var modelRuns = 0
+        private var outcomes: [ReceiptReading.ModelOutcome] = []
 
         private static let fields = ["merchant", "date", "total", "vatRates", "vatAmount"]
 
         mutating func add(file: String, rules: ReceiptReading, model: ReceiptReading?, expected: Expected?) {
-            if model != nil { modelRuns += 1 }
+            if let model { modelRuns += 1; outcomes.append(model.modelOutcome) }
             rows.append("\n### \(file)\n\n| Field | Rules | Apple model | Expected |\n|---|---|---|---|")
             for field in Self.fields {
                 let ruled = Self.value(field, of: rules.fields)
@@ -87,29 +88,38 @@ enum RealReceipts {
                 let wanted = Self.expectedValue(field, in: expected)
                 rows.append("| \(field) | \(ruled) | \(modelled) | \(wanted ?? "—") |")
                 guard let wanted else { continue }
-                var entry = score[field] ?? (0, 0, 0)
+                var entry = score[field] ?? (0, 0, 0, 0)
                 entry.total += 1
                 if Self.matches(field, ruled, wanted) { entry.rules += 1 } else {
                     failures.append("\(file) · \(field) · rules read \(ruled), expected \(wanted)")
                 }
-                if model != nil {
+                if let model, model.modelOutcome == .answered {
+                    entry.modelTotal += 1
                     if Self.matches(field, modelled, wanted) { entry.model += 1 } else {
                         failures.append("\(file) · \(field) · model read \(modelled), expected \(wanted)")
                     }
                 }
                 score[field] = entry
             }
-            rows.append("\nRecognised lines: \(rules.lines.count). Method with model: \(model?.method.rawValue ?? "not available").")
+            let modelNote = model.map { "\($0.modelOutcome.rawValue)" + ($0.modelOutcome == .answered ? ", \($0.modelFieldCount)/5 fields" : "") }
+            rows.append("\nRecognised lines: \(rules.lines.count). Apple's model: \(modelNote ?? "not available").")
         }
 
         func markdown() -> String {
             var text = "# Real receipts — reading report\n\nDocuments: \(rows.filter { $0.hasPrefix("\n### ") }.count). "
-            text += "Apple's model: \(modelRuns > 0 ? "available" : "not available on this device").\n"
+            if modelRuns == 0 {
+                text += "Apple's model: not available on this device (rules only).\n"
+            } else {
+                let answered = outcomes.filter { $0 == .answered }.count
+                text += "Apple's model answered \(answered) of \(modelRuns); fell back to rules on the others "
+                text += "(failed \(outcomes.filter { $0 == .failed }.count), timed out \(outcomes.filter { $0 == .timedOut }.count), "
+                text += "unavailable \(outcomes.filter { $0 == .unavailable }.count)). The \"Apple model\" column counts only when it answered.\n"
+            }
             if !score.isEmpty {
                 text += "\n| Field | Rules | Apple model |\n|---|---|---|\n"
                 for field in Self.fields {
                     guard let entry = score[field] else { continue }
-                    let model = modelRuns > 0 ? "\(entry.model)/\(entry.total)" : "—"
+                    let model = entry.modelTotal > 0 ? "\(entry.model)/\(entry.modelTotal)" : "—"
                     text += "| \(field) | \(entry.rules)/\(entry.total) | \(model) |\n"
                 }
             }
