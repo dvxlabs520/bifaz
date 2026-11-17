@@ -3,7 +3,10 @@
 App iOS para guardar facturas profesionales y gastos personales en un mismo sitio.
 Simple de usar, con acabado premium y preparada para publicarse en el App Store.
 
-Estado: **plan en revisión, desarrollo no iniciado.**
+Estado: **fases 0 y 1 entregadas y revisadas el 17-11-2026 (commits `213828c` y `344cd4d`).
+Las 6 correcciones de la fase 1 están hechas y revisadas en la rama `fase1-correcciones` (`72df666`),
+pendientes de integrar en `main`. La fase 2 está empezada sin commit en el directorio principal
+y sin revisar.**
 
 ## 1. Decisiones cerradas
 
@@ -13,8 +16,10 @@ Estado: **plan en revisión, desarrollo no iniciado.**
 | Empresa / identificador | dvxlabs · `com.dvxlabs.bifaz` |
 | Plataforma | iOS nativo, SwiftUI, Swift 6.4 (Xcode 27.1, SDK iOS 27.1) |
 | iOS mínimo | iOS 26 |
+| Dispositivos | Solo iPhone en la versión 1 |
+| Dirección visual | Sobria, de neobanco: fondo blanco, texto alineado a la izquierda, botones tinta y color solo para distinguir Pro de Personal. Elegida por el usuario en la fase 0 tomando Qonto como referencia de sobriedad, sin copiar sus elementos de marca |
 | País fiscal | Francia: TVA 20 % / 10 % / 5,5 % / 2,1 %, moneda base EUR |
-| Idiomas | Español, francés e inglés desde el primer día |
+| Idiomas | Español (de "tú"), francés (de "vous") e inglés desde el primer día |
 | Backend | Sin backend. Datos en el dispositivo, cifrados; iCloud opcional |
 | Lectura de facturas | En el dispositivo, con los frameworks de Apple. Sin modelo propio dentro de la app |
 | Asistente de preguntas | Modelo de Apple en el dispositivo, solo en iPhones compatibles |
@@ -50,45 +55,56 @@ Cinco letras y se lee bien en español, francés e inglés.
 - Reservas si Bifaz falla en el INPI: Bilado, Justio.
 
 ### Logo
-- Una moneda partida en dos mitades ligeramente desplazadas: mitad Pro (cobalto)
-  y mitad Personal (terracota) sobre fondo tinta. Juntas forman el círculo completo.
+- Una moneda partida en dos mitades ligeramente desplazadas: mitad Pro (blanca)
+  y mitad Personal (melocotón `#FFB08A`) sobre fondo cobalto `#2747D8`. Juntas forman el círculo completo.
 - Dibujado como vector en código (misma geometría para icono, splash y marca dentro de la app).
 - Icono de app en las variantes del sistema: claro, oscuro, tintado y transparente.
-- Logotipo: "Bifaz" en serif (New York), con la moneda de dos mitades junto a la B inicial.
+- Logotipo: icono de la app junto a "Bifaz" en SF Pro seminegrita.
+- En modo oscuro el icono usa un cobalto profundo `#172573`.
 
 ### Colores
-Valores de partida; el contraste AA de cada par texto/fondo se valida en la fase 0.
+Valores implementados en la fase 0; todos los pares texto/fondo pasan AA (prueba automática `ContrastTests`).
 
 | Token | Claro | Oscuro | Uso |
 |---|---|---|---|
-| Tinta | `#10151D` | `#F2EFE8` | Texto principal, botones primarios |
-| Papel | `#F6F3EC` | `#0B1018` | Fondo |
-| Superficie | `#FFFFFF` | `#151C27` | Tarjetas, hojas |
+| Tinta | `#1B1C1E` | `#F1F1F2` | Texto principal, botones primarios |
+| Tinta secundaria | `#6A6C72` | `#9C9EA4` | Texto de apoyo |
+| Papel | `#FFFFFF` | `#0F1012` | Fondo |
+| Superficie | `#FFFFFF` con borde | `#17181B` | Tarjetas, hojas |
+| Superficie tenue | `#F4F4F6` | `#1F2023` | Rellenos suaves |
+| Línea fina | `#E7E8EB` | `#26282C` | Separadores y bordes (nunca texto) |
 | Pro · Cobalto | `#2747D8` | `#8AA2FF` | Todo lo que pertenece al espacio Pro |
 | Personal · Terracota | `#B8451A` | `#FF9466` | Todo lo que pertenece al espacio Personal |
-| Éxito | `#1E8E5A` | `#5BD69A` | Confirmaciones, presupuesto en orden |
-| Aviso | `#B7791F` | `#F2C261` | Presupuesto cerca del límite, justificante pendiente |
+| Éxito | `#1B7F50` | `#5BD69A` | Confirmaciones, presupuesto en orden |
+| Aviso | `#98641A` | `#F2C261` | Presupuesto cerca del límite, justificante pendiente |
 | Error | `#C4314B` | `#FF8097` | Errores, presupuesto superado |
+
+- Tintes pastel de fondo para cada color (Pro `#ECEFFC`, Personal `#F9EEE8`, éxito `#EEF7F2`,
+  aviso `#FFF3DC`, error `#FBE9EC`) con sus equivalentes oscuros.
 
 - Cobalto y terracota son un par azul/naranja, distinguible con daltonismo;
   aun así el espacio siempre se indica también con texto o icono, nunca solo con color.
 - La paleta de categorías para gráficos se define y valida en la fase 3.
 
 ### Sistema de diseño
-- **Tipografía**: New York (serif del sistema) para títulos e importes grandes;
-  SF Pro para la interfaz; cifras tabulares en todas las listas. Todo con Dynamic Type.
+- **Tipografía**: SF Pro en toda la app, pesos regular y medio; importes con cifras tabulares.
+  Todo con Dynamic Type. (New York se retiró en la fase 0: daba aspecto de plantilla.)
 - **Espaciado**: rejilla de 4 pt. Radios 12 / 20 / 28.
 - **Materiales**: Liquid Glass solo en barras y controles flotantes; el contenido va sobre superficies sólidas.
-- **Iconos**: SF Symbols.
+- **Iconos**: juego propio de 54 iconos de trazo fino (24 pt, trazo 1,6) en `BifazDesign` (`BifazIcon`),
+  usado en pestañas, componentes, categorías y acciones. Sustituye a SF Symbols a petición del usuario (fase 1).
 - **Movimiento**: animaciones de muelle cortas, respuesta háptica en guardar, escanear y cerrar sesión;
   todo respeta "Reducir movimiento".
 - **Componentes**: importe, selector de espacio, fila de gasto, miniatura de justificante,
-  chip de categoría, tarjeta de cifra, barra de presupuesto, botón primario, estado vacío,
-  campo de confirmación (con indicador de confianza de la lectura).
+  chip de categoría, tarjeta de cifra, barra de presupuesto, botón primario y secundario,
+  campo de confirmación (con indicador de confianza de la lectura), cápsula de filtro,
+  icono de categoría con insignia de espacio, barra de reparto Pro/Personal, cabecera de sección.
+  El estado vacío es texto alineado a la izquierda con botones, sin ilustración.
 - Tokens y componentes viven en `BifazKit` con vistas previas en claro, oscuro y texto grande.
 
 ### Splash animado
-- Pantalla de lanzamiento estática: fondo tinta con la moneda quieta (idéntica al primer fotograma).
+- Pantalla de lanzamiento estática: fondo cobalto con la moneda blanca y melocotón quieta
+  (idéntica al primer fotograma de la animación).
 - Animación (máximo 1,4 s): las dos mitades entran desde lados opuestos, se unen con un toque háptico
   y un destello; aparece "Bifaz"; la moneda se expande como máscara y revela el Resumen.
 - Solo en arranque en frío; nunca retrasa la carga de datos; con "Reducir movimiento" es un fundido.
@@ -188,7 +204,9 @@ ingresos, Android y web, suscripciones de pago, valor legal de "copie fiable".
 - **Datos**: SwiftData en el contenedor de un App Group desde el primer día
   (lo comparten app, extensión de compartir y widgets). Modelo compatible con CloudKit desde el inicio
   (valores por defecto u opcionales, relaciones opcionales, sin unicidad).
-- **Justificantes**: archivo con almacenamiento externo y miniatura aparte.
+- **Justificantes**: desde la fase 1 el modelo guarda solo el nombre del archivo; los archivos van a una
+  carpeta propia con protección `.complete` (legibles solo con el iPhone desbloqueado). Consecuencia:
+  ya no viajan a iCloud con la base de datos, así que la fase 6 debe sincronizarlos por su cuenta.
 - **Importes**: siempre `Decimal`.
 - **Concurrencia**: modo de lenguaje Swift 6 con comprobación estricta; lectura, informes y copia fuera del hilo principal.
 - **Apple Pay**: App Intents ("Registrar pago", "Iniciar sesión", "Cerrar sesión") que se ejecutan
@@ -234,6 +252,41 @@ Cada fase termina con la app funcionando y sus pruebas en verde.
 | 9. Asistente | Preguntas en lenguaje natural con herramientas de consulta | Responde bien un banco de 30 preguntas en los 3 idiomas |
 | 10. Splash, pulido y lanzamiento | Splash animado, bienvenida, estados vacíos, accesibilidad, rendimiento con miles de gastos, TestFlight, ficha y etiquetas de privacidad | Versión candidata en TestFlight |
 
+**Fase 0, revisada por el manager (17-11-2026):** compila sin errores, 48 pruebas en verde,
+pestañas y selector de espacio probados con toques en el simulador, tres idiomas completos.
+Ajustes que pasan a la fase 1:
+- El título grande de cada pestaña queda 4 pt más a la izquierda que el contenido; alinearlos.
+- En el estado vacío hay tres accesos a "añadir" (dos botones y el "+" flotante); dejar uno claro.
+- Tratamiento en francés: ahora tutea ("Scanne…"); decidido "vous" (ver correcciones de la fase 1).
+
+**Fase 1, revisada por el manager (17-11-2026):** compila sin errores, 110 pruebas en verde.
+Probado con toques en el simulador: alta de un gasto, aparición en Resumen e Historial, detalle,
+borrado con confirmación; los totales cuadran al céntimo antes y después. No probados por el manager
+(sí cubiertos por pruebas del modelo y verificados a mano por el desarrollador): edición, búsqueda,
+filtros, gestión de categorías y ajuste "Sujeto a TVA". Además del alcance previsto, la fase incluye
+el Resumen con datos reales, el ajuste "Sujeto a TVA", manifiesto de privacidad, cifrado en iCloud
+marcado en los campos sensibles y portada de marca en el selector de apps.
+
+**Correcciones de la fase 1, revisadas por el manager (17-11-2026):** las 6 están hechas en la rama
+`fase1-correcciones`. Verificado: 115 pruebas en verde (103 + 10 de paquete y 2 de interfaz), categorías
+en francés, títulos alineados, textos franceses en "vous" sin ningún tuteo, texto de borrado sin comercio
+correcto y última fila visible sobre el botón "+". Falta integrarlas en `main` y adaptar a ellas lo ya
+empezado de la fase 2.
+
+**Aviso para la fase 2:** las 20 facturas de `TestData/Receipts` son sintéticas, generadas por el propio
+desarrollador. La fase no se acepta hasta probar la lectura con facturas y tickets reales del usuario.
+
+Lista de correcciones (todas hechas en la rama):
+1. **Categorías en idioma mezclado**: los nombres por defecto se guardan en el idioma del primer arranque
+   y no cambian con el idioma del iPhone (se ve "Supermercado" o "Software" con la app en francés).
+   Las categorías por defecto no renombradas deben traducirse al mostrarse.
+2. **Texto de borrado sin comercio**: si el gasto no tiene comercio, la confirmación empieza por
+   " et son justificatif seront supprimés…"; falta una variante del texto para ese caso.
+3. **Título de pestaña desalineado**: sigue 4 pt a la izquierda del contenido (venía de la fase 0).
+4. **Botón "+" flotante**: tapa los importes de las últimas filas visibles; añadir margen inferior a las listas.
+5. **Tratamiento en francés**: decidido por el usuario el 17-11-2026: **"vous"**. Pasar todos los textos franceses de "tu" a "vous".
+6. **Pruebas de interfaz**: no hay ninguna automatizada; añadir al menos alta, edición y borrado de un gasto.
+
 Tras la fase 2 la app ya sirve a diario; Apple Pay va después de seguridad porque depende
 de cómo queda protegida la base de datos; el asistente va casi al final porque nada depende de él.
 
@@ -247,6 +300,9 @@ de cómo queda protegida la base de datos; el asistente va casi al final porque 
 - **Modelo de Apple**: solo en iPhones con Apple Intelligence. La app debe ser completa sin él.
 - **APIs recientes**: se revisa la documentación del SDK 27.1 al empezar las fases 2, 7 y 9.
 - **Modelo de datos e iCloud**: las restricciones de CloudKit condicionan el modelo; se cierra con cuidado en la fase 0.
+- **Sincronización de justificantes**: al guardarse como archivos fuera de la base, no se sincronizan solos
+  con iCloud; la fase 6 necesita un mecanismo propio y la copia `.bifaz` debe incluirlos.
+- **Protección de datos**: el simulador no la aplica; hay que comprobarla en un iPhone real.
 - **Copia cifrada**: si se olvida la contraseña, la copia no se puede recuperar; la app lo avisa al crearla.
 - **Valor legal de la copia digital**: la versión 1 es archivo y control; conviene conservar los originales en papel.
 - **Cuenta de desarrollador**: la cuenta de pago de Apple hace falta para iCloud y TestFlight (desde la fase 6).
