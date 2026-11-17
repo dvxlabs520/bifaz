@@ -139,8 +139,8 @@ Criterio: un gasto en USD y un abono mensual salen bien en el Resumen y en el hi
 - **Pruebas de interfaz nuevas:**
   - gasto de 48 USD con tipo 1,2 tecleado: 40,00 € en el Resumen y «$48.00» en la fila;
   - regla mensual creada desde Ajustes que genera su gasto del día y aparece en el Resumen.
-- **Batería completa** del esquema `Bifaz`, sobre `e16eb2a`:
-  - 195 pruebas de modelos, 10 de diseño y 60 de lectura, más 5 de interfaz;
+- **Batería completa** del esquema `Bifaz`, sobre las mejoras finales:
+  - 195 pruebas de modelos, 10 de diseño y 60 de lectura, más 6 de interfaz (incluida la auditoría de accesibilidad);
   - en verde y sin avisos del compilador (solo el aviso habitual de `appintentsmetadataprocessor`).
 
 ## No comprobado, o que no se puede probar en el simulador
@@ -153,9 +153,30 @@ Criterio: un gasto en USD y un abono mensual salen bien en el Resumen y en el hi
   - el comportamiento de la red móvil;
   - la generación con dos dispositivos sincronizados, que depende de iCloud (fase 6).
 
+## Nota de proceso
+El `PLAN.md` del manager con la revisión de la fase 3 quedó dentro de mi commit `9c8ee4c` («Piezas compartidas…»), no en uno propio. Lo editó mientras yo usaba `git add -A`. El contenido es el suyo, sin tocar. No he reescrito el historial porque pidió no rebasar. Desde entonces añado solo rutas explícitas.
+
 ## Defectos menores pendientes
 - En la pantalla de Rappels, los interruptores necesitaron una pulsación algo más larga con la herramienta de toques del simulador. Es cosa de la herramienta, no de la app. Conviene confirmarlo con el dedo en el iPhone.
-- **Heredado de la fase 3:** el teclado tapa el campo del segundo importe de TVA.
+
+## Mejoras de la revisión de la fase 3 (hechas al final de la fase 4)
+1. **Orden del Resumen** (`2cb7ccc`): total → Por revisar (solo si hay algo) → Presupuestos → Por categoría → Seis meses → TVA → Últimos gastos. Capturas 11, 11b (español, oscuro) y 11c.
+2. **Botón «+»** (`456081a`):
+   - se aparta hacia abajo al desplazar hacia abajo en Resumen, Gastos y Ajustes, y vuelve al subir, al soltar o al quedarse quieto;
+   - con «Reducir movimiento» solo se desvanece;
+   - con VoiceOver activo nunca se oculta;
+   - el desplazamiento no se resiente: comprobado en un vídeo del simulador fotograma a fotograma, solo se anima la capa del botón.
+   Por diseño vuelve al detenerse, así que en reposo puede seguir tapando algo a media lista. El margen inferior de las listas garantiza que la última fila queda libre.
+3. **Teclado** (`e21a2e4`): el campo enfocado se desplaza al centro de la parte visible. Cubre importe, comercio, nota y el segundo importe de TVA, que antes quedaba tapado (captura 12). Con texto grande (AccessibilityXL) el importe queda visible. El título de la barra se corta («Nouv… »): es el comportamiento del sistema con un título en línea y dos botones.
+4. **Accesibilidad** (`77f628e`): prueba de interfaz `AccessibilityAuditUITests` con `performAccessibilityAudit` en Résumé, Dépenses, detalle, formulario, Budgets y Réglages, con los datos de ejemplo y en francés. Ha pasado dos veces seguidas. Encontró y corregí:
+   - **un problema real:** el selector Tout/Pro/Perso se exponía a VoiceOver como un Picker cuyos marcos no coincidían con los botones visibles. Ahora VoiceOver ve los botones reales, con el estado «seleccionado», agrupados bajo la etiqueta del selector.
+   **Exclusiones explícitas** (en el código de la prueba, `isKnownFalsePositive`):
+   - **Contraste de lo que pasa por debajo de la barra de pestañas translúcida y del botón «+»** (110 pt inferiores): la auditoría mide el color a través del material. Ejemplos: «Restaurants», «Statut», «TVA», «Gérer».
+     También 5 avisos de contraste en Dépenses que la auditoría no asocia a ningún elemento. Los atribuyo a lo mismo, pero no he podido localizarlos con certeza.
+   - **Botones de la barra superior** («Modifier», «Répéter», «Enregistrer») **y el título en línea:** son de sistema (Liquid Glass). Su contraste y su límite de Dynamic Type los pone iOS.
+   - **El buscador del historial mientras se pliega** (9 pt de alto): «texto recortado» durante la animación.
+   - **Dynamic Type de los botones Tout/Pro/Perso:** sí crecen, y con texto grande la fila pasa a columna (`ViewThatFits`; comprobado a mano en AccessibilityXL). La auditoría lo informa como «parcialmente no soportado».
+   - **Otro hallazgo:** con la auditoría justo después de cambiar de pestaña salían avisos de contraste en textos secundarios que cumplen AA (#6A6C72 sobre blanco, 5,3:1), por medir a mitad del fundido. La prueba espera a que la pantalla se asiente.
 
 ## Capturas (`docs/capturas/fase-4/`, francés)
 - **01:** historial Pro con el gasto en dólares y el gasto generado por la regla.
@@ -169,6 +190,8 @@ Criterio: un gasto en USD y un abono mensual salen bien en el Resumen y en el hi
 - **08:** rappels.
 - **09:** recordatorio de TVA en el centro de notificaciones.
 - **10:** réglages.
+- **11, 11b y 11c:** Resumen reordenado (francés; español en oscuro; presupuestos tras «Por revisar»).
+- **12:** segundo importe de TVA visible con el teclado abierto.
 
 ## Para el plan (decide el manager)
 - **Reglas recurrentes solo en euros:** ¿se admite moneda extranjera? Si sí, hay que decidir qué tipo aplicar en cada cargo generado.
