@@ -1,6 +1,8 @@
 import SwiftUI
+import BifazModels
 
-/// A budget progress bar: green below 80 %, amber from 80 to 100 %, red above.
+/// A budget progress bar: green below 80 %, amber from 80 %, red from 100 %
+/// (thresholds come from `BudgetState`).
 /// The fill is capped at 100 %. State is always shown with an icon and a word
 /// as well as colour.
 public struct BudgetBar: View {
@@ -19,8 +21,21 @@ public struct BudgetBar: View {
         self.currencyCode = currencyCode
     }
 
+    /// A bar for a budget status computed by the model.
+    public init(status: BudgetStatus, currencyCode: String = "EUR") {
+        self.init(spent: status.spent, limit: status.limit, currencyCode: currencyCode)
+    }
+
     private enum Status {
         case onTrack, closeToLimit, overBudget
+
+        init(_ state: BudgetState) {
+            switch state {
+            case .normal: self = .onTrack
+            case .nearLimit: self = .closeToLimit
+            case .over: self = .overBudget
+            }
+        }
 
         var color: Color {
             switch self {
@@ -53,13 +68,7 @@ public struct BudgetBar: View {
         return Double(truncating: (spent / limit) as NSDecimalNumber)
     }
 
-    private var status: Status {
-        switch ratio {
-        case ..<0.8: .onTrack
-        case ...1: .closeToLimit
-        default: .overBudget
-        }
-    }
+    private var status: Status { Status(BudgetState(spent: spent, limit: limit)) }
 
     private var progressText: String {
         let spentText = spent.formatted(.currency(code: currencyCode).locale(locale))
@@ -138,6 +147,7 @@ private struct BudgetBarSamples: View {
         VStack(spacing: BifazSpacing.l) {
             BudgetBar(spent: 120, limit: 300)
             BudgetBar(spent: 255, limit: 300)
+            BudgetBar(spent: 300, limit: 300)
             BudgetBar(spent: 342.50, limit: 300)
             BudgetBar(spent: 0, limit: 0)
         }
