@@ -33,6 +33,8 @@ struct ExpenseFormView: View {
     @State private var savedCount = 0
     /// Confidence of each read value; a field drops out once the user edits it.
     @State private var confidence: [ReadField: ReadingConfidence] = [:]
+    /// The category was proposed by Bifaz (merchant memory or receipt hints), not chosen.
+    @State private var categoryIsProposal = false
     @FocusState private var focus: Field?
 
     private enum Field { case amount, merchant, note }
@@ -100,7 +102,7 @@ struct ExpenseFormView: View {
                     if let capture { ReadReceiptHeader(capture: capture) }
                     amountSection
                     field("form.space") { spacePicker }
-                    field("form.category") { categoryPicker }
+                    field("form.category", proposed: categoryIsProposal && draft.category != nil) { categoryPicker }
                     field("form.merchant", read: .merchant) { merchantField }
                     field("form.date", read: .date) {
                         DatePicker(selection: $draft.date, displayedComponents: .date) {
@@ -149,11 +151,15 @@ struct ExpenseFormView: View {
             }
             .onChange(of: draft.merchant) { old, _ in if !old.isEmpty { confidence[.merchant] = nil } }
             .onChange(of: draft.date) { confidence[.date] = nil }
-            .onChange(of: draft.space) { _, space in spaceChanged(to: space) }
+            .onChange(of: draft.space) { _, space in
+                spaceChanged(to: space)
+                if isConfirmingCapture, draft.category == nil { proposeCategory() }
+            }
             .onAppear {
                 if isConfirmingCapture {
                     if !draft.merchant.isEmpty { applyMemory(for: draft.merchant) }
                     spaceChanged(to: draft.space)
+                    proposeCategory()
                 } else if !isEditing {
                     spaceChanged(to: draft.space)
                     focus = .amount
@@ -224,6 +230,7 @@ struct ExpenseFormView: View {
                 let isSelected = draft.category?.id == category.id
                 Button {
                     draft.category = isSelected ? nil : category
+                    categoryIsProposal = false
                 } label: {
                     CategoryChip(category.displayName, icon: category.icon, tint: draft.space.color, isSelected: isSelected)
                 }
@@ -309,6 +316,7 @@ struct ExpenseFormView: View {
     private func field(
         _ label: LocalizedStringResource,
         read: ReadField? = nil,
+        proposed: Bool = false,
         divider: Bool = true,
         @ViewBuilder content: () -> some View
     ) -> some View {
@@ -320,6 +328,7 @@ struct ExpenseFormView: View {
                     .foregroundStyle(.bifazInkSecondary)
                     .accessibilityAddTraits(.isHeader)
                 if let read, let level = confidence[read] { ConfidenceTag(confidence: level) }
+                if proposed { ProposalTag() }
             }
             content()
         }
@@ -351,7 +360,25 @@ struct ExpenseFormView: View {
     private func applyMemory(for merchant: String) {
         guard let rule = MerchantMemory.suggestion(for: merchant, in: context) else { return }
         draft.space = rule.space
-        if let category = rule.category { draft.category = category }
+        if let category = rule.category {
+            draft.category = category
+            categoryIsProposal = isConfirmingCapture
+        }
+    }
+
+    /// For a read receipt, proposes a category when none is set: the merchant's
+    /// last one, else a clear hint from the brand or the text, else nothing.
+    private func proposeCategory() {
+        guard let capture else { return }
+        if draft.category == nil {
+            draft.category = CategoryHint.proposal(
+                merchant: draft.merchant,
+                text: capture.reading.recognizedText,
+                space: draft.space,
+                in: context
+            )
+        }
+        categoryIsProposal = draft.category != nil
     }
 
     private func save() {
@@ -421,6 +448,23 @@ private struct ReadReceiptHeader: View {
         }
         .padding(.top, BifazSpacing.l)
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// A neutral tag next to the category when Bifaz proposed it.
+private struct ProposalTag: View {
+    var body: some View {
+        HStack(spacing: BifazSpacing.xxs) {
+            BifazIconView(.info, size: 12, relativeTo: .caption)
+            Text("form.category.proposed")
+        }
+        .font(.bifazLabel)
+        .foregroundStyle(Color.bifazInkSecondary)
+        .padding(.horizontal, BifazSpacing.xs)
+        .padding(.vertical, 2)
+        .overlay(Capsule().strokeBorder(Color.bifazHairline, lineWidth: 1))
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("ui.categoryProposed")
     }
 }
 

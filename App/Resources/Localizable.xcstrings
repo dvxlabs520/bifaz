@@ -1225,6 +1225,30 @@
         }
       }
     },
+    "form.category.proposed" : {
+      "comment" : "Very short tag next to the category of a read receipt: Bifaz proposed it, the user can change it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggested"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Propuesta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proposée"
+          }
+        }
+      }
+    },
     "form.date" : {
       "comment" : "Date field label.",
       "extractionState" : "manual",
