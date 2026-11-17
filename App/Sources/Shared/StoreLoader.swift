@@ -18,8 +18,9 @@ final class StoreLoader {
     func load() async {
         state = .loading
         do {
+            let inMemory = Self.isUITesting
             let container = try await Task.detached(priority: .userInitiated) {
-                try BifazStore.makeContainer()
+                try BifazStore.makeContainer(inMemory: inMemory)
             }.value
             try CategorySeeder.seedIfNeeded(in: container.mainContext)
             try CategorySeeder.adoptTranslatedDefaults(in: container.mainContext, knownNames: CategoryNames.allTranslations)
@@ -35,6 +36,15 @@ final class StoreLoader {
                 """)
             state = .failed(code: "\(nsError.domain) \(nsError.code)")
         }
+    }
+
+    /// `-BifazUITesting YES` (Debug only): a fresh in-memory store for UI tests.
+    private static var isUITesting: Bool {
+        #if DEBUG
+        UserDefaults.standard.bool(forKey: "BifazUITesting")
+        #else
+        false
+        #endif
     }
 
     #if DEBUG

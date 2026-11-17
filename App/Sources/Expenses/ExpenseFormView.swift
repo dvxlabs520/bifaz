@@ -86,6 +86,7 @@ struct ExpenseFormView: View {
                         }
                         .buttonStyle(.bifazSecondary)
                         .foregroundStyle(.bifazError)
+                        .accessibilityIdentifier("ui.formDelete")
                         .padding(.top, BifazSpacing.xxl)
                     }
                 }
@@ -107,6 +108,7 @@ struct ExpenseFormView: View {
             }
             .confirmationDialog("form.delete.title", isPresented: $isConfirmingDelete, titleVisibility: .visible) {
                 Button("form.delete", role: .destructive, action: delete)
+                    .accessibilityIdentifier("ui.formDeleteConfirm")
             } message: {
                 DeleteExpenseMessage(merchant: expense?.merchant ?? "")
             }
@@ -132,6 +134,7 @@ struct ExpenseFormView: View {
                 }
                 .font(.bifazAmountHero)
                 .keyboardType(.decimalPad)
+                .accessibilityIdentifier("ui.formAmount")
                 .focused($focus, equals: .amount)
                 .foregroundStyle(.bifazInk)
                 Text(verbatim: Self.currencySymbol)
@@ -178,6 +181,7 @@ struct ExpenseFormView: View {
     private var merchantField: some View {
         VStack(alignment: .leading, spacing: 0) {
             TextField("form.merchant.placeholder", text: $draft.merchant)
+                .accessibilityIdentifier("ui.formMerchant")
                 .font(.bifazBody)
                 .textInputAutocapitalization(.words)
                 .autocorrectionDisabled()
@@ -236,6 +240,7 @@ struct ExpenseFormView: View {
         }
         ToolbarItem(placement: .confirmationAction) {
             Button("form.save", action: save)
+                .accessibilityIdentifier("ui.formSave")
                 .disabled(!draft.isValid)
                 .fontWeight(.semibold)
         }

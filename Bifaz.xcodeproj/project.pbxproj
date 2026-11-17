@@ -31,6 +31,7 @@
 		92590EF75078D058EA15BDC8 /* ExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D940E35A0AFA708C76CE57 /* ExpenseFormView.swift */; };
 		96927527FFEF9DFA67EB4395 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2519A55C560092F139062327 /* Appearance.swift */; };
 		99B376B7C77272912241E26E /* DesignGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BB96F8FEB099CF6E9AD781 /* DesignGalleryView.swift */; };
+		A50B4234E20BA4F4906AF329 /* ExpenseFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98333B48244EC1C9957451E4 /* ExpenseFlowUITests.swift */; };
 		A668CF5487E6D1BEF70CCC4A /* StoreLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2136EE2404D6CAF2285ACA05 /* StoreLoader.swift */; };
 		BB5027E9B31F8E156FAA806C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 1B1E0EA0B2F495B0D1056A37 /* Localizable.xcstrings */; };
 		BF586BB9D1A63B6BA720C083 /* BifazApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF661489BE599A5EA6AD309 /* BifazApp.swift */; };
@@ -42,7 +43,18 @@
 		FBDA64E60116CD3B0089D496 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 91DE7FDFC123E116D5BB9468 /* InfoPlist.xcstrings */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		125A6F1CDE8255AB02D26FAD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B737725121BD1D82707D8CEB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F3BA5B070C8B965E7E76EBF7;
+			remoteInfo = Bifaz;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		05C72F3761583CDCCA60AB62 /* BifazUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = BifazUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CF661489BE599A5EA6AD309 /* BifazApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BifazApp.swift; sourceTree = "<group>"; };
 		131C3C664CDC56712A9781DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		149EA7E314AB40070BBAB287 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -69,6 +81,7 @@
 		8B750548D8A9F6680E9E0A26 /* ModelPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPresentation.swift; sourceTree = "<group>"; };
 		8FE43B63D39C4C48A2A6012B /* BifazKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BifazKit; path = BifazKit; sourceTree = SOURCE_ROOT; };
 		91DE7FDFC123E116D5BB9468 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		98333B48244EC1C9957451E4 /* ExpenseFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFlowUITests.swift; sourceTree = "<group>"; };
 		AA80D6D590995B39B6F3C8C8 /* AppTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTab.swift; sourceTree = "<group>"; };
 		B18DFDBFC825568481FAE708 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		B4D940E35A0AFA708C76CE57 /* ExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFormView.swift; sourceTree = "<group>"; };
@@ -104,6 +117,7 @@
 			children = (
 				C1BBE1387F1CE9B1A3A37BAA /* App */,
 				D6365FA95242F9DEA26B02CA /* Packages */,
+				F5BDED932BAB3F53BF3085AA /* UITests */,
 				99C9A0983BF21906ABFE3A68 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -168,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				E595CB2FC30B14735AF0210F /* Bifaz.app */,
+				05C72F3761583CDCCA60AB62 /* BifazUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -226,9 +241,35 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		F5BDED932BAB3F53BF3085AA /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				98333B48244EC1C9957451E4 /* ExpenseFlowUITests.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1F476F6E464854C397D62D54 /* BifazUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C6058A8C718C3649D26542D0 /* Build configuration list for PBXNativeTarget "BifazUITests" */;
+			buildPhases = (
+				CE5C5451DA53DDC61DB6ABAD /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				070D6ED32235A6CC7326094A /* PBXTargetDependency */,
+			);
+			name = BifazUITests;
+			packageProductDependencies = (
+			);
+			productName = BifazUITests;
+			productReference = 05C72F3761583CDCCA60AB62 /* BifazUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		F3BA5B070C8B965E7E76EBF7 /* Bifaz */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 335C29B5B7B5F6CE3BD34079 /* Build configuration list for PBXNativeTarget "Bifaz" */;
@@ -259,6 +300,11 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 2710;
 				TargetAttributes = {
+					1F476F6E464854C397D62D54 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+						TestTargetID = F3BA5B070C8B965E7E76EBF7;
+					};
 					F3BA5B070C8B965E7E76EBF7 = {
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
@@ -285,6 +331,7 @@
 			projectRoot = "";
 			targets = (
 				F3BA5B070C8B965E7E76EBF7 /* Bifaz */,
+				1F476F6E464854C397D62D54 /* BifazUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -338,7 +385,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE5C5451DA53DDC61DB6ABAD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A50B4234E20BA4F4906AF329 /* ExpenseFlowUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		070D6ED32235A6CC7326094A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F3BA5B070C8B965E7E76EBF7 /* Bifaz */;
+			targetProxy = 125A6F1CDE8255AB02D26FAD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		03067731683BA82A1708C779 /* Release */ = {
@@ -456,6 +519,46 @@
 			};
 			name = Debug;
 		};
+		4F91840E0DC16D6045FD3366 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dvxlabs.bifaz.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = Bifaz;
+			};
+			name = Debug;
+		};
+		DDB1D0EAB8FFE51B6F303B53 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dvxlabs.bifaz.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = Bifaz;
+			};
+			name = Release;
+		};
 		EE76CA556C8B6CE8707195D7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -545,6 +648,15 @@
 			buildConfigurations = (
 				EE76CA556C8B6CE8707195D7 /* Debug */,
 				34BAA890C1CF0286BE65E2E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C6058A8C718C3649D26542D0 /* Build configuration list for PBXNativeTarget "BifazUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F91840E0DC16D6045FD3366 /* Debug */,
+				DDB1D0EAB8FFE51B6F303B53 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

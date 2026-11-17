@@ -61,6 +61,17 @@
                ReferencedContainer = "container:BifazKit">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1F476F6E464854C397D62D54"
+               BuildableName = "BifazUITests.xctest"
+               BlueprintName = "BifazUITests"
+               ReferencedContainer = "container:Bifaz.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>

@@ -48,6 +48,7 @@ struct ExpenseDetailView: View {
                 } label: {
                     Text("detail.edit", tableName: "History")
                 }
+                .accessibilityIdentifier("ui.detailEdit")
             }
         }
         .sheet(isPresented: $isEditing) {

@@ -23,6 +23,7 @@ struct CaptureButton: View {
         .buttonBorderShape(.circle)
         .tint(.bifazInk)
         .accessibilityLabel(Text("capture.label"))
+        .accessibilityIdentifier("ui.captureButton")
         .accessibilityHint(Text("capture.hint"))
     }
 }

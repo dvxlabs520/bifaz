@@ -117,6 +117,7 @@ private struct SummaryContent: View {
             .padding(.top, BifazSpacing.s)
         }
         .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("ui.summaryHeader")
     }
 
     private func section(_ title: LocalizedStringResource, expenses: [Expense]) -> some View {

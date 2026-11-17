@@ -80,6 +80,23 @@ targets:
         CODE_SIGN_IDENTITY[sdk=iphonesimulator*]: "-"
         ENABLE_PREVIEWS: YES
 
+  BifazUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: UITests
+    dependencies:
+      - target: Bifaz
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dvxlabs.bifaz.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1"
+        TEST_TARGET_NAME: Bifaz
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""
+        CODE_SIGN_IDENTITY[sdk=iphonesimulator*]: "-"
+
 schemes:
   Bifaz:
     build:
@@ -92,5 +109,6 @@ schemes:
       targets:
         - package: BifazKit/BifazModelsTests
         - package: BifazKit/BifazDesignTests
+        - BifazUITests
     archive:
       config: Release
