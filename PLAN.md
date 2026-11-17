@@ -5,7 +5,7 @@ Simple de usar, con acabado premium y preparada para publicarse en el App Store.
 
 Estado: **fases 0 y 1 entregadas y revisadas el 17-11-2026 (commits `213828c` y `344cd4d`).
 Las 6 correcciones de la fase 1 están integradas en `main` (`838147d`). La fase 2 está entregada y revisada
-en simulador en la rama `fase-2` (`301e7ff`), sin fusionar y **sin aceptar**: falta probarla con facturas
+en simulador en la rama `fase-2` (`ea7d71b`, con sus 5 mejoras), sin fusionar y **sin aceptar**: falta probarla con facturas
 reales (`TestData/Real/`, fuera de git) y en un iPhone real (escáner, modelo de Apple, cifrado).**
 
 ## 1. Decisiones cerradas
@@ -84,7 +84,8 @@ Valores implementados en la fase 0; todos los pares texto/fondo pasan AA (prueba
 
 - Cobalto y terracota son un par azul/naranja, distinguible con daltonismo;
   aun así el espacio siempre se indica también con texto o icono, nunca solo con color.
-- La paleta de categorías para gráficos se define y valida en la fase 3.
+- Los gráficos no usan una paleta por categoría: las barras van en el color del espacio (cobalto en Pro,
+  terracota en Personal, tinta en Todo) y cada categoría se distingue por su nombre e icono.
 
 ### Sistema de diseño
 - **Tipografía**: SF Pro en toda la app, pesos regular y medio; importes con cifras tabulares.
@@ -302,12 +303,28 @@ modelo responde con Apple Intelligence del Mac, así que no representa un iPhone
 Para aceptar la fase: facturas y tickets reales del usuario leídos correctamente, y prueba en iPhone real
 del escáner, del modelo y de la protección de los justificantes.
 
-Mejoras detectadas en la revisión (no bloquean):
+**Mejoras de la fase 2, revisadas por el manager (17-11-2026), rama `fase-2` (`ea7d71b`):** las 5 están
+hechas, cada una en su commit. Verificado: 191 pruebas en verde (122 + 10 + 57 de paquete y 2 de interfaz) y,
+con toques en el simulador en francés sobre el ticket de TotalEnergies: categoría "Transports" marcada como
+propuesta, comercio "TotalEnergies", pantalla de lectura opaca, confirmación al descartar y menú del "+" sin
+parpadeo oscuro. El botón "+" es ahora un disco plano de 56 pt, algo menor que antes. Cubierto solo por
+pruebas automáticas: guardar con la categoría propuesta y la propuesta a partir de la memoria del comercio.
+
+Lista de mejoras (todas hechas en la rama):
 1. La lectura no propone categoría: los gastos leídos quedan "Sin categoría" (p. ej. Monoprix, SNCF).
 2. El comercio sale con mayúsculas irregulares ("Totalenergies Relais A6 - AIRE DE Beaune") y aun así marcado "Seguro".
 3. El texto de "Leyendo su justificante…" se superpone al contenido de fondo; falta un velo más opaco.
 4. Cerrar la confirmación con la "X" descarta la lectura sin preguntar.
 5. El menú del "+" parpadea en oscuro al cerrarse.
+
+**Fase 3, decisiones del manager al encargarla (17-11-2026):**
+- Parte de `fase-2` en una rama `fase-3`. No se fusiona nada en `main` hasta aceptar la fase 2.
+- Reparto por categoría como barras horizontales ordenadas, sin gráfico circular ni paleta por categoría.
+- TVA por tipo: el modelo pasa a guardar una línea por tipo de TVA (base, TVA e importe), porque el informe
+  de TVA de la fase 5 lo necesita y hoy un ticket con varios tipos solo guarda la TVA total. Es el esquema v2,
+  con migración probada desde el v1.
+- Avisos de presupuesto dentro de la app (cerca del límite al 80 %, superado al 100 %). Las notificaciones
+  del sistema se dejan para la fase 4, junto con el recordatorio de TVA.
 
 Tras la fase 2 la app ya sirve a diario; Apple Pay va después de seguridad porque depende
 de cómo queda protegida la base de datos; el asistente va casi al final porque nada depende de él.
