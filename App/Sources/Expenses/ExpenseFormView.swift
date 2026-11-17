@@ -35,6 +35,9 @@ struct ExpenseFormView: View {
     @State private var confidence: [ReadField: ReadingConfidence] = [:]
     /// The category was proposed by Bifaz (merchant memory or receipt hints), not chosen.
     @State private var categoryIsProposal = false
+    /// The draft as the form opened (after prefilling), to spot unsaved changes.
+    @State private var baseline: ExpenseDraft?
+    @State private var isConfirmingDiscard = false
     @FocusState private var focus: Field?
 
     private enum Field { case amount, merchant, note }
@@ -86,6 +89,9 @@ struct ExpenseFormView: View {
     private var spaceCategories: [ExpenseCategory] { categories.filter { $0.space == draft.space } }
     private var showsVAT: Bool { isVATRegistered && draft.space == .pro }
     private var amountIsInvalid: Bool { !amountText.isEmpty && MoneyParser.parse(amountText) == nil }
+    private var hasChanges: Bool { baseline.map { $0 != draft } ?? false }
+    /// A read receipt or unsaved changes would be lost: ask before closing.
+    private var closingLosesWork: Bool { isConfirmingCapture || hasChanges }
 
     /// "€" as the current locale writes it.
     private static let currencySymbol: String = {
@@ -164,6 +170,19 @@ struct ExpenseFormView: View {
                     spaceChanged(to: draft.space)
                     focus = .amount
                 }
+                if baseline == nil { baseline = draft }
+            }
+            .interactiveDismissDisabled(closingLosesWork)
+            .confirmationDialog(
+                isConfirmingCapture ? "form.discard.receipt.title" : "form.discard.changes.title",
+                isPresented: $isConfirmingDiscard,
+                titleVisibility: .visible
+            ) {
+                Button("form.discard.confirm", role: .destructive) { dismiss() }
+                    .accessibilityIdentifier("ui.formDiscardConfirm")
+                Button("form.discard.keep", role: .cancel) {}
+            } message: {
+                if isConfirmingCapture { Text("form.discard.receipt.message") }
             }
             .confirmationDialog("form.delete.title", isPresented: $isConfirmingDelete, titleVisibility: .visible) {
                 Button("form.delete", role: .destructive, action: delete)
@@ -299,11 +318,12 @@ struct ExpenseFormView: View {
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
             Button {
-                dismiss()
+                if closingLosesWork { isConfirmingDiscard = true } else { dismiss() }
             } label: {
                 BifazIconView(.close, size: 18)
             }
             .accessibilityLabel(Text("form.cancel"))
+            .accessibilityIdentifier("ui.formClose")
         }
         ToolbarItem(placement: .confirmationAction) {
             Button("form.save", action: save)

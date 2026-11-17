@@ -1321,6 +1321,126 @@
         }
       }
     },
+    "form.discard.changes.title" : {
+      "comment" : "Title of the confirmation asked when closing an expense form with unsaved changes.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard your changes?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Descartar los cambios?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonner vos modifications ?"
+          }
+        }
+      }
+    },
+    "form.discard.confirm" : {
+      "comment" : "Destructive button: close the form without saving.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descartar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonner"
+          }
+        }
+      }
+    },
+    "form.discard.keep" : {
+      "comment" : "Cancel button of the discard confirmation: stay in the form.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep editing"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguir editando"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer la saisie"
+          }
+        }
+      }
+    },
+    "form.discard.receipt.message" : {
+      "comment" : "Message of the confirmation asked when closing the confirmation of a read receipt without saving.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The receipt that was read and its details won't be saved."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El justificante leído y sus datos no se guardarán."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le justificatif lu et ses informations ne seront pas enregistrés."
+          }
+        }
+      }
+    },
+    "form.discard.receipt.title" : {
+      "comment" : "Title of the confirmation asked when closing the confirmation of a read receipt without saving.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard this receipt?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Descartar este justificante?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonner ce justificatif ?"
+          }
+        }
+      }
+    },
     "form.error.message" : {
       "comment" : "Message of the save error alert.",
       "extractionState" : "manual",

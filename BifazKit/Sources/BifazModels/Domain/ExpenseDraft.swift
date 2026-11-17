@@ -5,7 +5,7 @@ import SwiftData
 ///
 /// Plain value type: the form edits a draft, and only `ExpenseService` turns
 /// it into a stored `Expense`, after `validate()` passes.
-public struct ExpenseDraft {
+public struct ExpenseDraft: Equatable {
     public var amount: Decimal?
     public var merchant: String
     public var date: Date
