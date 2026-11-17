@@ -73,8 +73,10 @@ private struct ReceiptCaptureModifier: ViewModifier {
                 process(isPDF ? .pdf(data) : .photo(data))
             }
             .overlay {
-                if isProcessing { ReadingOverlay() }
+                // Appears at once (a fade-in would show the screen behind the text), fades out.
+                if isProcessing { ReadingOverlay().transition(.asymmetric(insertion: .identity, removal: .opacity)) }
             }
+            .animation(.easeOut(duration: 0.2), value: isProcessing)
             .alert("capture.error.title", isPresented: $failed) {
                 Button("capture.error.ok") {}
             } message: {
@@ -113,11 +115,12 @@ private struct ReceiptCaptureModifier: ViewModifier {
     }
 }
 
-/// "Reading your receipt…" over the current screen.
+/// "Reading your receipt…" over the current screen. The background is opaque
+/// (light and dark): the screen behind must never show through the text.
 private struct ReadingOverlay: View {
     var body: some View {
         ZStack {
-            Color.bifazPaper.opacity(0.92).ignoresSafeArea()
+            Color.bifazPaper.ignoresSafeArea()
             VStack(spacing: BifazSpacing.m) {
                 ProgressView()
                     .controlSize(.large)
@@ -133,6 +136,7 @@ private struct ReadingOverlay: View {
         }
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(.updatesFrequently)
+        .accessibilityIdentifier("ui.readingOverlay")
     }
 }
 
