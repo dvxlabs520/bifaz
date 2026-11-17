@@ -11,15 +11,16 @@ struct ContainerAndEntityTests {
         _ = try BifazStore.makeContainer(inMemory: true)
     }
 
-    @Test("Schema v2 contains exactly the 9 entity types; v1 keeps its 8")
+    @Test("Schema v3 contains exactly the 9 entity types; v2 the same 9; v1 keeps its 8")
     func schemaEntities() {
         let names = Set(BifazStore.schema.entities.map(\.name))
         #expect(names == ["Expense", "ExpenseVATLine", "Receipt", "ExpenseCategory", "Tag", "Budget",
                           "RecurringRule", "ExpenseSession", "MerchantRule"])
         #expect(BifazStore.schema.entities.count == 9)
+        #expect(BifazSchemaV3.models.count == 9)
         #expect(BifazSchemaV2.models.count == 9)
         #expect(BifazSchemaV1.models.count == 8)
-        #expect(BifazStore.schema.version == BifazSchemaV2.versionIdentifier)
+        #expect(BifazStore.schema.version == BifazSchemaV3.versionIdentifier)
     }
 
     @Test("Expense round-trips its fields")

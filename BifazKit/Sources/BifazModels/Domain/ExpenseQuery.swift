@@ -9,6 +9,8 @@ public struct ExpenseFilter: Equatable, Sendable {
     public var categoryIDs: Set<UUID>
     /// Keep expenses with no category (with `categoryIDs`, either one matches).
     public var withoutCategory: Bool
+    /// Client and project tags the expense must all carry (phase 4); empty = any.
+    public var tagIDs: Set<UUID>
     /// Inclusive start and exclusive end; `nil` = all time.
     public var dateInterval: DateInterval?
     public var onlyReceiptPending: Bool
@@ -18,6 +20,7 @@ public struct ExpenseFilter: Equatable, Sendable {
         space: SpaceFilter = .all,
         categoryIDs: Set<UUID> = [],
         withoutCategory: Bool = false,
+        tagIDs: Set<UUID> = [],
         dateInterval: DateInterval? = nil,
         onlyReceiptPending: Bool = false,
         searchText: String = ""
@@ -25,6 +28,7 @@ public struct ExpenseFilter: Equatable, Sendable {
         self.space = space
         self.categoryIDs = categoryIDs
         self.withoutCategory = withoutCategory
+        self.tagIDs = tagIDs
         self.dateInterval = dateInterval
         self.onlyReceiptPending = onlyReceiptPending
         self.searchText = searchText
@@ -32,7 +36,7 @@ public struct ExpenseFilter: Equatable, Sendable {
 
     /// Filters other than space and search are active (for the filter badge).
     public var activeRefinementCount: Int {
-        (categoryIDs.isEmpty && !withoutCategory ? 0 : 1) + (dateInterval == nil ? 0 : 1) + (onlyReceiptPending ? 1 : 0)
+        (categoryIDs.isEmpty && !withoutCategory ? 0 : 1) + (tagIDs.isEmpty ? 0 : 1) + (dateInterval == nil ? 0 : 1) + (onlyReceiptPending ? 1 : 0)
     }
 
     /// Fetch descriptor for the store-side part (space, dates, pending receipts), newest first.
@@ -67,6 +71,10 @@ public struct ExpenseFilter: Equatable, Sendable {
             }
         }
         if onlyReceiptPending, expense.status != .receiptPending { return false }
+        if !tagIDs.isEmpty {
+            let carried = Set((expense.tags ?? []).map(\.id))
+            guard tagIDs.isSubset(of: carried) else { return false }
+        }
         let query = Self.fold(searchText)
         guard !query.isEmpty else { return true }
         let haystack = [expense.merchant, expense.note, expense.category.map(categoryName) ?? ""].map(Self.fold)
@@ -99,7 +107,7 @@ public struct ExpenseTotals: Equatable, Sendable {
 
     public init(_ expenses: some Sequence<Expense>) {
         for expense in expenses {
-            add(expense.amountInEUR, space: expense.space, vat: expense.vatAmount ?? 0)
+            add(expense.amountInEUR, space: expense.space, vat: expense.vatAmountInEUR ?? 0)
         }
     }
 

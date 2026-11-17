@@ -9,7 +9,8 @@ public enum ExpenseService {
     public static func create(
         from draft: ExpenseDraft,
         receipt: StoredReceiptFiles? = nil,
-        in context: ModelContext
+        in context: ModelContext,
+        saving: Bool = true
     ) throws -> Expense {
         if let error = draft.validate() { throw error }
         let expense = Expense(amount: 0, space: draft.space, source: draft.source)
@@ -17,7 +18,7 @@ public enum ExpenseService {
         apply(draft, to: expense, in: context)
         if let receipt { attach(receipt, to: expense, in: context) }
         MerchantMemory.remember(expense, in: context)
-        try context.save()
+        if saving { try context.save() }
         return expense
     }
 
@@ -89,8 +90,20 @@ public enum ExpenseService {
     private static func apply(_ draft: ExpenseDraft, to expense: Expense, in context: ModelContext) {
         let amount = (draft.amount ?? 0).rounded(scale: 2)
         expense.amount = amount
-        expense.currencyCode = "EUR"
-        expense.amountInEUR = amount
+        expense.currencyCode = draft.currencyCode
+        expense.amountInEUR = draft.amountInEUR ?? amount
+        if let quote = draft.effectiveExchangeRate {
+            // Fixed now, never recalculated.
+            expense.exchangeRate = quote.rate
+            expense.exchangeRateDate = quote.date
+            expense.exchangeRateSourceRawValue = quote.source.rawValue
+        } else {
+            expense.exchangeRate = nil
+            expense.exchangeRateDate = nil
+            expense.exchangeRateSourceRawValue = nil
+        }
+        // Client and project exist only in Pro.
+        expense.tags = draft.space == .pro ? [draft.client, draft.project].compactMap { $0 } : []
         expense.merchant = draft.normalizedMerchant
         expense.date = draft.date
         expense.space = draft.space

@@ -41,9 +41,46 @@ public enum BifazSchemaV2: VersionedSchema {
     }
 }
 
+/// Version 3 (phase 4): exchange rate on the expense, recurrence day, archived
+/// tags, recurring schedule, client and project in the merchant memory.
+public enum BifazSchemaV3: VersionedSchema {
+    public static let versionIdentifier = Schema.Version(3, 0, 0)
+
+    public static var models: [any PersistentModel.Type] {
+        [
+            Expense.self,
+            ExpenseVATLine.self,
+            Receipt.self,
+            ExpenseCategory.self,
+            Tag.self,
+            Budget.self,
+            RecurringRule.self,
+            ExpenseSession.self,
+            MerchantRule.self,
+        ]
+    }
+}
+
 public enum BifazMigrationPlan: SchemaMigrationPlan {
-    public static var schemas: [any VersionedSchema.Type] { [BifazSchemaV1.self, BifazSchemaV2.self] }
-    public static var stages: [MigrationStage] { [v1ToV2] }
+    public static var schemas: [any VersionedSchema.Type] { [BifazSchemaV1.self, BifazSchemaV2.self, BifazSchemaV3.self] }
+    public static var stages: [MigrationStage] { [v1ToV2, v2ToV3] }
+
+    /// V2 → V3: only optional attributes, attributes with defaults and optional
+    /// relationships are added. Afterwards, a rule's new `startDate` (which the
+    /// store fills with the migration time) takes its `nextDate`: before v3 the
+    /// next date was the only schedule a rule had.
+    static let v2ToV3 = MigrationStage.custom(
+        fromVersion: BifazSchemaV2.self,
+        toVersion: BifazSchemaV3.self,
+        willMigrate: nil,
+        didMigrate: { context in
+            for rule in try context.fetch(FetchDescriptor<BifazSchemaV3.RecurringRule>()) {
+                rule.startDate = rule.nextDate
+                rule.generatedThrough = nil
+            }
+            try context.save()
+        }
+    )
 
     /// V1 → V2. The store change is additive (a new entity and an optional
     /// relationship); after it, each expense with VAT gets its line from the
@@ -97,7 +134,7 @@ public enum BifazStore {
     }
 
     /// The schema of the current version.
-    public static var schema: Schema { Schema(versionedSchema: BifazSchemaV2.self) }
+    public static var schema: Schema { Schema(versionedSchema: BifazSchemaV3.self) }
 
     /// Creates the container. Pass `inMemory: true` for tests and previews.
     public static func makeContainer(inMemory: Bool = false) throws -> ModelContainer {

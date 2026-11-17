@@ -25,6 +25,16 @@ public struct ExpenseDraft: Equatable {
     public var note: String
     /// How the expense entered Bifaz (only used when creating).
     public var source: ExpenseSource = .manual
+    /// ISO 4217 code of `amount`. (phase 4)
+    public var currencyCode: String = "EUR"
+    /// For a foreign currency: the rate to apply (ECB or typed). Ignored for euros.
+    public var exchangeRate: ExchangeRateQuote?
+    /// For a foreign currency: the euros the bank actually charged, typed by the user.
+    /// Wins over `exchangeRate`; the rate saved is the one it implies (source manual).
+    public var amountInEUROverride: Decimal?
+    /// Client and project tags (Pro only; cleared in Personal when saving).
+    public var client: Tag?
+    public var project: Tag?
 
     /// A second VAT rate and the part of the amount (TTC) taxed at it.
     public struct SecondVAT: Equatable, Sendable {
@@ -65,6 +75,16 @@ public struct ExpenseDraft: Equatable {
             category: expense.category,
             note: expense.note
         )
+        currencyCode = expense.currencyCode
+        if expense.isForeignCurrency, let rate = expense.exchangeRate {
+            exchangeRate = ExchangeRateQuote(
+                currencyCode: expense.currencyCode, rate: rate,
+                date: expense.exchangeRateDate ?? expense.date,
+                source: expense.exchangeRateSource ?? .manual
+            )
+        }
+        client = expense.client
+        project = expense.project
         let lines = expense.sortedVATLines.map(VATPart.init)
         if lines.isEmpty {
             vatRate = expense.vatRate.flatMap(VATRate.init(fraction:))
@@ -111,6 +131,10 @@ public struct ExpenseDraft: Equatable {
         case secondVATPartInvalid
         /// Fixed VAT lines do not add up to the amount.
         case vatLinesDoNotMatchAmount
+        /// A foreign currency without a rate or a euro amount.
+        case missingExchangeRate
+        /// The euro amount is zero, negative or too large.
+        case euroAmountInvalid
     }
 
     /// The first problem that prevents saving, if any.
@@ -127,7 +151,34 @@ public struct ExpenseDraft: Equatable {
             }
         }
         if let category, category.space != space { return .categoryInOtherSpace }
+        if isForeignCurrency {
+            guard let euros = amountInEUR else { return .missingExchangeRate }
+            guard euros > 0, euros <= MoneyParser.maximum else { return .euroAmountInvalid }
+        }
         return nil
+    }
+
+    public var isForeignCurrency: Bool { currencyCode != "EUR" }
+
+    /// The euro amount this draft saves: the amount for euros; for a foreign
+    /// currency the typed euro amount, else the amount at the chosen rate.
+    public var amountInEUR: Decimal? {
+        guard let amount else { return nil }
+        guard isForeignCurrency else { return amount.rounded(scale: 2) }
+        if let amountInEUROverride { return amountInEUROverride.rounded(scale: 2) }
+        guard let exchangeRate, exchangeRate.currencyCode == currencyCode else { return nil }
+        return CurrencyConverter.euros(for: amount.rounded(scale: 2), rate: exchangeRate.rate)
+    }
+
+    /// The rate saved with a foreign-currency expense (the typed euros imply a manual one).
+    public var effectiveExchangeRate: ExchangeRateQuote? {
+        guard isForeignCurrency, let amount else { return nil }
+        if let amountInEUROverride,
+           let rate = CurrencyConverter.impliedRate(amount: amount.rounded(scale: 2), euros: amountInEUROverride.rounded(scale: 2)) {
+            return ExchangeRateQuote(currencyCode: currencyCode, rate: rate, date: date, source: .manual)
+        }
+        guard let exchangeRate, exchangeRate.currencyCode == currencyCode else { return nil }
+        return exchangeRate
     }
 
     public var isValid: Bool { validate() == nil }

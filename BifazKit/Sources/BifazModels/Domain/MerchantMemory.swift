@@ -8,13 +8,21 @@ public enum MerchantMemory {
     public static func remember(_ expense: Expense, in context: ModelContext) {
         let key = MerchantRule.key(for: expense.merchant)
         guard !key.isEmpty else { return }
-        if let rule = rule(forKey: key, in: context) {
+        let rule: MerchantRule
+        if let existing = Self.rule(forKey: key, in: context) {
+            rule = existing
             rule.merchantName = expense.merchant
             rule.space = expense.space
             rule.category = expense.category
             rule.updatedAt = .now
         } else {
-            context.insert(MerchantRule(merchantName: expense.merchant, space: expense.space, category: expense.category))
+            rule = MerchantRule(merchantName: expense.merchant, space: expense.space, category: expense.category)
+            context.insert(rule)
+        }
+        // Client and project are remembered from Pro expenses only (phase 4).
+        if expense.space == .pro {
+            rule.client = expense.client
+            rule.project = expense.project
         }
     }
 

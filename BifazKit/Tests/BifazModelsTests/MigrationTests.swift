@@ -5,7 +5,7 @@ import Testing
 
 /// Opens a real on-disk v1 store with data in the current (v2) app container.
 @MainActor
-@Suite("Migration v1 → v2", .serialized)
+@Suite("Migrations v1 → v3 and v2 → v3", .serialized)
 struct MigrationTests {
     struct Snapshot: Equatable {
         var id: UUID
@@ -145,5 +145,57 @@ struct MigrationTests {
         let second = try BifazStore.makeContainer(at: url)
         #expect(try second.mainContext.fetchCount(FetchDescriptor<ExpenseVATLine>()) == 4)
         #expect(try second.mainContext.fetchCount(FetchDescriptor<Expense>()) == 6)
+    }
+
+    @Test("A v2 store opens in v3: same expenses and lines, new fields at their defaults, rules keep their date")
+    func v2ToV3() throws {
+        let directory = try Self.directory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let url = directory.appending(path: "Bifaz.store")
+        typealias V2 = BifazSchemaV2
+        let nextDate = Date(timeIntervalSince1970: 1_765_000_000)
+        var before: [Snapshot] = []
+        do {
+            let schema = Schema(versionedSchema: V2.self)
+            let container = try ModelContainer(for: schema, configurations: ModelConfiguration(schema: schema, url: url))
+            let context = ModelContext(container)
+            let software = V2.ExpenseCategory(name: "Logiciels", space: .pro, seedKey: "category.pro.software")
+            context.insert(software)
+            let client = V2.Tag(name: "Studio Nord", kind: .client)
+            context.insert(client)
+            let expense = V2.Expense(amount: decimal("71.99"), merchant: "Adobe", space: .pro, category: software,
+                                     vatRate: decimal("0.2"), vatAmount: decimal("12.00"))
+            context.insert(expense)
+            expense.tags = [client]
+            let line = V2.ExpenseVATLine(rate: decimal("0.2"), base: decimal("59.99"), vat: decimal("12.00"), total: decimal("71.99"))
+            context.insert(line)
+            line.expense = expense
+            let rule = V2.RecurringRule(amount: decimal("71.99"), merchant: "Adobe", space: .pro, category: software,
+                                        frequency: .monthly, nextDate: nextDate)
+            context.insert(rule)
+            context.insert(V2.MerchantRule(merchantName: "Adobe", space: .pro, category: software))
+            try context.save()
+            before = [Snapshot(id: expense.id, amount: expense.amount, amountInEUR: expense.amountInEUR, currencyCode: expense.currencyCode,
+                               date: expense.date, merchant: expense.merchant, space: expense.spaceRawValue, vatRate: expense.vatRate,
+                               vatAmount: expense.vatAmount, note: expense.note, source: expense.sourceRawValue,
+                               status: expense.statusRawValue, category: software.seedKey, receiptFile: nil, tags: ["Studio Nord"])]
+        }
+
+        let container = try BifazStore.makeContainer(at: url)
+        let context = container.mainContext
+        let expense = try #require(try context.fetch(FetchDescriptor<Expense>()).first)
+        let after = Snapshot(id: expense.id, amount: expense.amount, amountInEUR: expense.amountInEUR, currencyCode: expense.currencyCode,
+                             date: expense.date, merchant: expense.merchant, space: expense.spaceRawValue, vatRate: expense.vatRate,
+                             vatAmount: expense.vatAmount, note: expense.note, source: expense.sourceRawValue,
+                             status: expense.statusRawValue, category: expense.category?.seedKey, receiptFile: expense.receipt?.fileName,
+                             tags: (expense.tags ?? []).map(\.name))
+        #expect([after] == before)
+        #expect(expense.sortedVATLines.map(VATPart.init) == [VATPart(rate: decimal("0.2"), base: decimal("59.99"), vat: 12, total: decimal("71.99"))])
+        #expect(expense.exchangeRate == nil && expense.recurrenceDate == nil && expense.client?.name == "Studio Nord")
+        let tag = try #require(try context.fetch(FetchDescriptor<Tag>()).first)
+        #expect(tag.isArchived == false)
+        let rule = try #require(try context.fetch(FetchDescriptor<RecurringRule>()).first)
+        #expect(rule.startDate == nextDate && rule.nextDate == nextDate && rule.generatedThrough == nil && rule.endDate == nil)
+        #expect(try context.fetch(FetchDescriptor<MerchantRule>()).first?.client == nil)
     }
 }

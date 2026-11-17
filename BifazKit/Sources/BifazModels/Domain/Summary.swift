@@ -35,8 +35,19 @@ public struct ExpenseFigure: Sendable, Equatable {
             space: expense.space,
             amount: expense.amountInEUR,
             categoryID: expense.category?.id,
-            vatLines: includingVAT && expense.space == .pro ? (expense.vatLines ?? []).map(VATPart.init) : []
+            vatLines: includingVAT && expense.space == .pro ? Self.linesInEUR(expense) : []
         )
+    }
+
+    /// VAT lines are in the expense's currency; the Summary adds euros.
+    static func linesInEUR(_ expense: Expense) -> [VATPart] {
+        let lines = (expense.vatLines ?? []).map(VATPart.init)
+        guard expense.isForeignCurrency, let rate = expense.exchangeRate else { return lines }
+        return lines.map { line in
+            let vat = CurrencyConverter.euros(for: line.vat, rate: rate)
+            let total = CurrencyConverter.euros(for: line.total, rate: rate)
+            return VATPart(rate: line.rate, base: total - vat, vat: vat, total: total)
+        }
     }
 }
 

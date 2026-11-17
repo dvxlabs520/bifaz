@@ -30,7 +30,12 @@ let package = Package(
         // Phase 6: Data Protection, Face ID, encrypted backup. Placeholder only.
         .target(name: "BifazSecurity", dependencies: ["BifazModels"]),
 
-        .testTarget(name: "BifazModelsTests", dependencies: ["BifazModels"]),
+        .testTarget(
+            name: "BifazModelsTests",
+            dependencies: ["BifazModels"],
+            // Saved ECB tables: no test ever goes to the internet.
+            resources: [.copy("Fixtures")]
+        ),
         .testTarget(name: "BifazDesignTests", dependencies: ["BifazDesign"]),
         .testTarget(
             name: "BifazReadingTests",

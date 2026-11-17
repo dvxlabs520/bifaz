@@ -167,11 +167,16 @@ public enum VATBreakdown {
 /// the line keeps that VAT with no rate (`nil`), so no amount changes and the
 /// split is not invented. Amounts, rates and dates of the expenses are not touched.
 enum VATMigration {
+    // Pinned to the version-2 classes: this stage runs inside the v1 → v2 step,
+    // whatever the current version is.
+    typealias V2Expense = BifazSchemaV2.Expense
+    typealias V2Line = BifazSchemaV2.ExpenseVATLine
+
     static func createLines(in context: ModelContext) throws {
-        let descriptor = FetchDescriptor<Expense>(predicate: #Predicate { $0.vatRate != nil || $0.vatAmount != nil })
+        let descriptor = FetchDescriptor<V2Expense>(predicate: #Predicate { $0.vatRate != nil || $0.vatAmount != nil })
         for expense in try context.fetch(descriptor) where (expense.vatLines ?? []).isEmpty {
-            guard let part = part(for: expense) else { continue }
-            let line = ExpenseVATLine(rate: part.rate, base: part.base, vat: part.vat, total: part.total)
+            guard let part = part(amount: expense.amount, vatRate: expense.vatRate, vatAmount: expense.vatAmount) else { continue }
+            let line = V2Line(rate: part.rate, base: part.base, vat: part.vat, total: part.total)
             context.insert(line)
             line.expense = expense
             if expense.vatAmount == nil { expense.vatAmount = part.vat }
@@ -179,16 +184,15 @@ enum VATMigration {
         try context.save()
     }
 
-    static func part(for expense: Expense) -> VATPart? {
-        let amount = expense.amount
+    static func part(amount: Decimal, vatRate: Decimal?, vatAmount: Decimal?) -> VATPart? {
         guard amount > 0 else { return nil }
-        var rate = expense.vatRate
+        var rate = vatRate
         let vat: Decimal
-        if let storedRate = expense.vatRate {
+        if let storedRate = vatRate {
             let computed = VATCalculator.vatAmount(includedIn: amount, rate: storedRate)
-            vat = expense.vatAmount ?? computed
+            vat = vatAmount ?? computed
             if abs(vat - computed) > Decimal(string: "0.01")! { rate = nil }
-        } else if let stored = expense.vatAmount {
+        } else if let stored = vatAmount {
             vat = stored
         } else {
             return nil

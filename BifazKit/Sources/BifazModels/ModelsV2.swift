@@ -1,7 +1,8 @@
 import Foundation
 import SwiftData
 
-// Bifaz data model, schema version 2 (current).
+// Bifaz data model, schema version 2 (phase 3). FROZEN: the current version is
+// `BifazSchemaV3` (ModelsV3.swift); do not edit these classes.
 //
 // Version 2 adds `ExpenseVATLine`: one line per VAT rate of an expense (rate,
 // base HT, VAT, TTC), needed by the phase 5 VAT report. Everything else is
@@ -415,15 +416,3 @@ extension BifazSchemaV2 {
         }
     }
 }
-
-// MARK: - Current version
-
-public typealias Expense = BifazSchemaV2.Expense
-public typealias ExpenseVATLine = BifazSchemaV2.ExpenseVATLine
-public typealias Receipt = BifazSchemaV2.Receipt
-public typealias ExpenseCategory = BifazSchemaV2.ExpenseCategory
-public typealias Tag = BifazSchemaV2.Tag
-public typealias Budget = BifazSchemaV2.Budget
-public typealias RecurringRule = BifazSchemaV2.RecurringRule
-public typealias ExpenseSession = BifazSchemaV2.ExpenseSession
-public typealias MerchantRule = BifazSchemaV2.MerchantRule
