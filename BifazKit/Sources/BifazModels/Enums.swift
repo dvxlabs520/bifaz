@@ -68,3 +68,11 @@ public enum RecurrenceFrequency: String, CaseIterable, Codable, Sendable {
     case quarterly
     case yearly
 }
+
+/// How sure the reader is about a value it extracted from a receipt.
+/// Produced by `BifazReading` (phase 2), shown by the confirmation field.
+public enum ReadingConfidence: String, CaseIterable, Codable, Sendable {
+    case high
+    case medium
+    case low
+}
