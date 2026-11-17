@@ -108,14 +108,46 @@ public enum RuleBasedReceiptParser {
 
     // MARK: - Merchant
 
-    static let brands = [
-        "MONOPRIX", "CARREFOUR", "FRANPRIX", "LECLERC", "AUCHAN", "INTERMARCHE", "LIDL", "ALDI", "CASINO",
-        "PICARD", "NATURALIA", "BIOCOOP", "SNCF", "OUIGO", "RATP", "TOTALENERGIES", "ESSO", "SHELL", "AVIA",
-        "FNAC", "DARTY", "IKEA", "DECATHLON", "LEROY MERLIN", "CASTORAMA", "BOULANGER", "AMAZON", "APPLE",
-        "ADOBE", "FREE MOBILE", "ORANGE", "SFR", "BOUYGUES", "UBER", "G7", "BOLT", "HEETCH", "STARBUCKS",
-        "MCDONALD", "BRIOCHE DOREE", "PAUL", "PHARMACIE", "IBIS", "NOVOTEL", "MERCURE", "AIRBNB", "INDIGO",
-        "EFFIA", "SAEMES", "ZARA", "H&M", "SEPHORA", "NESPRESSO", "GOOGLE", "MICROSOFT", "NOTION", "OVH",
+    /// Known brands (folded key → name to show). A header line that starts with
+    /// one of them is shown as the short brand name ("TOTALENERGIES RELAIS A6 -
+    /// AIRE DE BEAUNE" → "TotalEnergies"). Longer keys are tried first, so
+    /// "CARREFOUR CITY" keeps its format.
+    static let brandNames: [String: String] = [
+        "MONOPRIX": "Monoprix", "CARREFOUR": "Carrefour", "CARREFOUR CITY": "Carrefour City",
+        "CARREFOUR MARKET": "Carrefour Market", "CARREFOUR EXPRESS": "Carrefour Express",
+        "CARREFOUR CONTACT": "Carrefour Contact", "FRANPRIX": "Franprix", "LECLERC": "E.Leclerc",
+        "E LECLERC": "E.Leclerc", "AUCHAN": "Auchan", "INTERMARCHE": "Intermarché",
+        "INTERMARCHE EXPRESS": "Intermarché Express", "INTERMARCHE SUPER": "Intermarché Super",
+        "LIDL": "Lidl", "ALDI": "Aldi", "CASINO": "Casino", "SUPER U": "Super U", "HYPER U": "Hyper U",
+        "U EXPRESS": "U Express", "PICARD": "Picard", "NATURALIA": "Naturalia", "BIOCOOP": "Biocoop",
+        "SNCF": "SNCF", "OUIGO": "OUIGO", "RATP": "RATP", "TOTALENERGIES": "TotalEnergies", "ESSO": "Esso",
+        "SHELL": "Shell", "AVIA": "Avia", "VINCI AUTOROUTES": "Vinci Autoroutes", "APRR": "APRR",
+        "SANEF": "Sanef", "FNAC": "Fnac", "DARTY": "Darty", "IKEA": "IKEA", "DECATHLON": "Decathlon",
+        "LEROY MERLIN": "Leroy Merlin", "CASTORAMA": "Castorama", "BOULANGER": "Boulanger",
+        "AMAZON": "Amazon", "APPLE": "Apple", "ADOBE": "Adobe", "FREE MOBILE": "Free Mobile", "FREE": "Free",
+        "ORANGE": "Orange", "SFR": "SFR", "BOUYGUES TELECOM": "Bouygues Telecom", "UBER": "Uber", "G7": "G7",
+        "BOLT": "Bolt", "HEETCH": "Heetch", "STARBUCKS": "Starbucks", "MCDONALD": "McDonald's",
+        "BRIOCHE DOREE": "Brioche Dorée", "PAUL": "Paul", "IBIS": "ibis", "NOVOTEL": "Novotel",
+        "MERCURE": "Mercure", "AIRBNB": "Airbnb", "INDIGO": "Indigo", "EFFIA": "Effia", "SAEMES": "Saemes",
+        "ZARA": "Zara", "H&M": "H&M", "SEPHORA": "Sephora", "NESPRESSO": "Nespresso", "GOOGLE": "Google",
+        "MICROSOFT": "Microsoft", "NOTION": "Notion", "OVH": "OVHcloud", "OVHCLOUD": "OVHcloud",
     ]
+
+    /// Brand keys, longest first.
+    static let brandKeys: [String] = brandNames.keys.sorted { $0.count > $1.count }
+
+    /// Generic words that may come before a brand ("TAXIS G7", "STATION ESSO").
+    static let brandPrefixes: Set<String> = ["TAXI", "TAXIS", "STATION", "PARKING", "MAGASIN"]
+
+    /// The brand a line starts with (after an optional generic word), if any.
+    static func brand(startingLine row: Row) -> String? {
+        var words = row.words
+        if let first = words.split(separator: " ").first, brandPrefixes.contains(String(first)) {
+            words = String(words.dropFirst(first.count + 1))
+        }
+        guard let key = brandKeys.first(where: { words.hasPrefix(" \($0) ") }) else { return nil }
+        return brandNames[key]
+    }
 
     /// Words (matched whole) that mark a line as address, legal or ticket chrome.
     static let notMerchantWords = [
@@ -135,8 +167,8 @@ public enum RuleBasedReceiptParser {
     static func merchant(in rows: [Row]) -> ReadValue<String>? {
         // Brands only count in the header (not "jus d'orange" in the articles).
         let header = rows.prefix(6).filter { $0.amounts.isEmpty }
-        if let row = header.first(where: { $0.containsWord(brands) }) {
-            return ReadValue(cleanMerchant(row.original), confidence: .high)
+        for row in header {
+            if let brand = brand(startingLine: row) { return ReadValue(brand, confidence: .high) }
         }
         let candidate = header.first { row in
             let letters = row.folded.filter(\.isLetter).count
@@ -146,19 +178,63 @@ public enum RuleBasedReceiptParser {
                 && !row.containsWord(notMerchantWords) && !row.folded.contains("@")
                 && row.folded.firstMatch(of: /\d{5}/) == nil
         }
-        return candidate.map { ReadValue(cleanMerchant($0.original), confidence: .medium) }
+        return candidate.map { ReadValue(normalizedMerchant($0.original).name, confidence: .medium) }
     }
 
-    /// "MONOPRIX  " → "Monoprix"; keeps short acronyms ("SNCF") and mixed case as printed.
-    static func cleanMerchant(_ text: String) -> String {
+    /// "MONOPRIX  " → "Monoprix"; mixed case is kept as printed.
+    static func cleanMerchant(_ text: String) -> String { normalizedMerchant(text).name }
+
+    /// Short all-capital words that are names, not words: kept in capitals.
+    static let acronyms: Set<String> = [
+        "SNCF", "RATP", "SFR", "OVH", "IKEA", "EDF", "BNP", "LCL", "CIC", "BHV", "KFC", "UGC", "TGV", "TER",
+        "RER", "APRR", "SA", "SAS", "SARL", "EURL", "SNC", "EU", "UK", "USA", "H&M", "G7", "PMU", "MK2",
+    ]
+
+    /// French words written in lower case inside a name ("Pharmacie du Centre").
+    static let particles: Set<String> = ["DE", "DU", "DES", "D", "ET", "A", "À", "AU", "AUX", "SUR", "EN", "SOUS"]
+
+    /// Cleans a merchant line. A line printed all in capitals is re-cased
+    /// ("BRASSERIE LE ZINC" → "Brasserie Le Zinc", "AIRE DE BEAUNE" → "Aire de
+    /// Beaune", "SNCF" and "A6" stay as they are); `guessedCase` then says the
+    /// casing is a guess, so the reader never marks such a name as sure.
+    static func normalizedMerchant(_ text: String) -> (name: String, guessedCase: Bool) {
         let trimmed = text
             .replacing(/\*+/, with: "")
             .trimmingCharacters(in: .punctuationCharacters.union(.whitespaces).union(.symbols))
             .replacing(/\s+/, with: " ")
-        guard trimmed == trimmed.uppercased() else { return trimmed }
-        return trimmed.split(separator: " ").map { word in
-            word.count <= 4 && word.allSatisfy(\.isLetter) ? String(word) : word.capitalized(with: Locale(identifier: "fr_FR"))
+        guard trimmed.contains(where: \.isLetter), trimmed == trimmed.uppercased() else { return (trimmed, false) }
+        let french = Locale(identifier: "fr_FR")
+        var isFirst = true
+        let name = trimmed.split(separator: " ").map { word -> String in
+            defer { isFirst = false }
+            // Keep separators inside a word: "SAINT-GEORGES", "D'ARGENT".
+            return pieces(of: String(word)).map { piece -> String in
+                guard piece.contains(where: \.isLetter) else { return piece }
+                if acronyms.contains(piece) || piece.contains(where: \.isNumber) { return piece }
+                let vowels = piece.filter { "AEIOUYÀÂÄÉÈÊËÎÏÔÖÙÛÜŸ".contains($0) }
+                if vowels.isEmpty, piece.count >= 2 { return piece }
+                if !isFirst, particles.contains(piece) { return piece.lowercased(with: french) }
+                return piece.capitalized(with: french)
+            }.joined()
         }.joined(separator: " ")
+        return (name, true)
+    }
+
+    /// "SAINT-GEORGES" → ["SAINT", "-", "GEORGES"]: hyphens and apostrophes are pieces of their own.
+    private static func pieces(of word: String) -> [String] {
+        var result: [String] = []
+        var current = ""
+        for character in word {
+            if "-'’".contains(character) {
+                if !current.isEmpty { result.append(current) }
+                result.append(String(character))
+                current = ""
+            } else {
+                current.append(character)
+            }
+        }
+        if !current.isEmpty { result.append(current) }
+        return result
     }
 
     // MARK: - Date

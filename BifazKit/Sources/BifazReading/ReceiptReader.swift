@@ -114,17 +114,20 @@ public struct ReceiptReader: Sendable {
             }
         }
 
-        // Merchant: the model is better at names; keep it only if printed.
-        if let name = model.merchant?.trimmingCharacters(in: .whitespacesAndNewlines), name.count >= 2 {
-            let folded = RuleBasedReceiptParser.Row(name).folded
-            if foldedText.contains(folded) {
-                let ruled = rules.merchant.map { RuleBasedReceiptParser.Row($0.value).folded }
-                let agrees = ruled.map { $0.contains(folded) || folded.contains($0) } ?? false
-                if agrees {
-                    fields.merchant = ReadValue(RuleBasedReceiptParser.cleanMerchant(name), confidence: .high)
-                } else if rules.merchant?.confidence != .high {
-                    // A known brand found by the rules beats the model (e.g. "INDIGO" vs the car park's name).
-                    fields.merchant = ReadValue(RuleBasedReceiptParser.cleanMerchant(name), confidence: .medium)
+        // Merchant: the model is better at names; keep it only if printed. A brand
+        // found by the rules always wins (short name; "INDIGO" over the car park's name).
+        if let name = model.merchant?.trimmingCharacters(in: .whitespacesAndNewlines), name.count >= 2,
+           rules.merchant?.confidence != .high {
+            let row = RuleBasedReceiptParser.Row(name)
+            if foldedText.contains(row.folded) {
+                if let brand = RuleBasedReceiptParser.brand(startingLine: row) {
+                    fields.merchant = ReadValue(brand, confidence: .high)
+                } else {
+                    let ruled = rules.merchant.map { RuleBasedReceiptParser.Row($0.value).folded }
+                    let agrees = ruled.map { $0.contains(row.folded) || row.folded.contains($0) } ?? false
+                    // A name re-cased from capitals is a guess: never sure.
+                    let cleaned = RuleBasedReceiptParser.normalizedMerchant(name)
+                    fields.merchant = ReadValue(cleaned.name, confidence: agrees && !cleaned.guessedCase ? .high : .medium)
                 }
             }
         }
