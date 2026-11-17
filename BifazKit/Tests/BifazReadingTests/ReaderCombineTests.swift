@@ -68,14 +68,44 @@ struct ReaderCombineTests {
         #expect(merged.date == rules.date)
     }
 
-    @Test("A model VAT rate fills a missing rate with medium confidence and computes the VAT amount")
+    @Test("A model VAT rate fills a missing rate when the text mentions VAT")
     func vatRateFillsGap() throws {
-        let (rules, merged) = combine(.init(vatRatePercent: 20), lines: withoutVAT)
+        let lines = withoutVAT + ["TVA incluse"]
+        let (rules, merged) = combine(.init(vatRatePercent: 20), lines: lines)
         #expect(rules.vatRate == nil)
         #expect(merged.vatRate == ReadValue(dec("0.20"), confidence: .medium))
         let expectedVAT = VATCalculator.vatAmount(includedIn: dec("42.50"), rate: dec("0.20"))
         #expect(try #require(merged.vatAmount).value == expectedVAT)
         #expect(expectedVAT == dec("7.08"))
+    }
+
+    @Test("A model VAT rate is ignored when the receipt never mentions VAT")
+    func vatRateWithoutVATMention() {
+        let (_, merged) = combine(.init(vatRatePercent: 20), lines: withoutVAT)
+        #expect(merged.vatRate == nil)
+        #expect(merged.vatAmount == nil)
+    }
+
+    @Test("A 0 % model rate never adds VAT")
+    func zeroRateIgnored() {
+        let (_, merged) = combine(.init(vatRatePercent: 0), lines: withoutVAT + ["TVA incluse"])
+        #expect(merged.vatRate == nil)
+    }
+
+    @Test("A different model date does not replace the date the rules found")
+    func modelDateDoesNotOverrideRules() throws {
+        let lines = ["AMAZON", "Date de la commande : 06.11.2026", "Date de la facture : 08.11.2026", "TOTAL TTC  42,50 €"]
+        let (rules, merged) = combine(.init(date: "2026-11-06"), lines: lines)
+        let invoiceDay = try #require(paris.date(from: DateComponents(year: 2026, month: 11, day: 8, hour: 12)))
+        #expect(rules.date?.value == invoiceDay)
+        #expect(merged.date?.value == invoiceDay)
+    }
+
+    @Test("A known brand found by the rules beats a different model merchant")
+    func brandBeatsModelMerchant() throws {
+        let lines = ["INDIGO", "Parking Saint-Georges - Lyon 3e", "Le 31/10/2026", "TOTAL TTC  14,40 €"]
+        let (_, merged) = combine(.init(merchant: "Parking Saint-Georges"), lines: lines)
+        #expect(try #require(merged.merchant).value.uppercased().contains("INDIGO"))
     }
 
     @Test("With a high-confidence total, the rules win when the model disagrees")

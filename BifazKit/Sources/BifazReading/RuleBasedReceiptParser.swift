@@ -177,9 +177,11 @@ public enum RuleBasedReceiptParser {
                 guard date <= calendar.date(byAdding: .day, value: 1, to: today) ?? today,
                       date >= calendar.date(byAdding: .year, value: -2, to: today) ?? .distantPast else { continue }
                 var score = 0
-                if row.contains(["DATE DE FACTURE", "DATE FACTURE", "FACTURE DU", "EMISE LE", "EMIS LE", "DATE D'EMISSION"]) { score += 30 }
+                if row.contains(["DATE DE FACTURE", "DATE DE LA FACTURE", "DATE FACTURE", "FACTURE DU", "EMISE LE", "EMIS LE", "DATE D'EMISSION"]) { score += 30 }
                 if row.contains(["DATE", "LE "]) { score += 10 }
-                if row.contains(["ECHEANCE", "VALIDITE", "EXPIR", "LIVRAISON", "NAISSANCE", "DEPART", "ARRIVEE", "ECHEANT"]) { score -= 20 }
+                if row.contains(["ECHEANCE", "VALIDITE", "EXPIR", "LIVRAISON", "NAISSANCE", "DEPART", "ARRIVEE", "ECHEANT", "ALLER", "RETOUR"]) { score -= 20 }
+                // Invoices that print both: the order date is not the invoice date.
+                if row.contains(["DATE DE LA COMMANDE", "DATE DE COMMANDE"]) { score -= 20 }
                 candidates.append((date, score, index))
             }
         }

@@ -80,10 +80,12 @@ public struct ReceiptReader: Sendable {
             if foldedText.contains(folded) {
                 let ruled = rules.merchant.map { RuleBasedReceiptParser.Row($0.value).folded }
                 let agrees = ruled.map { $0.contains(folded) || folded.contains($0) } ?? false
-                fields.merchant = ReadValue(
-                    RuleBasedReceiptParser.cleanMerchant(name),
-                    confidence: agrees ? .high : .medium
-                )
+                if agrees {
+                    fields.merchant = ReadValue(RuleBasedReceiptParser.cleanMerchant(name), confidence: .high)
+                } else if rules.merchant?.confidence != .high {
+                    // A known brand found by the rules beats the model (e.g. "INDIGO" vs the car park's name).
+                    fields.merchant = ReadValue(RuleBasedReceiptParser.cleanMerchant(name), confidence: .medium)
+                }
             }
         }
 
@@ -96,14 +98,19 @@ public struct ReceiptReader: Sendable {
                 let agrees = rules.date.map { calendar.isDate($0.value, inSameDayAs: date) } ?? false
                 if agrees {
                     fields.date = ReadValue(rules.date!.value, confidence: .high)
-                } else if rules.date?.confidence != .high {
+                } else if rules.date == nil {
+                    // Invoices print several dates (order, delivery, due): when the
+                    // rules already chose one, a different model date only fills gaps.
                     fields.date = ReadValue(date, confidence: .medium)
                 }
             }
         }
 
         // VAT: the rules' table wins; the model fills the gaps.
-        if let percent = model.vatRatePercent,
+        // The model may answer 0 % or a rate for a receipt that prints no VAT at
+        // all: only trust a non-zero rate when the text talks about VAT.
+        let mentionsVAT = foldedText.contains("TVA") || foldedText.contains("T.V.A")
+        if mentionsVAT, let percent = model.vatRatePercent, percent > 0,
            let rate = VATRate.allCases.map(\.fraction).first(where: { ($0 * 100) == Decimal(percent).rounded(scale: 1) }) {
             if let ruled = fields.vatRate {
                 if ruled.value == rate { fields.vatRate = ReadValue(rate, confidence: .high) }
