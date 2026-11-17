@@ -45,17 +45,16 @@ public struct ReceiptThumbnail: View {
                 .resizable()
                 .scaledToFill()
         } else {
-            Image(systemName: symbolName)
-                .font(.bifazBody)
+            BifazIconView(icon, size: 20)
                 .foregroundStyle(state == .pending ? Color.bifazWarning : .bifazInkSecondary)
         }
     }
 
-    private var symbolName: String {
+    private var icon: BifazIcon {
         switch state {
-        case .attached: "doc.text"
-        case .pending: "doc.badge.clock"
-        case .none: "doc"
+        case .attached: .receipt
+        case .pending: .receiptPending
+        case .none: .note
         }
     }
 
@@ -83,7 +82,7 @@ public struct ReceiptThumbnail: View {
 private struct ReceiptThumbnailSamples: View {
     var body: some View {
         HStack(spacing: BifazSpacing.m) {
-            ReceiptThumbnail(image: Image(systemName: "photo"), state: .attached)
+            ReceiptThumbnail(image: BifazIcon.camera.image, state: .attached)
             ReceiptThumbnail(state: .attached)
             ReceiptThumbnail(state: .pending)
             ReceiptThumbnail(state: .none)

@@ -12,7 +12,7 @@ public struct ExpenseRow: View {
 
     private let merchant: String
     private let categoryName: String?
-    private let categorySymbol: String?
+    private let categoryIcon: BifazIcon?
     private let date: Date
     private let amount: Decimal
     private let currencyCode: String
@@ -22,7 +22,7 @@ public struct ExpenseRow: View {
     public init(
         merchant: String,
         categoryName: String?,
-        categorySymbol: String?,
+        categoryIcon: BifazIcon?,
         date: Date,
         amount: Decimal,
         currencyCode: String = "EUR",
@@ -31,7 +31,7 @@ public struct ExpenseRow: View {
     ) {
         self.merchant = merchant
         self.categoryName = categoryName
-        self.categorySymbol = categorySymbol
+        self.categoryIcon = categoryIcon
         self.date = date
         self.amount = amount
         self.currencyCode = currencyCode
@@ -42,7 +42,7 @@ public struct ExpenseRow: View {
     public var body: some View {
         HStack(alignment: dynamicTypeSize.isAccessibilitySize ? .top : .center, spacing: BifazSpacing.s) {
             CategoryIcon(
-                symbolName: categorySymbol ?? "tag",
+                icon: categoryIcon ?? .other,
                 tint: space.color,
                 background: space.tint,
                 badge: space
@@ -78,10 +78,11 @@ public struct ExpenseRow: View {
     @ViewBuilder
     private var subtitle: some View {
         if receiptState == .pending {
-            Label {
+            // An HStack rather than a Label: inside a List, Label gets an icon
+            // column that pushes the text away and moves the row separator.
+            HStack(spacing: BifazSpacing.xxs) {
+                BifazIconView(.receiptPending, size: 14, relativeTo: .caption)
                 Text("expenseRow.receiptMissing", bundle: .module)
-            } icon: {
-                Image(systemName: "doc.badge.clock")
             }
             .foregroundStyle(Color.bifazWarning)
         } else if let categoryName, !categoryName.isEmpty {
@@ -137,22 +138,22 @@ private struct ExpenseRowSamples: View {
     var body: some View {
         VStack(spacing: 0) {
             ExpenseRow(
-                merchant: "Monoprix", categoryName: "Courses", categorySymbol: "cart.fill",
+                merchant: "Monoprix", categoryName: "Courses", categoryIcon: .groceries,
                 date: .now, amount: 42.80, space: .personal, receiptState: .none
             )
             HairlineDivider(leadingInset: 48)
             ExpenseRow(
-                merchant: "SNCF", categoryName: "Transport", categorySymbol: "tram.fill",
+                merchant: "SNCF", categoryName: "Transport", categoryIcon: .transport,
                 date: .now, amount: 1284.50, space: .pro, receiptState: .pending
             )
             HairlineDivider(leadingInset: 48)
             ExpenseRow(
-                merchant: "Adobe", categoryName: "Logiciels", categorySymbol: "app.fill",
+                merchant: "Adobe", categoryName: "Logiciels", categoryIcon: .software,
                 date: .now, amount: 65.99, space: .pro, receiptState: .attached
             )
             HairlineDivider(leadingInset: 48)
             ExpenseRow(
-                merchant: "Boulangerie Paul", categoryName: nil, categorySymbol: nil,
+                merchant: "Boulangerie Paul", categoryName: nil, categoryIcon: nil,
                 date: .now, amount: 4.30, space: .personal, receiptState: .attached
             )
         }

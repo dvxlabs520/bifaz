@@ -22,10 +22,9 @@ struct AssistantView: View {
                     ForEach(Array(examples.enumerated()), id: \.offset) { index, example in
                         if index > 0 { HairlineDivider(leadingInset: BifazSpacing.xxl) }
                         HStack(spacing: BifazSpacing.s) {
-                            Image(systemName: "text.bubble")
+                            BifazIconView(.assistant, size: 18)
                                 .foregroundStyle(.bifazInkSecondary)
                                 .frame(width: BifazSpacing.l)
-                                .accessibilityHidden(true)
                             Text(example)
                                 .font(.bifazBody)
                                 .foregroundStyle(.bifazInk)

@@ -36,7 +36,7 @@ public struct SpaceSelector: View {
         ForEach(filters) { filter in
             FilterChip(
                 filter.title,
-                symbolName: filter.space?.symbolName,
+                icon: filter.icon,
                 symbolTint: filter.space?.color,
                 isSelected: selection == filter
             ) { selection = filter }

@@ -15,6 +15,8 @@ struct StringCatalogTests {
         "BifazKit/Sources/BifazDesign/Resources/Localizable.xcstrings",
         "App/Resources/Localizable.xcstrings",
         "App/Resources/InfoPlist.xcstrings",
+        "App/Resources/History.xcstrings",
+        "App/Resources/Settings.xcstrings",
     ]
 
     /// Every `stringUnit` (state, value) under a localization, descending into variations.

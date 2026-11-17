@@ -180,11 +180,11 @@ public extension Space {
         }
     }
 
-    /// SF Symbol that identifies the space without relying on colour.
-    var symbolName: String {
+    /// Icon that identifies the space without relying on colour.
+    var icon: BifazIcon {
         switch self {
-        case .pro: "briefcase.fill"
-        case .personal: "house.fill"
+        case .pro: .pro
+        case .personal: .personal
         }
     }
 }
@@ -195,7 +195,8 @@ public extension SpaceFilter {
         space?.color ?? .bifazInk
     }
 
-    var symbolName: String {
-        space?.symbolName ?? "circle.lefthalf.filled"
+    /// Icon that identifies the filter: the space icon, or the Bifaz coin for "All".
+    var icon: BifazIcon {
+        space?.icon ?? .all
     }
 }

@@ -59,14 +59,13 @@ struct ContainerAndEntityTests {
         let container = try BifazStore.makeContainer(inMemory: true)
         defer { withExtendedLifetime(container) {} } // the context does not retain its container
         let context = container.mainContext
-        let bytes = Data([1, 2, 3, 4])
-        context.insert(Receipt(fileData: bytes, fileTypeIdentifier: "com.adobe.pdf",
-                               thumbnailData: Data([9]), recognizedText: "TOTAL 5"))
+        context.insert(Receipt(fileName: "A1.pdf", fileTypeIdentifier: "com.adobe.pdf",
+                               thumbnailFileName: "A1-thumb.jpg", recognizedText: "TOTAL 5"))
         try context.save()
         let fetched = try #require(context.fetch(FetchDescriptor<Receipt>()).first)
-        #expect(fetched.fileData == bytes)
+        #expect(fetched.fileName == "A1.pdf")
         #expect(fetched.fileTypeIdentifier == "com.adobe.pdf")
-        #expect(fetched.thumbnailData == Data([9]))
+        #expect(fetched.thumbnailFileName == "A1-thumb.jpg")
         #expect(fetched.recognizedText == "TOTAL 5")
     }
 
@@ -75,12 +74,12 @@ struct ContainerAndEntityTests {
         let container = try BifazStore.makeContainer(inMemory: true)
         defer { withExtendedLifetime(container) {} } // the context does not retain its container
         let context = container.mainContext
-        context.insert(ExpenseCategory(name: "Food", symbolName: "fork.knife", colorKey: "orange",
+        context.insert(ExpenseCategory(name: "Food", iconName: "fork.knife", colorKey: "orange",
                                        space: .personal, sortOrder: 3))
         try context.save()
         let fetched = try #require(context.fetch(FetchDescriptor<ExpenseCategory>()).first)
         #expect(fetched.name == "Food")
-        #expect(fetched.symbolName == "fork.knife")
+        #expect(fetched.iconName == "fork.knife")
         #expect(fetched.colorKey == "orange")
         #expect(fetched.space == .personal)
         #expect(fetched.sortOrder == 3)

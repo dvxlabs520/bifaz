@@ -30,11 +30,11 @@ public struct BudgetBar: View {
             }
         }
 
-        var symbolName: String {
+        var icon: BifazIcon {
             switch self {
-            case .onTrack: "checkmark.circle.fill"
-            case .closeToLimit: "exclamationmark.triangle.fill"
-            case .overBudget: "xmark.octagon.fill"
+            case .onTrack: .check
+            case .closeToLimit: .warning
+            case .overBudget: .close
             }
         }
 
@@ -105,7 +105,7 @@ public struct BudgetBar: View {
 
     private var statusLabel: some View {
         HStack(spacing: BifazSpacing.xxs) {
-            Image(systemName: status.symbolName)
+            BifazIconView(status.icon, size: 14, relativeTo: .caption)
             Text(status.title)
         }
         .font(.bifazLabel)

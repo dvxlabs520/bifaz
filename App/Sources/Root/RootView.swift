@@ -1,40 +1,61 @@
 import SwiftUI
+import SwiftData
 import BifazModels
 import BifazDesign
 
-/// Tab bar: Summary · Expenses · Assistant · Settings.
+/// Tab bar: Summary · Expenses · Assistant · Settings, plus the quick-add sheet.
 struct RootView: View {
-    @State private var selectedTab: AppTab = AppTab.initial
+    @State private var navigation = AppNavigation()
     /// Global space filter, shared by every screen and kept between launches.
     @AppStorage("spaceFilter") private var spaceFilter: SpaceFilter = .all
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            Tab("tab.summary", systemImage: "chart.pie", value: AppTab.summary) {
+        TabView(selection: $navigation.selectedTab) {
+            Tab(value: AppTab.summary) {
                 SummaryView(spaceFilter: $spaceFilter)
+            } label: {
+                tabLabel("tab.summary", icon: .summary)
             }
-            Tab("tab.expenses", systemImage: "list.bullet.rectangle", value: AppTab.expenses) {
+            Tab(value: AppTab.expenses) {
                 ExpensesView(spaceFilter: $spaceFilter)
+            } label: {
+                tabLabel("tab.expenses", icon: .expenses)
             }
-            Tab("tab.assistant", systemImage: "sparkles", value: AppTab.assistant) {
+            Tab(value: AppTab.assistant) {
                 AssistantView()
+            } label: {
+                tabLabel("tab.assistant", icon: .assistant)
             }
-            Tab("tab.settings", systemImage: "gearshape", value: AppTab.settings) {
+            Tab(value: AppTab.settings) {
                 SettingsView()
+            } label: {
+                tabLabel("tab.settings", icon: .settings)
             }
         }
         .tint(.bifazInk)
+        .environment(navigation)
+        .sheet(item: $navigation.newExpenseSpace) { space in
+            ExpenseFormView(defaultSpace: space)
+        }
+    }
+
+    private func tabLabel(_ title: LocalizedStringKey, icon: BifazIcon) -> some View {
+        Label {
+            Text(title)
+        } icon: {
+            icon.image
+        }
     }
 }
 
 #Preview("Light") {
     RootView()
-        .modelContainer(PreviewContainer.empty)
+        .modelContainer(PreviewContainer.sample)
 }
 
 #Preview("Dark") {
     RootView()
-        .modelContainer(PreviewContainer.empty)
+        .modelContainer(PreviewContainer.sample)
         .preferredColorScheme(.dark)
 }
 

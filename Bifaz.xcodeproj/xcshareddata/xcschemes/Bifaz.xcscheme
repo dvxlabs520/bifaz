@@ -39,7 +39,31 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BifazModelsTests"
+               BuildableName = "BifazModelsTests"
+               BlueprintName = "BifazModelsTests"
+               ReferencedContainer = "container:BifazKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BifazDesignTests"
+               BuildableName = "BifazDesignTests"
+               BlueprintName = "BifazDesignTests"
+               ReferencedContainer = "container:BifazKit">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

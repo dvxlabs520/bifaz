@@ -4,7 +4,7 @@ import SwiftUI
 /// turns ink-filled when selected. Not interactive by itself.
 struct ChipLabel: View {
     let title: Text
-    let symbolName: String?
+    let icon: BifazIcon?
     let symbolTint: Color?
     let isSelected: Bool
 
@@ -12,9 +12,8 @@ struct ChipLabel: View {
 
     var body: some View {
         HStack(spacing: BifazSpacing.xs) {
-            if let symbolName {
-                Image(systemName: symbolName)
-                    .imageScale(.small)
+            if let icon {
+                BifazIconView(icon, size: 16, relativeTo: .subheadline)
                     .foregroundStyle(isSelected ? Color.bifazPaper : symbolTint ?? .bifazInk)
             }
             title

@@ -35,3 +35,9 @@ let package = Package(
     ],
     swiftLanguageModes: [.v6]
 )
+
+// Warnings are errors in every BifazKit target: concurrency and API warnings
+// get fixed, never ignored.
+for target in package.targets {
+    target.swiftSettings = (target.swiftSettings ?? []) + [.treatAllWarnings(as: .error)]
+}

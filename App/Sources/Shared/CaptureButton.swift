@@ -1,19 +1,21 @@
 import SwiftUI
+import BifazModels
 import BifazDesign
 
 /// The capture button, floating over every tab.
 ///
-/// Phase 0: present but without function. Phase 1 opens quick expense entry;
-/// phase 2 adds scanning and import; phase 7 adds "Start expense session".
+/// Opens quick add in the space of the current filter. Phase 2 adds scanning
+/// and import here; phase 7 adds "Start expense session".
 struct CaptureButton: View {
+    @Environment(AppNavigation.self) private var navigation
+    @AppStorage("spaceFilter") private var spaceFilter: SpaceFilter = .all
     @ScaledMetric(relativeTo: .title2) private var side: CGFloat = 56
 
     var body: some View {
         Button {
-            // Intentionally empty until phase 1.
+            navigation.addExpense(filter: spaceFilter)
         } label: {
-            Image(systemName: "plus")
-                .font(.title2.weight(.medium))
+            BifazIconView(.plus, size: 24, relativeTo: .title2)
                 .foregroundStyle(Color.bifazPaper)
                 .frame(width: side, height: side)
         }
@@ -46,4 +48,5 @@ extension View {
     Color.bifazPaper
         .ignoresSafeArea()
         .captureButtonOverlay()
+        .environment(AppNavigation())
 }

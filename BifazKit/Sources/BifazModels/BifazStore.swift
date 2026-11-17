@@ -56,6 +56,13 @@ public enum BifazStore {
             .appending(path: "Application Support", directoryHint: .isDirectory)
             .appending(path: "Bifaz", directoryHint: .isDirectory)
         try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
+        // The database must stay readable after the first unlock since boot, so
+        // Apple Pay payments can be recorded in the background (phase 7). New
+        // files in this folder inherit the class. Receipts use `.complete`.
+        try fileManager.setAttributes(
+            [.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication],
+            ofItemAtPath: directory.path(percentEncoded: false)
+        )
         return directory.appending(path: storeFileName, directoryHint: .notDirectory)
     }
 

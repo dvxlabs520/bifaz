@@ -1,23 +1,23 @@
 import SwiftUI
 
 /// An outlined capsule chip used to filter lists. The selected chip is filled
-/// near-black; an optional SF Symbol can carry the colour of a space.
+/// near-black; an optional icon can carry the colour of a space.
 public struct FilterChip: View {
     private let title: LocalizedStringResource
-    private let symbolName: String?
+    private let icon: BifazIcon?
     private let symbolTint: Color?
     private let isSelected: Bool
     private let action: @MainActor () -> Void
 
     public init(
         _ title: LocalizedStringResource,
-        symbolName: String? = nil,
+        icon: BifazIcon? = nil,
         symbolTint: Color? = nil,
         isSelected: Bool,
         action: @escaping @MainActor () -> Void
     ) {
         self.title = title
-        self.symbolName = symbolName
+        self.icon = icon
         self.symbolTint = symbolTint
         self.isSelected = isSelected
         self.action = action
@@ -25,7 +25,7 @@ public struct FilterChip: View {
 
     public var body: some View {
         Button(action: action) {
-            ChipLabel(title: Text(title), symbolName: symbolName, symbolTint: symbolTint, isSelected: isSelected)
+            ChipLabel(title: Text(title), icon: icon, symbolTint: symbolTint, isSelected: isSelected)
         }
         .buttonStyle(ChipButtonStyle())
         .sensoryFeedback(.selection, trigger: isSelected)
@@ -61,7 +61,7 @@ private struct FilterChipSamples: View {
             ForEach(["Courses", "Transport", "Logiciels"], id: \.self) { name in
                 FilterChip(
                     LocalizedStringResource(stringLiteral: name),
-                    symbolName: "tag.fill",
+                    icon: .other,
                     symbolTint: .bifazPro,
                     isSelected: selected == name
                 ) { selected = name }

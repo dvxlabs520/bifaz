@@ -76,8 +76,7 @@ public struct SpaceSplitBar: View {
 
     private func legendItem(_ space: Space, amount: Decimal) -> some View {
         HStack(spacing: BifazSpacing.xxs) {
-            Image(systemName: space.symbolName)
-                .imageScale(.small)
+            BifazIconView(space.icon, size: 14, relativeTo: .caption)
                 .foregroundStyle(space.color)
             Text(verbatim: legendText(space, amount: amount))
                 .foregroundStyle(Color.bifazInkSecondary)

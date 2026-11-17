@@ -24,6 +24,8 @@ settings:
     LOCALIZATION_PREFERS_STRING_CATALOGS: YES
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     DEAD_CODE_STRIPPING: YES
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+    GCC_TREAT_WARNINGS_AS_ERRORS: YES
     MARKETING_VERSION: "0.1.0"
     CURRENT_PROJECT_VERSION: "1"
 
@@ -85,5 +87,10 @@ schemes:
         Bifaz: all
     run:
       config: Debug
+    test:
+      config: Debug
+      targets:
+        - package: BifazKit/BifazModelsTests
+        - package: BifazKit/BifazDesignTests
     archive:
       config: Release

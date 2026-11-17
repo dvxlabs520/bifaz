@@ -30,7 +30,7 @@ struct DesignGalleryView: View {
 
                 section("ExpenseRow · pending")
                 ExpenseRow(
-                    merchant: "SNCF", categoryName: "Transport", categorySymbol: "tram.fill",
+                    merchant: "SNCF", categoryName: "Transport", categoryIcon: .transport,
                     date: now.addingTimeInterval(-3 * Self.day), amount: 87,
                     space: .pro, receiptState: .pending
                 )
@@ -39,19 +39,19 @@ struct DesignGalleryView: View {
 
                 section("ExpenseRow")
                 ExpenseRow(
-                    merchant: "Adobe", categoryName: "Logiciels", categorySymbol: "laptopcomputer",
+                    merchant: "Adobe", categoryName: "Logiciels", categoryIcon: .software,
                     date: now.addingTimeInterval(-5 * Self.day), amount: Decimal(string: "71.99")!,
                     space: .pro, receiptState: .attached
                 )
                 HairlineDivider(leadingInset: BifazSpacing.xxxl)
                 ExpenseRow(
-                    merchant: "Monoprix", categoryName: "Courses", categorySymbol: "cart.fill",
+                    merchant: "Monoprix", categoryName: "Courses", categoryIcon: .groceries,
                     date: now.addingTimeInterval(-6 * Self.day), amount: Decimal(string: "23.40")!,
                     space: .personal, receiptState: .none
                 )
                 HairlineDivider(leadingInset: BifazSpacing.xxxl)
                 ExpenseRow(
-                    merchant: "Boulangerie Paul", categoryName: nil, categorySymbol: "fork.knife",
+                    merchant: "Boulangerie Paul", categoryName: nil, categoryIcon: .meal,
                     date: now.addingTimeInterval(-7 * Self.day), amount: Decimal(string: "6.80")!,
                     space: .personal, receiptState: .none
                 )
@@ -63,8 +63,8 @@ struct DesignGalleryView: View {
 
                 section("CategoryChip · ReceiptThumbnail")
                 HStack(spacing: BifazSpacing.xs) {
-                    CategoryChip("Transport", symbolName: "tram.fill", tint: .bifazPro, isSelected: true)
-                    CategoryChip("Courses", symbolName: "cart.fill", tint: .bifazPersonal)
+                    CategoryChip("Transport", icon: .transport, tint: .bifazPro, isSelected: true)
+                    CategoryChip("Courses", icon: .groceries, tint: .bifazPersonal)
                 }
                 HStack(spacing: BifazSpacing.s) {
                     ReceiptThumbnail(state: .attached)

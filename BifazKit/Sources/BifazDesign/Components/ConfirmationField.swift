@@ -57,7 +57,7 @@ public struct ConfirmationField: View {
     private var tag: some View {
         if let confidence {
             HStack(spacing: BifazSpacing.xxs) {
-                Image(systemName: confidence.symbolName)
+                BifazIconView(confidence.icon, size: 14, relativeTo: .caption)
                 Text(confidence.word)
             }
             .font(.bifazLabel)
@@ -85,11 +85,11 @@ private extension ReadingConfidence {
         }
     }
 
-    var symbolName: String {
+    var icon: BifazIcon {
         switch self {
-        case .high: "checkmark.circle.fill"
-        case .medium: "questionmark.circle.fill"
-        case .low: "exclamationmark.triangle.fill"
+        case .high: .check
+        case .medium: .info
+        case .low: .warning
         }
     }
 
