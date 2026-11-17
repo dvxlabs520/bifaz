@@ -22,6 +22,7 @@ struct ExpenseFormView: View {
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.receiptStore) private var receiptStore
     @Environment(AppNavigation.self) private var navigation: AppNavigation?
     @AppStorage(VATSetting.key) private var isVATRegistered = VATSetting.defaultValue
@@ -48,7 +49,7 @@ struct ExpenseFormView: View {
     @State private var isConfirmingDiscard = false
     @FocusState private var focus: Field?
 
-    private enum Field { case amount, merchant, note }
+    private enum Field: Hashable { case amount, merchant, note, secondVAT }
     private enum ReadField { case amount, merchant, date, vat }
 
     init(editing expense: Expense? = nil, defaultSpace: Space = .personal, onDeleted: @escaping () -> Void = {}) {
@@ -117,6 +118,7 @@ struct ExpenseFormView: View {
 
     var body: some View {
         NavigationStack {
+            ScrollViewReader { scroller in
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     if let capture { ReadReceiptHeader(capture: capture) }
@@ -157,6 +159,7 @@ struct ExpenseFormView: View {
                             .font(.bifazBody)
                             .lineLimit(1...4)
                             .focused($focus, equals: .note)
+                            .id(Field.note)
                     }
                     if isEditing {
                         Button(role: .destructive) {
@@ -178,6 +181,15 @@ struct ExpenseFormView: View {
                 .padding(.bottom, BifazSpacing.xxxl)
             }
             .scrollDismissesKeyboard(.interactively)
+            // Keep the focused field above the keyboard (the second VAT amount sits low).
+            .onChange(of: focus) { _, field in
+                guard let field else { return }
+                Task {
+                    try? await Task.sleep(for: .milliseconds(350))
+                    withAnimation(reduceMotion ? nil : .snappy) { scroller.scrollTo(field, anchor: .center) }
+                }
+            }
+            }
             .background(Color.bifazPaper)
             .navigationTitle(isEditing ? "form.title.edit" : isConfirmingCapture ? "form.title.confirm" : "form.title.new")
             .navigationBarTitleDisplayMode(.inline)
@@ -277,6 +289,7 @@ struct ExpenseFormView: View {
                 .keyboardType(.decimalPad)
                 .accessibilityIdentifier("ui.formAmount")
                 .focused($focus, equals: .amount)
+                .id(Field.amount)
                 .foregroundStyle(.bifazInk)
                 CurrencyMenu(currencyCode: $draft.currencyCode)
             }
@@ -330,6 +343,7 @@ struct ExpenseFormView: View {
                 .autocorrectionDisabled()
                 .submitLabel(.next)
                 .focused($focus, equals: .merchant)
+                .id(Field.merchant)
                 .onChange(of: draft.merchant) { _, text in
                     merchantSuggestions = MerchantMemory.merchants(matching: text, in: context)
                         .filter { $0 != text }
@@ -432,6 +446,8 @@ struct ExpenseFormView: View {
                 .monospacedDigit()
                 .keyboardType(.decimalPad)
                 .accessibilityIdentifier("ui.formVATSecondAmount")
+                .focused($focus, equals: .secondVAT)
+                .id(Field.secondVAT)
                 .fixedSize()
                 Text(verbatim: Self.currencySymbol)
                     .font(.bifazBody)
