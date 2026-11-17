@@ -22,14 +22,18 @@ struct CaptureButton: View {
             }
             .accessibilityIdentifier("ui.captureManual")
         } label: {
+            // A plain dark disc, not a tinted Liquid Glass button: the menu morphs
+            // out of (and back into) a glass button's tint, which put the dark
+            // menu text on a dark background while it closed.
             BifazIconView(.plus, size: 24, relativeTo: .title2)
                 .foregroundStyle(Color.bifazPaper)
                 .frame(width: side, height: side)
+                .background(Color.bifazInk, in: Circle())
+                .shadow(color: .black.opacity(0.18), radius: 10, y: 4)
+                .contentShape(Circle())
         }
         .menuOrder(.fixed)
-        .buttonStyle(.glassProminent)
-        .buttonBorderShape(.circle)
-        .tint(.bifazInk)
+        .buttonStyle(.plain)
         .accessibilityLabel(Text("capture.label"))
         .accessibilityIdentifier("ui.captureButton")
         .accessibilityHint(Text("capture.hint"))
