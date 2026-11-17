@@ -44,3 +44,21 @@
 - Una copia exportable de la base si no abre (escape de emergencia): con la fase 6.
 - Pruebas de interfaz automatizadas (UI tests) de los flujos de la fase 1: no hay; verificado a mano en el simulador.
 - La protección de datos no se puede comprobar en el simulador (no la aplica); comprobar en iPhone real.
+
+## Correcciones de la revisión del manager (rama `fase1-correcciones`)
+1. **Categorías en el idioma actual**: las categorías por defecto se guardan con `name` vacío y se
+   identifican por `seedKey`; se muestran traducidas en cada dispositivo. Renombrar guarda el texto
+   del usuario. **Sin cambio de esquema** (v1 congelado intacto, compatible con CloudKit: un
+   `name` vacío viaja igual). Migración: reparación idempotente al arrancar
+   (`CategorySeeder.adoptTranslatedDefaults`) que vacía el nombre si coincide con una traducción
+   por defecto en en/es/fr. Pruebas nuevas.
+2. **Borrado sin comercio**: variante «Cette dépense et son justificatif seront supprimés…» en los
+   tres idiomas (historial y formulario de edición).
+3. **Títulos alineados**: margen de pantalla de 16 pt (`BifazSpacing.screen`) = margen del título grande.
+4. **Margen bajo el botón +**: `.bifazScreen()` reserva el alto del botón (escala con Dynamic Type).
+5. **Pruebas de interfaz**: target `BifazUITests` en el esquema `Bifaz` (alta, edición, borrado con
+   confirmación; total del mes comprobado en cada paso). `-BifazUITesting YES` (solo Debug) usa un
+   almacén en memoria.
+6. **Francés con «vous»**: 15 cadenas cambiadas; las 205 cadenas francesas revisadas con un script.
+
+Capturas en `docs/capturas/fase-1-correcciones/` (francés).
