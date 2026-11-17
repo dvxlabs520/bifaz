@@ -139,7 +139,7 @@ struct ExpenseFilterSheet: View {
                 refinements.categoryIDs.insert(category.id)
             }
         } label: {
-            CategoryChip(category.name, icon: category.icon, tint: space.color, isSelected: isSelected)
+            CategoryChip(category.displayName, icon: category.icon, tint: space.color, isSelected: isSelected)
         }
         .buttonStyle(.plain)
         .sensoryFeedback(.selection, trigger: isSelected)

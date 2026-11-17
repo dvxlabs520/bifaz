@@ -106,7 +106,7 @@ struct ExpenseDetailView: View {
                     HStack(spacing: BifazSpacing.xs) {
                         BifazIconView(category.icon, size: 18)
                             .foregroundStyle(expense.space.color)
-                        Text(verbatim: category.name)
+                        Text(verbatim: category.displayName)
                     }
                 } else {
                     Text("detail.category.none", tableName: "History")

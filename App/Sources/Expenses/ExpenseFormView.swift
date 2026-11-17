@@ -166,7 +166,7 @@ struct ExpenseFormView: View {
                 Button {
                     draft.category = isSelected ? nil : category
                 } label: {
-                    CategoryChip(category.name, icon: category.icon, tint: draft.space.color, isSelected: isSelected)
+                    CategoryChip(category.displayName, icon: category.icon, tint: draft.space.color, isSelected: isSelected)
                 }
                 .buttonStyle(.plain)
                 .accessibilityAddTraits(isSelected ? .isSelected : [])

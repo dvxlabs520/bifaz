@@ -23,7 +23,7 @@ enum PreviewContainer {
 /// Sample data for previews and the debug `-BifazSampleData YES` launch argument.
 enum SampleData {
     static func insert(into context: ModelContext) throws {
-        try CategorySeeder.seedIfNeeded(in: context) { Bundle.main.localizedString(forKey: $0, value: nil, table: nil) }
+        try CategorySeeder.seedIfNeeded(in: context)
         let categories = try context.fetch(FetchDescriptor<ExpenseCategory>())
         func category(_ key: String) -> ExpenseCategory? { categories.first { $0.seedKey == key } }
         let calendar = Calendar.current

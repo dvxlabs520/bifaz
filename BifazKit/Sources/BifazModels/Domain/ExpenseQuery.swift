@@ -53,22 +53,23 @@ public struct ExpenseFilter: Equatable, Sendable {
 
     /// The in-memory part: categories and text search (pending receipts are
     /// re-checked so the function is also correct on its own).
-    public func matches(_ expense: Expense) -> Bool {
+    /// `categoryName` resolves the shown name (built-in categories are translated).
+    public func matches(_ expense: Expense, categoryName: (ExpenseCategory) -> String = { $0.name }) -> Bool {
         if !categoryIDs.isEmpty {
             guard let id = expense.category?.id, categoryIDs.contains(id) else { return false }
         }
         if onlyReceiptPending, expense.status != .receiptPending { return false }
         let query = Self.fold(searchText)
         guard !query.isEmpty else { return true }
-        let haystack = [expense.merchant, expense.note, expense.category?.name ?? ""].map(Self.fold)
+        let haystack = [expense.merchant, expense.note, expense.category.map(categoryName) ?? ""].map(Self.fold)
         return query.split(separator: " ").allSatisfy { term in
             haystack.contains { $0.contains(term) }
         }
     }
 
     /// Runs the full filter against a context.
-    public func fetch(in context: ModelContext) throws -> [Expense] {
-        try context.fetch(fetchDescriptor).filter(matches)
+    public func fetch(in context: ModelContext, categoryName: (ExpenseCategory) -> String = { $0.name }) throws -> [Expense] {
+        try context.fetch(fetchDescriptor).filter { matches($0, categoryName: categoryName) }
     }
 
     static func fold(_ text: String) -> String {

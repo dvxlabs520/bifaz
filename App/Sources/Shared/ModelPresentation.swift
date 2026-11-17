@@ -7,13 +7,37 @@ import BifazDesign
 extension ExpenseCategory {
     /// The category's icon (falls back to `.other` for unknown names).
     var icon: BifazIcon { BifazIcon(rawValue: iconName) ?? .other }
+
+    /// Name in the current language for built-in categories, else the user's name.
+    var displayName: String { displayName(localize: CategoryNames.current) }
+}
+
+/// Default category names, from the app's String Catalog.
+enum CategoryNames {
+    /// In the app's current language.
+    static func current(_ seedKey: String) -> String {
+        Bundle.main.localizedString(forKey: seedKey, value: nil, table: nil)
+    }
+
+    /// Every shipped translation of a default name (to recognise names stored
+    /// by earlier builds in another language).
+    static func allTranslations(_ seedKey: String) -> Set<String> {
+        var names: Set<String> = [current(seedKey)]
+        for language in Bundle.main.localizations {
+            guard let path = Bundle.main.path(forResource: language, ofType: "lproj"),
+                  let bundle = Bundle(path: path) else { continue }
+            let name = bundle.localizedString(forKey: seedKey, value: nil, table: nil)
+            if name != seedKey { names.insert(name) }
+        }
+        return names
+    }
 }
 
 extension Expense {
     /// Merchant, else category name, else "Expense".
     var displayTitle: String {
         if !merchant.isEmpty { return merchant }
-        if let name = category?.name, !name.isEmpty { return name }
+        if let name = category?.displayName, !name.isEmpty { return name }
         return String(localized: "expense.untitled")
     }
 
@@ -30,7 +54,7 @@ extension ExpenseRow {
         let hasMerchant = !expense.merchant.isEmpty
         self.init(
             merchant: hasMerchant ? expense.merchant : expense.displayTitle,
-            categoryName: hasMerchant ? expense.category?.name : String(localized: "expense.noMerchant"),
+            categoryName: hasMerchant ? expense.category?.displayName : String(localized: "expense.noMerchant"),
             categoryIcon: expense.category?.icon,
             date: expense.date,
             amount: expense.amountInEUR,

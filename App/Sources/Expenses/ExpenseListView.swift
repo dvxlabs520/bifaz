@@ -47,7 +47,7 @@ private struct ExpenseListContent: View {
     }
 
     var body: some View {
-        let groups = ExpenseGrouping.byMonth(expenses.filter(filter.matches))
+        let groups = ExpenseGrouping.byMonth(expenses.filter { filter.matches($0, categoryName: { $0.displayName }) })
         Group {
             if groups.isEmpty {
                 emptyState

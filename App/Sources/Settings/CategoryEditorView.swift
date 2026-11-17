@@ -22,7 +22,7 @@ struct CategoryEditorView: View {
     init(category: ExpenseCategory?, space: Space) {
         self.category = category
         self.space = space
-        _name = State(initialValue: category?.name ?? "")
+        _name = State(initialValue: category?.displayName ?? "")
         _icon = State(initialValue: category?.icon ?? .other)
         let raw = space.rawValue
         _spaceCategories = Query(filter: #Predicate<ExpenseCategory> { $0.spaceRawValue == raw })
@@ -35,7 +35,7 @@ struct CategoryEditorView: View {
     private var isDuplicate: Bool {
         let target = Self.fold(trimmedName)
         return spaceCategories.contains {
-            $0.persistentModelID != category?.persistentModelID && Self.fold($0.name) == target
+            $0.persistentModelID != category?.persistentModelID && Self.fold($0.displayName) == target
         }
     }
 
@@ -165,7 +165,10 @@ struct CategoryEditorView: View {
     private func save() {
         guard canSave else { return }
         if let category {
-            category.name = trimmedName
+            // A built-in category saved with its translated default name keeps
+            // following the language; any other text is a rename.
+            let keepsDefault = category.usesDefaultName && trimmedName == category.displayName
+            if !keepsDefault { category.name = trimmedName }
             category.iconName = icon.rawValue
         } else {
             let next = (spaceCategories.map(\.sortOrder).max() ?? -1) + 1

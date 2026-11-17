@@ -182,7 +182,7 @@ private struct CategoryList: View {
         return HStack(spacing: BifazSpacing.m) {
             CategoryIcon(icon: category.icon, tint: space.color, background: space.tint)
             VStack(alignment: .leading, spacing: 0) {
-                Text(category.name)
+                Text(category.displayName)
                     .font(.bifazBody)
                     .foregroundStyle(.bifazInk)
                 Text("category.expenseCount \(count)", tableName: "Settings")

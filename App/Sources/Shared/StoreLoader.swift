@@ -21,9 +21,8 @@ final class StoreLoader {
             let container = try await Task.detached(priority: .userInitiated) {
                 try BifazStore.makeContainer()
             }.value
-            try CategorySeeder.seedIfNeeded(in: container.mainContext) {
-                Bundle.main.localizedString(forKey: $0, value: nil, table: nil)
-            }
+            try CategorySeeder.seedIfNeeded(in: container.mainContext)
+            try CategorySeeder.adoptTranslatedDefaults(in: container.mainContext, knownNames: CategoryNames.allTranslations)
             #if DEBUG
             try insertSampleDataIfRequested(into: container.mainContext)
             #endif
