@@ -17,6 +17,8 @@ struct StringCatalogTests {
         "App/Resources/InfoPlist.xcstrings",
         "App/Resources/History.xcstrings",
         "App/Resources/Settings.xcstrings",
+        "App/Resources/Summary.xcstrings",
+        "App/Resources/Budgets.xcstrings",
     ]
 
     /// Every `stringUnit` (state, value) under a localization, descending into variations.

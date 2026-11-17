@@ -31,6 +31,10 @@ struct ExpensesView: View {
                 ExpenseListView(filter: filter, onClearFilters: clearFilters)
             }
             .navigationTitle("tab.expenses")
+            // Declared at the root of the stack: the Summary pushes this list too, with its own.
+            .navigationDestination(for: PersistentIdentifier.self) { id in
+                ExpenseDestination(id: id)
+            }
             .searchable(
                 text: $searchText,
                 prompt: Text("history.search.prompt", tableName: "History")

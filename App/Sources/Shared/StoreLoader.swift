@@ -64,9 +64,12 @@ final class StoreLoader {
     #if DEBUG
     /// `-BifazSampleData YES` fills an empty store with sample expenses (screenshots, manual QA).
     private func insertSampleDataIfRequested(into context: ModelContext) throws {
-        guard UserDefaults.standard.bool(forKey: "BifazSampleData"),
-              try context.fetchCount(FetchDescriptor<Expense>()) == 0 else { return }
-        try SampleData.insert(into: context)
+        guard try context.fetchCount(FetchDescriptor<Expense>()) == 0 else { return }
+        if UserDefaults.standard.bool(forKey: "BifazLargeSample") {
+            try SampleData.insertLarge(into: context)
+        } else if UserDefaults.standard.bool(forKey: "BifazSampleData") {
+            try SampleData.insert(into: context)
+        }
     }
     #endif
 }

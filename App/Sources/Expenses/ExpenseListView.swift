@@ -56,11 +56,6 @@ private struct ExpenseListContent: View {
                 list(groups)
             }
         }
-        .navigationDestination(for: PersistentIdentifier.self) { id in
-            if let expense = modelContext.model(for: id) as? Expense {
-                ExpenseDetailView(expense: expense)
-            }
-        }
         .confirmationDialog(
             Text("history.delete.title", tableName: "History"),
             isPresented: Binding(get: { pendingDeletion != nil }, set: { if !$0 { pendingDeletion = nil } }),

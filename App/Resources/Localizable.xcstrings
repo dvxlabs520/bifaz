@@ -2449,6 +2449,30 @@
         }
       }
     },
+    "summary.byCategory" : {
+      "extractionState" : "manual",
+      "comment" : "Summary: section title of the split by category.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By category"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por categoría"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par catégorie"
+          }
+        }
+      }
+    },
     "summary.empty.message" : {
       "comment" : "Message of the empty state on Summary; points to the two actions.",
       "extractionState" : "manual",
@@ -2497,6 +2521,30 @@
         }
       }
     },
+    "summary.evolution" : {
+      "extractionState" : "manual",
+      "comment" : "Summary: section title of the evolution chart.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last six months"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Últimos seis meses"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Six derniers mois"
+          }
+        }
+      }
+    },
     "summary.latest" : {
       "comment" : "Summary section title for the latest expenses.",
       "extractionState" : "manual",
@@ -2541,6 +2589,102 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rien dans cet espace pour l’instant."
+          }
+        }
+      }
+    },
+    "summary.month.next" : {
+      "extractionState" : "manual",
+      "comment" : "Summary: accessibility label of the button that shows the next month.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next month"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mes siguiente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mois suivant"
+          }
+        }
+      }
+    },
+    "summary.month.previous" : {
+      "extractionState" : "manual",
+      "comment" : "Summary: accessibility label of the button that shows the previous month.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous month"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mes anterior"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mois précédent"
+          }
+        }
+      }
+    },
+    "summary.monthEmpty %@" : {
+      "extractionState" : "manual",
+      "comment" : "Summary: the selected month has no expenses in this space. Argument: month name.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No expenses in %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ningún gasto en %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune dépense en %@."
+          }
+        }
+      }
+    },
+    "summary.noCategory" : {
+      "extractionState" : "manual",
+      "comment" : "Summary: title part of the history of expenses without a category.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No category"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin categoría"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans catégorie"
           }
         }
       }

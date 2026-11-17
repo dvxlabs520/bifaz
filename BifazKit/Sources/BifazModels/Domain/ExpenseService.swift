@@ -21,13 +21,14 @@ public enum ExpenseService {
         return expense
     }
 
-    /// Applies an edited draft to an existing expense.
-    public static func update(_ expense: Expense, with draft: ExpenseDraft, in context: ModelContext) throws {
+    /// Applies an edited draft to an existing expense. `saving: false` leaves the
+    /// save to the caller (bulk inserts of generated data).
+    public static func update(_ expense: Expense, with draft: ExpenseDraft, in context: ModelContext, saving: Bool = true) throws {
         if let error = draft.validate() { throw error }
         apply(draft, to: expense, in: context)
         expense.updatedAt = .now
         MerchantMemory.remember(expense, in: context)
-        try context.save()
+        if saving { try context.save() }
     }
 
     /// Attaches (or replaces) the receipt of an existing expense. A "receipt

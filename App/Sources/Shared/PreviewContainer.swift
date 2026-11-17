@@ -20,37 +20,103 @@ enum PreviewContainer {
     }
 }
 
-/// Sample data for previews and the debug `-BifazSampleData YES` launch argument.
+/// Sample data for previews and the debug `-BifazSampleData YES` launch argument:
+/// seven months of French expenses in both spaces, VAT at one or several rates,
+/// expenses without a category, and three budgets (on track, near the limit, over).
 enum SampleData {
-    static func insert(into context: ModelContext) throws {
+    static func insert(into context: ModelContext, now: Date = .now, calendar: Calendar = .current) throws {
         try CategorySeeder.seedIfNeeded(in: context)
         let categories = try context.fetch(FetchDescriptor<ExpenseCategory>())
         func category(_ key: String) -> ExpenseCategory? { categories.first { $0.seedKey == key } }
-        let calendar = Calendar.current
-        func daysAgo(_ days: Int) -> Date { calendar.date(byAdding: .day, value: -days, to: .now) ?? .now }
-
-        let items: [(String, String, Space, String, Int, VATRate?, ExpenseStatus)] = [
-            ("87.00", "SNCF", .pro, "category.pro.transport", 1, .intermediate, .receiptPending),
-            ("71.99", "Adobe", .pro, "category.pro.software", 3, .standard, .confirmed),
-            ("23.40", "Monoprix", .personal, "category.personal.groceries", 4, nil, .confirmed),
-            ("6.80", "Boulangerie Paul", .personal, "category.personal.restaurants", 5, nil, .confirmed),
-            ("142.50", "Hôtel Mercure Lyon", .pro, "category.pro.lodging", 9, .intermediate, .confirmed),
-            ("38.90", "Pharmacie Lafayette", .personal, "category.personal.health", 12, nil, .confirmed),
-            ("19.99", "Free Mobile", .pro, "category.pro.phone", 33, .standard, .confirmed),
-            ("64.20", "Carrefour", .personal, "category.personal.groceries", 36, nil, .confirmed),
+        let thisMonth = calendar.dateInterval(of: .month, for: now)?.start ?? now
+        let today = calendar.component(.day, from: now)
+        /// Day `day` of the month `monthsAgo` months back, never after today.
+        func date(_ monthsAgo: Int, _ day: Int) -> Date {
+            let month = calendar.date(byAdding: .month, value: -monthsAgo, to: thisMonth) ?? thisMonth
+            let clamped = monthsAgo == 0 ? min(day, today) : day
+            return calendar.date(byAdding: .day, value: clamped - 1, to: month)?.addingTimeInterval(11 * 3600) ?? month
+        }
+        typealias Item = (amount: String, merchant: String, space: Space, key: String?, monthsAgo: Int, day: Int, rate: VATRate?)
+        var items: [Item] = [
+            // This month.
+            ("87.00", "SNCF", .pro, "category.pro.transport", 0, 2, .intermediate),
+            ("71.99", "Adobe", .pro, "category.pro.software", 0, 3, .standard),
+            ("142.50", "Hôtel Mercure Lyon", .pro, "category.pro.lodging", 0, 6, .intermediate),
+            ("48.60", "Brasserie Le Zinc", .pro, "category.pro.meals", 0, 6, .intermediate),
+            ("19.99", "Free Mobile", .pro, "category.pro.phone", 0, 8, .standard),
+            ("64.89", "TotalEnergies", .pro, "category.pro.car", 0, 10, .standard),
+            ("12.00", "Parking Indigo", .pro, nil, 0, 10, .standard),
+            ("23.40", "Monoprix", .personal, "category.personal.groceries", 0, 1, nil),
+            ("96.30", "Carrefour", .personal, "category.personal.groceries", 0, 5, nil),
+            ("54.12", "Franprix", .personal, "category.personal.groceries", 0, 9, nil),
+            ("6.80", "Boulangerie Paul", .personal, "category.personal.restaurants", 0, 4, nil),
+            ("68.00", "Le Petit Bouillon", .personal, "category.personal.restaurants", 0, 7, nil),
+            ("38.90", "Pharmacie Lafayette", .personal, "category.personal.health", 0, 9, nil),
+            ("29.99", "Fnac", .personal, nil, 0, 11, nil),
         ]
-        for (amount, merchant, space, key, days, rate, status) in items {
-            var draft = ExpenseDraft(
-                amount: Decimal(string: amount),
-                merchant: merchant,
-                date: daysAgo(days),
-                space: space,
-                category: category(key),
-                vatRate: rate
+        // Earlier months: a steady base that varies a little.
+        for monthsAgo in 1...6 {
+            let k = Decimal(100 + (monthsAgo * 7) % 23) / 100
+            func scaled(_ amount: String) -> String { "\((Decimal(string: amount)! * k).rounded(scale: 2))" }
+            items += [
+                (scaled("120.00"), "SNCF", .pro, "category.pro.transport", monthsAgo, 4, .intermediate),
+                (scaled("71.99"), "Adobe", .pro, "category.pro.software", monthsAgo, 3, .standard),
+                (scaled("19.99"), "Free Mobile", .pro, "category.pro.phone", monthsAgo, 8, .standard),
+                (scaled("86.40"), "Restaurant Chez Marcel", .pro, "category.pro.meals", monthsAgo, 14, .intermediate),
+                (scaled("210.00"), "Carrefour", .personal, "category.personal.groceries", monthsAgo, 6, nil),
+                (scaled("75.00"), "Le Petit Bouillon", .personal, "category.personal.restaurants", monthsAgo, 18, nil),
+                (scaled("45.00"), "Pharmacie Lafayette", .personal, "category.personal.health", monthsAgo, 21, nil),
+            ]
+        }
+        for item in items {
+            let draft = ExpenseDraft(
+                amount: Decimal(string: item.amount),
+                merchant: item.merchant,
+                date: date(item.monthsAgo, item.day),
+                space: item.space,
+                category: item.key.flatMap(category),
+                vatRate: item.rate
             )
-            draft.note = ""
-            let expense = try ExpenseService.create(from: draft, in: context)
-            expense.status = status
+            try ExpenseService.create(from: draft, in: context)
+        }
+        // A supermarket receipt with two printed rates (5,5 % food, 20 % the rest).
+        var monoprix = ExpenseDraft(amount: Decimal(string: "27.55"), merchant: "Monoprix", date: date(0, 12),
+                                    space: .pro, category: category("category.pro.office"))
+        monoprix.setVAT(VATBreakdown.lines(fromPrinted: [
+            PrintedVATLine(rate: VATRate.reduced.fraction, base: Decimal(string: "10.00"), vat: Decimal(string: "0.55")),
+            PrintedVATLine(rate: VATRate.standard.fraction, base: Decimal(string: "14.17"), vat: Decimal(string: "2.83")),
+        ], total: Decimal(string: "27.55")!))
+        try ExpenseService.create(from: monoprix, in: context)
+        if let pending = try context.fetch(FetchDescriptor<Expense>()).first(where: { $0.merchant == "SNCF" && $0.date >= thisMonth }) {
+            pending.status = .receiptPending
+        }
+
+        // Budgets for this month: transport on track, groceries near the limit, restaurants over.
+        if let transport = category("category.pro.transport") { try BudgetService.setBudget(300, for: transport, in: context) }
+        if let groceries = category("category.personal.groceries") { try BudgetService.setBudget(200, for: groceries, in: context) }
+        if let restaurants = category("category.personal.restaurants") { try BudgetService.setBudget(70, for: restaurants, in: context) }
+        try context.save()
+    }
+
+    /// `-BifazLargeSample YES`: 5,000 expenses over two years, to measure the Summary.
+    static func insertLarge(into context: ModelContext, now: Date = .now) throws {
+        try CategorySeeder.seedIfNeeded(in: context)
+        let categories = try context.fetch(FetchDescriptor<ExpenseCategory>())
+        var generator = SystemRandomNumberGenerator()
+        for index in 0..<5000 {
+            let space: Space = index.isMultiple(of: 2) ? .pro : .personal
+            let amount = Decimal(Int.random(in: 100...30_000, using: &generator)) / 100
+            var draft = ExpenseDraft(
+                amount: amount,
+                merchant: "Commerce \(index % 97)",
+                date: now.addingTimeInterval(-Double.random(in: 0..<(730 * 86_400), using: &generator)),
+                space: space,
+                category: categories.filter { $0.space == space }.randomElement(using: &generator)
+            )
+            if space == .pro { draft.vatRate = VATRate.allCases.randomElement(using: &generator) }
+            let expense = Expense(amount: 0, space: space)
+            context.insert(expense)
+            try ExpenseService.update(expense, with: draft, in: context, saving: false)
         }
         try context.save()
     }

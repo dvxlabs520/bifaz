@@ -23,6 +23,7 @@ struct ExpenseFormView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Environment(\.receiptStore) private var receiptStore
+    @Environment(AppNavigation.self) private var navigation: AppNavigation?
     @AppStorage(VATSetting.key) private var isVATRegistered = VATSetting.defaultValue
     @Query(sort: \ExpenseCategory.sortOrder) private var categories: [ExpenseCategory]
 
@@ -508,6 +509,8 @@ struct ExpenseFormView: View {
 
     private func save() {
         var storedFiles: StoredReceiptFiles?
+        // The budget of the chosen category, before and after, for the in-app alert.
+        let budgetBefore = draft.category.flatMap { try? BudgetService.status(of: $0, at: draft.date, in: context) }
         do {
             if let expense {
                 try ExpenseService.update(expense, with: draft, in: context)
@@ -527,6 +530,13 @@ struct ExpenseFormView: View {
                 try ExpenseService.create(from: draft, in: context)
             }
             savedCount += 1
+            if let category = draft.category,
+               let alert = BudgetService.alert(
+                   before: budgetBefore,
+                   after: try? BudgetService.status(of: category, at: draft.date, in: context)
+               ) {
+                navigation?.budgetAlert = alert
+            }
             dismiss()
         } catch {
             if let storedFiles, let receiptStore {

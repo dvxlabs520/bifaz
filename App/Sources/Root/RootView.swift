@@ -8,6 +8,8 @@ struct RootView: View {
     @State private var navigation = AppNavigation()
     /// Global space filter, shared by every screen and kept between launches.
     @AppStorage("spaceFilter") private var spaceFilter: SpaceFilter = .all
+    @Environment(\.modelContext) private var context
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         TabView(selection: $navigation.selectedTab) {
@@ -33,7 +35,8 @@ struct RootView: View {
             }
         }
         .tint(.bifazInk)
-        .environment(navigation)
+        .overlay(alignment: .top) { budgetBanner }
+        .animation(reduceMotion ? nil : .snappy, value: navigation.budgetAlert)
         .sheet(item: $navigation.newExpenseSpace) { space in
             ExpenseFormView(defaultSpace: space)
         }
@@ -43,6 +46,34 @@ struct RootView: View {
         .sheet(item: $navigation.capturedReceipt) { result in
             ExpenseFormView(capture: result.receipt, defaultSpace: result.space)
         }
+        // After the sheets, so the forms they present can reach it too.
+        .environment(navigation)
+    }
+
+    /// Shown for a few seconds after a save that pushed a budget near or over its limit.
+    @ViewBuilder
+    private var budgetBanner: some View {
+        if let alert = navigation.budgetAlert {
+            let name = categoryName(alert.categoryID)
+            BudgetAlertBanner(alert: alert, categoryName: name) { navigation.budgetAlert = nil }
+                .padding(.horizontal, BifazSpacing.screen)
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .task(id: alert) {
+                    try? await Task.sleep(for: .seconds(1))
+                    AccessibilityNotification.Announcement(
+                        alert.state == .over
+                            ? String(localized: "budget.alert.over.announcement \(name)", table: "Budgets")
+                            : String(localized: "budget.alert.near.announcement \(name)", table: "Budgets")
+                    ).post()
+                    try? await Task.sleep(for: .seconds(5))
+                    if navigation.budgetAlert == alert { navigation.budgetAlert = nil }
+                }
+        }
+    }
+
+    private func categoryName(_ id: UUID) -> String {
+        let descriptor = FetchDescriptor<ExpenseCategory>(predicate: #Predicate { $0.id == id })
+        return (try? context.fetch(descriptor).first?.displayName) ?? ""
     }
 
     private func tabLabel(_ title: LocalizedStringKey, icon: BifazIcon) -> some View {
