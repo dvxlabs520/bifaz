@@ -18,3 +18,9 @@ Packages/
 
 # Local test output
 *.xcresult
+
+# Temporary git worktrees
+.worktrees/
+
+# Real receipts and invoices for reading tests: personal documents, never committed
+TestData/Real/

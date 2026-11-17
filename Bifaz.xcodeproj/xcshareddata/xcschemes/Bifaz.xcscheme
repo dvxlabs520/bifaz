@@ -66,6 +66,17 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BifazReadingTests"
+               BuildableName = "BifazReadingTests"
+               BlueprintName = "BifazReadingTests"
+               ReferencedContainer = "container:BifazKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F476F6E464854C397D62D54"
                BuildableName = "BifazUITests.xctest"
                BlueprintName = "BifazUITests"

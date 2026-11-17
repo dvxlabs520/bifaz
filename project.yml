@@ -112,6 +112,7 @@ schemes:
       targets:
         - package: BifazKit/BifazModelsTests
         - package: BifazKit/BifazDesignTests
+        - package: BifazKit/BifazReadingTests
         - BifazUITests
     archive:
       config: Release
