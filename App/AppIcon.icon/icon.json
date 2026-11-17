@@ -1,0 +1,35 @@
+{
+  "fill" : {
+    "solid" : "srgb:0.06275,0.08235,0.11373,1.00000"
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "coin-personal.svg",
+          "name" : "coin-personal"
+        },
+        {
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "coin-pro.svg",
+          "name" : "coin-pro"
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "squares" : "shared"
+  }
+}

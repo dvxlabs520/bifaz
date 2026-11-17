@@ -1,0 +1,51 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "brand.name" : {
+      "comment" : "App name in the logotype. Never translated.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Bifaz" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Bifaz" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Bifaz" } }
+      }
+    },
+    "brand.tagline" : {
+      "comment" : "Brand tagline.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Two sides, one clear ledger." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Dos caras, una cuenta clara." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Deux faces, des comptes clairs." } }
+      }
+    },
+    "space.all" : {
+      "comment" : "Space selector option that shows both spaces together.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "All" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Todo" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tout" } }
+      }
+    },
+    "space.personal" : {
+      "comment" : "Name of the personal space.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Personal" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Personal" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Perso" } }
+      }
+    },
+    "space.pro" : {
+      "comment" : "Name of the professional space.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Pro" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Pro" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Pro" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}
