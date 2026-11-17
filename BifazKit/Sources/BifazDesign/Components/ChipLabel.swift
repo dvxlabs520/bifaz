@@ -1,8 +1,9 @@
 import SwiftUI
 
 /// Shared look of `FilterChip` and `CategoryChip`: an outlined capsule that
-/// turns ink-filled when selected. Not interactive by itself.
-struct ChipLabel: View {
+/// turns ink-filled when selected. Not interactive by itself (also used as the
+/// label of a `Menu`, e.g. the client and project pickers).
+public struct ChipLabel: View {
     let title: Text
     let icon: BifazIcon?
     let symbolTint: Color?
@@ -10,7 +11,14 @@ struct ChipLabel: View {
 
     @ScaledMetric private var minHeight: CGFloat = 36
 
-    var body: some View {
+    public init(title: Text, icon: BifazIcon? = nil, symbolTint: Color? = nil, isSelected: Bool) {
+        self.title = title
+        self.icon = icon
+        self.symbolTint = symbolTint
+        self.isSelected = isSelected
+    }
+
+    public var body: some View {
         HStack(spacing: BifazSpacing.xs) {
             if let icon {
                 BifazIconView(icon, size: 16, relativeTo: .subheadline)

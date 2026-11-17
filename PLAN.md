@@ -326,6 +326,21 @@ Lista de mejoras (todas hechas en la rama):
 - Avisos de presupuesto dentro de la app (cerca del límite al 80 %, superado al 100 %). Las notificaciones
   del sistema se dejan para la fase 4, junto con el recordatorio de TVA.
 
+**Fase 3, revisada por el manager (17-11-2026), rama `fase-3` (`ff4aa96`):** pasan 231 pruebas
+(161 + 10 + 57 de paquete y 3 de interfaz). Comprobado en un simulador aparte, en español y con los datos de
+ejemplo: el Resumen de noviembre cuadra con el historial al céntimo en "Todo" (792,03 €), la comparación
+mensual es correcta, la TVA por tipo suma el total del mes y los presupuestos muestran sus tres estados con
+importes coherentes con el reparto. No comprobado por el manager (sí por el desarrollador o por pruebas):
+el cuadre en Pro y Personal por separado, crear un presupuesto a mano, la migración v1 → v2 y el rendimiento
+(659 ms la primera apertura con 5.000 gastos; después entre 7 y 216 ms). VoiceOver no lo ha probado nadie.
+"Trimestre acumulado" se entiende como del primer día del trimestre al final del mes mostrado.
+
+Mejoras de la fase 3, a hacer al terminar la fase 4:
+1. Orden del Resumen: tras el total, "Por revisar" y "Presupuestos"; después categorías, evolución, TVA y últimos gastos.
+2. El botón "+" tapa importes a media lista: ocultarlo al desplazar hacia abajo y mostrarlo al subir o al parar.
+3. El teclado tapa el campo del segundo importe de TVA en el formulario.
+4. Accesibilidad: auditoría automática en las pruebas de interfaz de las pantallas principales.
+
 **Fase 4, decisiones del manager al encargarla (17-11-2026), a petición del usuario de seguir sin esperar
 a la revisión de la fase 3:**
 - Parte de `fase-3` en una rama `fase-4`. Las correcciones que salgan de la revisión de la fase 3 se hacen

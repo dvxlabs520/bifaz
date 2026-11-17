@@ -2113,6 +2113,198 @@
         }
       }
     },
+    "notification.budget.body %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "Notification body. 1: spent, 2: monthly limit.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ spent of %2$@ this month."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ gastados de %2$@ este mes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ dépensés sur %2$@ ce mois-ci."
+          }
+        }
+      }
+    },
+    "notification.budget.near.title %@" : {
+      "extractionState" : "manual",
+      "comment" : "Notification title after an automatic expense pushed a budget past 80 %. Argument: category.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ budget close to its limit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presupuesto %@ cerca del límite"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Budget %@ proche de la limite"
+          }
+        }
+      }
+    },
+    "notification.budget.over.title %@" : {
+      "extractionState" : "manual",
+      "comment" : "Notification title after an automatic expense pushed a budget past 100 %. Argument: category.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ budget exceeded"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presupuesto %@ superado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Budget %@ dépassé"
+          }
+        }
+      }
+    },
+    "notification.recurring.body %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "Notification body. 1: merchant, 2: amount.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@. It will be added when you open Bifaz."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@. Se añadirá al abrir Bifaz."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@. Elle sera ajoutée à l’ouverture de Bifaz."
+          }
+        }
+      }
+    },
+    "notification.recurring.title" : {
+      "extractionState" : "manual",
+      "comment" : "Notification title: a recurring expense falls today.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expected today"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previsto para hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prévu aujourd’hui"
+          }
+        }
+      }
+    },
+    "notification.vat.body.amount %@ %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "Notification body. 1: period (month year), 2: VAT amount, 3: due date (day month).",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VAT paid in %1$@: %2$@. Return due on %3$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TVA soportada en %1$@: %2$@. Declaración antes del %3$@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TVA déductible de %1$@ : %2$@. Déclaration avant le %3$@."
+          }
+        }
+      }
+    },
+    "notification.vat.body.generic %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "Notification body when the VAT of the period is not known yet. 1: period, 2: due date.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time to prepare the return for %1$@, due on %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prepare la declaración de %1$@, antes del %2$@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Préparez la déclaration de %1$@, à déposer avant le %2$@."
+          }
+        }
+      }
+    },
+    "notification.vat.title" : {
+      "extractionState" : "manual",
+      "comment" : "Notification title, a few days before the VAT return is due.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VAT return coming up"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se acerca la declaración de TVA"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déclaration de TVA bientôt"
+          }
+        }
+      }
+    },
     "settings.about" : {
       "comment" : "Section header in Settings.",
       "extractionState" : "manual",
@@ -2877,6 +3069,198 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Résumé"
+          }
+        }
+      }
+    },
+    "tags.picker.addClient" : {
+      "extractionState" : "manual",
+      "comment" : "Form: client chip when none is chosen.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client"
+          }
+        }
+      }
+    },
+    "tags.picker.addProject" : {
+      "extractionState" : "manual",
+      "comment" : "Form: project chip when none is chosen.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proyecto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projet"
+          }
+        }
+      }
+    },
+    "tags.picker.cancel" : {
+      "extractionState" : "manual",
+      "comment" : "Tag picker: cancel creation.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
+          }
+        }
+      }
+    },
+    "tags.picker.create" : {
+      "extractionState" : "manual",
+      "comment" : "Tag picker: confirm creation.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crear"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer"
+          }
+        }
+      }
+    },
+    "tags.picker.name" : {
+      "extractionState" : "manual",
+      "comment" : "Tag picker: name field of the creation alert.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom"
+          }
+        }
+      }
+    },
+    "tags.picker.newClient" : {
+      "extractionState" : "manual",
+      "comment" : "Tag picker: create a client.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New client…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuevo cliente…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouveau client…"
+          }
+        }
+      }
+    },
+    "tags.picker.newProject" : {
+      "extractionState" : "manual",
+      "comment" : "Tag picker: create a project.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New project…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuevo proyecto…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouveau projet…"
+          }
+        }
+      }
+    },
+    "tags.picker.none" : {
+      "extractionState" : "manual",
+      "comment" : "Tag picker menu: remove the client or project.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "None"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ninguno"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun"
           }
         }
       }

@@ -28,6 +28,7 @@
 		6113E75EACD392948CE7816C /* ExpenseFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D65C3F861288F6A5FFD2D52 /* ExpenseFilterSheet.swift */; };
 		65D6D844D7A6E427CCE7C586 /* AssistantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7189CBC1123B45B893585570 /* AssistantView.swift */; };
 		6B783C901C510C8D39FDF3FA /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FEE9BE3E1360AC927D2C7 /* SummaryView.swift */; };
+		6CA20F1F20476E6299EB4FB0 /* TagPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52CD9A6651AC80809CD173C /* TagPicker.swift */; };
 		6DB3F8A892069C0E859FEDAD /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237FE0699B20C036FDFD1BF2 /* Log.swift */; };
 		6E38DCC011A7D3B6FBB6589D /* ModelPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B750548D8A9F6680E9E0A26 /* ModelPresentation.swift */; };
 		6E797E39D1E799F26036FE3B /* VATSummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E44647F0C4AB05929395B4B /* VATSummaryCard.swift */; };
@@ -42,12 +43,14 @@
 		96927527FFEF9DFA67EB4395 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2519A55C560092F139062327 /* Appearance.swift */; };
 		99B376B7C77272912241E26E /* DesignGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BB96F8FEB099CF6E9AD781 /* DesignGalleryView.swift */; };
 		9C3D47B5D745E56BD972BD29 /* BudgetAlertBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3751AEA9D677C05FEB4C0C7C /* BudgetAlertBanner.swift */; };
+		A256CF63598FDE10B16733D3 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE49F40747FFD78D71C36D63 /* AppSettings.swift */; };
 		A50B4234E20BA4F4906AF329 /* ExpenseFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98333B48244EC1C9957451E4 /* ExpenseFlowUITests.swift */; };
 		A668CF5487E6D1BEF70CCC4A /* StoreLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2136EE2404D6CAF2285ACA05 /* StoreLoader.swift */; };
 		BA940C7C5EE0E4511BFA8BD4 /* BifazReading in Frameworks */ = {isa = PBXBuildFile; productRef = 186C25E05D5E16537FA3EBC9 /* BifazReading */; };
 		BB5027E9B31F8E156FAA806C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 1B1E0EA0B2F495B0D1056A37 /* Localizable.xcstrings */; };
 		BF586BB9D1A63B6BA720C083 /* BifazApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF661489BE599A5EA6AD309 /* BifazApp.swift */; };
 		C3AB785358861819C8879070 /* BifazDesign in Frameworks */ = {isa = PBXBuildFile; productRef = EF36F71680D2DD28A362210E /* BifazDesign */; };
+		D69C5751BA6EA0C4CE754D0C /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F7460866416F5CB0118946 /* Notifications.swift */; };
 		DBEDEA289B83B1204B4A10BC /* ReceiptCaptureModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3857E31E4B94D362766B05D /* ReceiptCaptureModifier.swift */; };
 		E4B1EC229B7C9B81E39A1549 /* DeleteExpenseMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CB968CD631D249864ACF5C /* DeleteExpenseMessage.swift */; };
 		E67591CAE8037CB9B7375DDF /* DocumentScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCCA8AA4CD0181C218674F4 /* DocumentScanner.swift */; };
@@ -107,16 +110,19 @@
 		91DE7FDFC123E116D5BB9468 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		955A1CC11FE60A87AD48D0C0 /* ReceiptSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptSection.swift; sourceTree = "<group>"; };
 		98333B48244EC1C9957451E4 /* ExpenseFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFlowUITests.swift; sourceTree = "<group>"; };
+		A0F7460866416F5CB0118946 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		AA80D6D590995B39B6F3C8C8 /* AppTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTab.swift; sourceTree = "<group>"; };
 		B18DFDBFC825568481FAE708 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		B4A66B20D0FE6E3F99BBA259 /* Budgets.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Budgets.xcstrings; sourceTree = "<group>"; };
 		B4D940E35A0AFA708C76CE57 /* ExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFormView.swift; sourceTree = "<group>"; };
+		B52CD9A6651AC80809CD173C /* TagPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPicker.swift; sourceTree = "<group>"; };
 		C14FEE9BE3E1360AC927D2C7 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
 		C5BFAC8D9224DB15FC3A9942 /* BudgetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetsView.swift; sourceTree = "<group>"; };
 		D3857E31E4B94D362766B05D /* ReceiptCaptureModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCaptureModifier.swift; sourceTree = "<group>"; };
 		E3F26450C7D9416B7C3E033B /* CaptureCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureCoordinator.swift; sourceTree = "<group>"; };
 		E595CB2FC30B14735AF0210F /* Bifaz.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Bifaz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBD850A1B09CB071E2EFB638 /* CategoryEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditorView.swift; sourceTree = "<group>"; };
+		EE49F40747FFD78D71C36D63 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		FC0DDD7D1C0BA78FC87B2D12 /* Summary.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Summary.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -221,6 +227,7 @@
 				E57E54FA905F6DCAA4C7725E /* Settings */,
 				6A02949F99A77E952235B05F /* Shared */,
 				3064B91223811083C4A635EF /* Summary */,
+				EF06C3BD8E164084783ACEF6 /* Tags */,
 				0CF661489BE599A5EA6AD309 /* BifazApp.swift */,
 			);
 			path = Sources;
@@ -230,11 +237,13 @@
 			isa = PBXGroup;
 			children = (
 				2519A55C560092F139062327 /* Appearance.swift */,
+				EE49F40747FFD78D71C36D63 /* AppSettings.swift */,
 				4F753C9F98CD65EC87DBB613 /* CaptureButton.swift */,
 				E3F26450C7D9416B7C3E033B /* CaptureCoordinator.swift */,
 				5B3EB851D868AA825C5663D9 /* FlowLayout.swift */,
 				237FE0699B20C036FDFD1BF2 /* Log.swift */,
 				8B750548D8A9F6680E9E0A26 /* ModelPresentation.swift */,
+				A0F7460866416F5CB0118946 /* Notifications.swift */,
 				4735E56651A1EA8F848B629E /* PreviewContainer.swift */,
 				399A901B3FD5DE9E80F79AD9 /* StoreErrorView.swift */,
 				2136EE2404D6CAF2285ACA05 /* StoreLoader.swift */,
@@ -306,6 +315,14 @@
 				30033BBDF258E6D8892A09CE /* SettingsView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		EF06C3BD8E164084783ACEF6 /* Tags */ = {
+			isa = PBXGroup;
+			children = (
+				B52CD9A6651AC80809CD173C /* TagPicker.swift */,
+			);
+			path = Tags;
 			sourceTree = "<group>";
 		};
 		F5BDED932BAB3F53BF3085AA /* UITests */ = {
@@ -429,6 +446,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A256CF63598FDE10B16733D3 /* AppSettings.swift in Sources */,
 				406AF32C3C7625221288A91E /* AppTab.swift in Sources */,
 				96927527FFEF9DFA67EB4395 /* Appearance.swift in Sources */,
 				65D6D844D7A6E427CCE7C586 /* AssistantView.swift in Sources */,
@@ -455,6 +473,7 @@
 				6DB3F8A892069C0E859FEDAD /* Log.swift in Sources */,
 				6E38DCC011A7D3B6FBB6589D /* ModelPresentation.swift in Sources */,
 				939EDBA6CA868C1BE57B9E8E /* MonthComparisonView.swift in Sources */,
+				D69C5751BA6EA0C4CE754D0C /* Notifications.swift in Sources */,
 				E76065FDC20E23D910FA67BD /* PreviewContainer.swift in Sources */,
 				DBEDEA289B83B1204B4A10BC /* ReceiptCaptureModifier.swift in Sources */,
 				77EC2EBEDFB66DD7B5FCBBC7 /* ReceiptSection.swift in Sources */,
@@ -463,6 +482,7 @@
 				9022408D2C03D49A49A3723D /* StoreErrorView.swift in Sources */,
 				A668CF5487E6D1BEF70CCC4A /* StoreLoader.swift in Sources */,
 				6B783C901C510C8D39FDF3FA /* SummaryView.swift in Sources */,
+				6CA20F1F20476E6299EB4FB0 /* TagPicker.swift in Sources */,
 				6E797E39D1E799F26036FE3B /* VATSummaryCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
