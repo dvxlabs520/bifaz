@@ -25,7 +25,9 @@ enum ExchangeRates {
     }
 
     static func name(of code: String) -> String {
-        Locale.current.localizedString(forCurrencyCode: code).map { "\($0) (\(code))" } ?? code
+        guard let name = Locale.current.localizedString(forCurrencyCode: code), let first = name.first else { return code }
+        // French and Spanish write currency names in lower case; a menu item starts with a capital.
+        return "\(String(first).uppercased(with: .current))\(name.dropFirst()) (\(code))"
     }
 }
 

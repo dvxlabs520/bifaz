@@ -91,6 +91,26 @@ enum SampleData {
             pending.status = .receiptPending
         }
 
+        // Phase 4: a client and a project on some Pro expenses, a dollar invoice and a monthly rule.
+        let studio = try TagService.create("Studio Nord", kind: .client, in: context)
+        let site = try TagService.create("Site vitrine", kind: .project, in: context)
+        for expense in try context.fetch(FetchDescriptor<Expense>()) where expense.space == .pro
+            && ["Hôtel Mercure Lyon", "Brasserie Le Zinc", "SNCF"].contains(expense.merchant) && expense.date >= thisMonth {
+            var edit = ExpenseDraft(expense: expense)
+            edit.client = studio
+            edit.project = expense.merchant == "SNCF" ? nil : site
+            try ExpenseService.update(expense, with: edit, in: context, saving: false)
+        }
+        var github = ExpenseDraft(amount: 48, merchant: "GitHub", date: date(0, 13), space: .pro, category: category("category.pro.software"))
+        github.currencyCode = "USD"
+        github.exchangeRate = ExchangeRateQuote(currencyCode: "USD", rate: Decimal(string: "1.1052")!, date: date(0, 13), source: .ecb)
+        try ExpenseService.create(from: github, in: context, saving: false)
+        if let office = category("category.pro.office") {
+            let rent = ExpenseDraft(amount: 450, merchant: "Loyer bureau", space: .pro, category: office, vatRate: .standard)
+            let start = calendar.date(byAdding: .month, value: -2, to: thisMonth).flatMap { calendar.date(byAdding: .day, value: 4, to: $0) } ?? now
+            try RecurringService.create(.init(draft: rent, frequency: .monthly, startDate: start), in: context, now: now, calendar: calendar)
+        }
+
         // Budgets for this month: transport on track, groceries near the limit, restaurants over.
         if let transport = category("category.pro.transport") { try BudgetService.setBudget(300, for: transport, in: context) }
         if let groceries = category("category.personal.groceries") { try BudgetService.setBudget(200, for: groceries, in: context) }

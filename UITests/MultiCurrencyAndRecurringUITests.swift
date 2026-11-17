@@ -44,8 +44,10 @@ final class MultiCurrencyAndRecurringUITests: XCTestCase {
         XCTAssertTrue(rate.waitForExistence(timeout: 5), "Without a stored rate, the form asks for one")
         rate.tap()
         rate.typeText("1.2")
-        XCTAssertTrue(app.staticTexts["ui.formEuros"].waitForExistence(timeout: 5))
-        XCTAssertTrue((app.staticTexts["ui.formEuros"].label).contains("40.00"), "48 USD at 1.2 is €40.00")
+        let euros = app.staticTexts["ui.formEuros"]
+        XCTAssertTrue(euros.waitForExistence(timeout: 5))
+        let converted = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label CONTAINS %@", "40.00"), object: euros)
+        XCTAssertEqual(XCTWaiter().wait(for: [converted], timeout: 5), .completed, "48 USD at 1.2 is €40.00")
         app.buttons["ui.formSave"].tap()
         XCTAssertTrue(app.buttons["ui.captureButton"].waitForExistence(timeout: 5), "The form closes")
 

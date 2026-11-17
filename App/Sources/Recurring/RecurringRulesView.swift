@@ -117,12 +117,12 @@ struct RecurringRulesView: View {
     }
 
     @ViewBuilder
-    private func group(_ title: LocalizedStringResource, _ rows: [RecurringRule]) -> some View {
+    private func group(_ title: String.LocalizationValue, _ rows: [RecurringRule]) -> some View {
         if !rows.isEmpty {
             Section {
                 ForEach(rows) { rule in row(rule) }
             } header: {
-                Text(title)
+                Text(LocalizedStringResource(title, table: "Recurring"))
                     .font(.bifazSubheadline)
                     .foregroundStyle(Color.bifazInkSecondary)
                     .textCase(nil)

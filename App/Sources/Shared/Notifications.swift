@@ -14,6 +14,11 @@ final class NotificationScheduler: NSObject, UNUserNotificationCenterDelegate {
     static let prefix = "bifaz."
 
     private let center = UNUserNotificationCenter.current()
+    #if DEBUG
+    /// The first VAT reminder of the current plan (the one `-BifazReminderDelay` brings forward).
+    private var firstVATReminderID: String?
+    #endif
+
     /// Set by the root view: where a tapped notification leads.
     var onRoute: ((ReminderRoute) -> Void)?
 
@@ -46,6 +51,9 @@ final class NotificationScheduler: NSObject, UNUserNotificationCenterDelegate {
             },
             now: now, calendar: calendar
         )
+        #if DEBUG
+        firstVATReminderID = plan.first { if case .vatDeadline = $0.kind { true } else { false } }?.id
+        #endif
         for reminder in plan { await add(reminder, context: context, calendar: calendar) }
     }
 
@@ -84,11 +92,19 @@ final class NotificationScheduler: NSObject, UNUserNotificationCenterDelegate {
                 : String(localized: "notification.budget.near.title \(name)")
             content.body = String(localized: "notification.budget.body \(spent.formatted(.currency(code: "EUR"))) \(limit.formatted(.currency(code: "EUR")))")
         }
-        let trigger: UNNotificationTrigger? = reminder.fireDate.map { date in
+        var trigger: UNNotificationTrigger? = reminder.fireDate.map { date in
             UNCalendarNotificationTrigger(
                 dateMatching: calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date), repeats: false
             )
         }
+        #if DEBUG
+        // `-BifazReminderDelay <seconds>`: the first VAT reminder fires that soon, with its real
+        // content, so it can be checked in the Simulator without waiting for the date.
+        let delay = UserDefaults.standard.integer(forKey: "BifazReminderDelay")
+        if delay > 0, case .vatDeadline = reminder.kind, reminder.id == firstVATReminderID {
+            trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(delay), repeats: false)
+        }
+        #endif
         let request = UNNotificationRequest(identifier: Self.prefix + reminder.id, content: content, trigger: trigger)
         try? await center.add(request)
     }

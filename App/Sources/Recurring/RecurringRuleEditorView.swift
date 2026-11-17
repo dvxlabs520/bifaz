@@ -309,10 +309,10 @@ struct RecurringRuleEditorView: View {
         .accessibilityIdentifier("ui.ruleUpcoming")
     }
 
-    private func field(_ label: LocalizedStringResource, @ViewBuilder content: () -> some View) -> some View {
+    private func field(_ label: String.LocalizationValue, @ViewBuilder content: () -> some View) -> some View {
         VStack(alignment: .leading, spacing: BifazSpacing.s) {
             HairlineDivider()
-            Text(label)
+            Text(LocalizedStringResource(label, table: "Recurring"))
                 .font(.bifazCaption)
                 .foregroundStyle(.bifazInkSecondary)
                 .accessibilityAddTraits(.isHeader)

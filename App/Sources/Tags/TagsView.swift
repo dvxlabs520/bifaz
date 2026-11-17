@@ -34,7 +34,9 @@ struct TagsView: View {
             HStack(spacing: BifazSpacing.xs) {
                 ForEach(TagKind.allCases, id: \.self) { option in
                     FilterChip(
-                        option == .client ? "tags.screen.clients" : "tags.screen.projects",
+                        option == .client
+                            ? LocalizedStringResource("tags.screen.clients", table: "Tags")
+                            : LocalizedStringResource("tags.screen.projects", table: "Tags"),
                         icon: option.icon,
                         symbolTint: .bifazPro,
                         isSelected: kind == option

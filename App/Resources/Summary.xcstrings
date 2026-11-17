@@ -116,7 +116,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ de moins qu'en %2$@ (%3$@)"
+            "value" : "%1$@ de moins qu’en %2$@ (%3$@)"
           }
         }
       }
@@ -212,7 +212,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ de plus qu'en %2$@ (%3$@)"
+            "value" : "%1$@ de plus qu’en %2$@ (%3$@)"
           }
         }
       }
@@ -428,7 +428,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ %2$@, jusqu'à fin %3$@"
+            "value" : "%1$@ %2$@, jusqu’à fin %3$@"
           }
         }
       }

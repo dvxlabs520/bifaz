@@ -19,7 +19,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quand vous ajoutez vous-même une dépense, l'alerte dans l'app suffit."
+            "value" : "Quand vous ajoutez vous-même une dépense, l’alerte dans l’app suffit."
           }
         }
       }
@@ -134,7 +134,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les notifications sont locales : elles sont programmées sur votre iPhone et rien n'est envoyé nulle part."
+            "value" : "Les notifications sont locales : elles sont programmées sur votre iPhone et rien n’est envoyé nulle part."
           }
         }
       }
@@ -157,7 +157,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bifaz ne peut pas ajouter la dépense en arrière-plan. Il vous le rappelle et l'ajoute quand vous ouvrez l'app."
+            "value" : "Bifaz ne peut pas ajouter la dépense en arrière-plan. Il vous le rappelle et l’ajoute quand vous ouvrez l’app."
           }
         }
       }
@@ -180,7 +180,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dépense récurrente prévue aujourd'hui"
+            "value" : "Dépense récurrente prévue aujourd’hui"
           }
         }
       }
