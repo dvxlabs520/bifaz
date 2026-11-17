@@ -134,7 +134,8 @@ private struct SummaryContent: View {
                 } else {
                     monthPicker
                         .padding(.bottom, BifazSpacing.m)
-                    header(total: summary?.totals.total ?? result?.summary.totals.total ?? 0)
+                    // Until the first load, a placeholder: never a false "0,00 €".
+                    header(total: summary?.totals.total ?? result?.summary.totals.total)
                     if let summary {
                         details(summary)
                     }
@@ -169,7 +170,9 @@ private struct SummaryContent: View {
             let started = clock.now
             let loaded = try await loader.load(month: key.month, space: key.space, version: key.version)
             let elapsed = started.duration(to: clock.now)
-            Log.app.debug("Summary loaded in \(elapsed.formatted(.units(allowed: [.milliseconds])), privacy: .public)")
+            #if DEBUG
+            Log.app.notice("Summary loaded in \(elapsed.formatted(.units(allowed: [.milliseconds])), privacy: .public)")
+            #endif
             guard !Task.isCancelled else { return }
             result = loaded
         } catch {
@@ -225,14 +228,15 @@ private struct SummaryContent: View {
 
     // MARK: Header
 
-    private func header(total: Decimal) -> some View {
+    private func header(total: Decimal?) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("summary.spentIn \(monthName(month.start))")
                 .font(.bifazCaption)
                 .foregroundStyle(.bifazInkSecondary)
-            AmountView(total, style: .hero, tint: total > 0 ? .bifazInk : .bifazInkSecondary)
+            AmountView(total ?? 0, style: .hero, tint: (total ?? 0) > 0 ? .bifazInk : .bifazInkSecondary)
                 .padding(.top, BifazSpacing.xxs)
                 .contentTransition(.numericText())
+                .redacted(reason: total == nil ? .placeholder : [])
             if let comparison = summary?.comparison {
                 MonthComparisonView(
                     comparison: comparison,
