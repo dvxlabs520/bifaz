@@ -146,11 +146,18 @@ private struct SummaryContent: View {
                         .padding(.bottom, BifazSpacing.m)
                     // Until the first load, a placeholder: never a false "0,00 €".
                     header(total: summary?.totals.total ?? result?.summary.totals.total)
-                    if let summary {
-                        details(summary)
-                    }
+                    // What asks for action first: to review, then budgets; then the analysis.
                     if !reviewItems.isEmpty {
                         section("summary.toReview", expenses: Array(reviewItems.prefix(5)))
+                    }
+                    if let summary {
+                        BudgetSummarySection(
+                            statuses: result?.budgets ?? [],
+                            categories: categoriesByID,
+                            isCurrentMonth: summary.isCurrentMonth
+                        )
+                        .padding(.top, BifazSpacing.xxl)
+                        details(summary)
                     }
                     section("summary.latest", expenses: latestItems)
                     if !latestItems.isEmpty {
@@ -294,13 +301,6 @@ private struct SummaryContent: View {
             VATSummaryCard(vat: vat, month: month.start)
                 .padding(.top, BifazSpacing.xxl)
         }
-
-        BudgetSummarySection(
-            statuses: result?.budgets ?? [],
-            categories: categoriesByID,
-            isCurrentMonth: summary.isCurrentMonth
-        )
-        .padding(.top, BifazSpacing.xxl)
     }
 
     private func sectionTitle(_ title: LocalizedStringResource) -> some View {
