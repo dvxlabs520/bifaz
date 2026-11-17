@@ -5,8 +5,10 @@ import SwiftData
 /// store (predicate); search and category run in memory on that result.
 public struct ExpenseFilter: Equatable, Sendable {
     public var space: SpaceFilter
-    /// Categories to keep (by `ExpenseCategory.id`); empty = all.
+    /// Categories to keep (by `ExpenseCategory.id`); empty = all (unless `withoutCategory`).
     public var categoryIDs: Set<UUID>
+    /// Keep expenses with no category (with `categoryIDs`, either one matches).
+    public var withoutCategory: Bool
     /// Inclusive start and exclusive end; `nil` = all time.
     public var dateInterval: DateInterval?
     public var onlyReceiptPending: Bool
@@ -15,12 +17,14 @@ public struct ExpenseFilter: Equatable, Sendable {
     public init(
         space: SpaceFilter = .all,
         categoryIDs: Set<UUID> = [],
+        withoutCategory: Bool = false,
         dateInterval: DateInterval? = nil,
         onlyReceiptPending: Bool = false,
         searchText: String = ""
     ) {
         self.space = space
         self.categoryIDs = categoryIDs
+        self.withoutCategory = withoutCategory
         self.dateInterval = dateInterval
         self.onlyReceiptPending = onlyReceiptPending
         self.searchText = searchText
@@ -28,7 +32,7 @@ public struct ExpenseFilter: Equatable, Sendable {
 
     /// Filters other than space and search are active (for the filter badge).
     public var activeRefinementCount: Int {
-        (categoryIDs.isEmpty ? 0 : 1) + (dateInterval == nil ? 0 : 1) + (onlyReceiptPending ? 1 : 0)
+        (categoryIDs.isEmpty && !withoutCategory ? 0 : 1) + (dateInterval == nil ? 0 : 1) + (onlyReceiptPending ? 1 : 0)
     }
 
     /// Fetch descriptor for the store-side part (space, dates, pending receipts), newest first.
@@ -55,8 +59,12 @@ public struct ExpenseFilter: Equatable, Sendable {
     /// re-checked so the function is also correct on its own).
     /// `categoryName` resolves the shown name (built-in categories are translated).
     public func matches(_ expense: Expense, categoryName: (ExpenseCategory) -> String = { $0.name }) -> Bool {
-        if !categoryIDs.isEmpty {
-            guard let id = expense.category?.id, categoryIDs.contains(id) else { return false }
+        if !categoryIDs.isEmpty || withoutCategory {
+            if let id = expense.category?.id {
+                guard categoryIDs.contains(id) else { return false }
+            } else {
+                guard withoutCategory else { return false }
+            }
         }
         if onlyReceiptPending, expense.status != .receiptPending { return false }
         let query = Self.fold(searchText)
@@ -91,15 +99,26 @@ public struct ExpenseTotals: Equatable, Sendable {
 
     public init(_ expenses: some Sequence<Expense>) {
         for expense in expenses {
-            total += expense.amountInEUR
-            count += 1
-            switch expense.space {
-            case .pro:
-                pro += expense.amountInEUR
-                proVAT += expense.vatAmount ?? 0
-            case .personal:
-                personal += expense.amountInEUR
-            }
+            add(expense.amountInEUR, space: expense.space, vat: expense.vatAmount ?? 0)
+        }
+    }
+
+    /// The same sums from Summary figures (one arithmetic for both).
+    public init(figures: some Sequence<ExpenseFigure>) {
+        for figure in figures {
+            add(figure.amount, space: figure.space, vat: figure.vatLines.reduce(0) { $0 + $1.vat })
+        }
+    }
+
+    private mutating func add(_ amount: Decimal, space: Space, vat: Decimal) {
+        total += amount
+        count += 1
+        switch space {
+        case .pro:
+            pro += amount
+            proVAT += vat
+        case .personal:
+            personal += amount
         }
     }
 }
