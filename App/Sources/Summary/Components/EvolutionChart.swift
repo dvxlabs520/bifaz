@@ -105,11 +105,12 @@ struct EvolutionChart: View {
                             guard let plot = proxy.plotFrame else { return }
                             let x = tap.location.x - geometry[plot].origin.x
                             guard let date: Date = proxy.value(atX: x) else { return }
-                            if let nearest = bars.min(by: {
-                                abs($0.month.timeIntervalSince(date) - 15 * 86_400) < abs($1.month.timeIntervalSince(date) - 15 * 86_400)
-                            }) {
-                                onSelect(nearest.month)
-                            }
+                            // The bar whose month holds the tapped date (bars span a whole
+                            // month), else the one whose middle is closest.
+                            let middle = { (bar: MonthBar) in bar.month.addingTimeInterval(15 * 86_400) }
+                            let hit = bars.first { calendar.isDate($0.month, equalTo: date, toGranularity: .month) }
+                                ?? bars.min { abs(middle($0).timeIntervalSince(date)) < abs(middle($1).timeIntervalSince(date)) }
+                            if let hit { onSelect(hit.month) }
                         }
                     )
             }
