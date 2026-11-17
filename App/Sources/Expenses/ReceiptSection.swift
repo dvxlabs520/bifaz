@@ -28,6 +28,10 @@ struct ReceiptSection: View {
         }
         .receiptCapture(source: $source) { captured in attach(captured) }
         .quickLookPreview($previewURL)
+        .onChange(of: previewURL) { old, new in
+            // The viewer closed: delete the temporary copy.
+            if new == nil, let old { ReceiptPreviewCopy.remove(old) }
+        }
         .sensoryFeedback(.success, trigger: feedback)
         .confirmationDialog(
             Text("receipt.remove.title", tableName: "History"),
@@ -68,7 +72,7 @@ struct ReceiptSection: View {
         return VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: BifazSpacing.s) {
                 Button {
-                    previewURL = receiptStore?.url(for: receipt.fileName)
+                    previewURL = ReceiptPreviewCopy.make(of: receipt, for: expense, in: receiptStore)
                 } label: {
                     HStack(spacing: BifazSpacing.m) {
                         ReceiptThumbnailLoader(fileName: receipt.thumbnailFileName, side: 56)
@@ -262,3 +266,29 @@ private struct ReceiptSectionPreview: View {
 #Preview("Dark") { ReceiptSectionPreview().preferredColorScheme(.dark) }
 #Preview("Large text") { ReceiptSectionPreview().dynamicTypeSize(.accessibility3) }
 #endif
+
+/// Quick Look works on a temporary copy of the receipt, never on the original:
+/// the title is readable ("SNCF – 21 oct. 2026.pdf" instead of a UUID) and a
+/// Markup edit in the viewer can't alter the stored receipt. The copy keeps the
+/// `.complete` protection and is deleted when the viewer closes.
+enum ReceiptPreviewCopy {
+    static func make(of receipt: Receipt, for expense: Expense, in store: ReceiptStore?) -> URL? {
+        guard let store, let data = try? store.data(for: receipt.fileName) else { return nil }
+        let folder = FileManager.default.temporaryDirectory.appending(path: "ReceiptPreview", directoryHint: .isDirectory)
+        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let ext = (receipt.fileName as NSString).pathExtension
+        let title = "\(expense.displayTitle) – \(expense.date.formatted(date: .abbreviated, time: .omitted))"
+        let safeTitle = title.replacing(/[\/:*?"<>|]/, with: "-")
+        let url = folder.appending(path: "\(safeTitle).\(ext)", directoryHint: .notDirectory)
+        do {
+            try data.write(to: url, options: [.atomic, .completeFileProtection])
+            return url
+        } catch {
+            return nil
+        }
+    }
+
+    static func remove(_ url: URL) {
+        try? FileManager.default.removeItem(at: url)
+    }
+}

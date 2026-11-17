@@ -1970,25 +1970,25 @@
       }
     },
     "source.scanner" : {
-      "comment" : "Expense origin: scanned document.",
+      "comment" : "Origin of an expense created from a scanned or imported receipt (photo or PDF).",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scanned"
+            "value" : "From a receipt"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Escaneado"
+            "value" : "Desde un justificante"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scannée"
+            "value" : "Depuis un justificatif"
           }
         }
       }

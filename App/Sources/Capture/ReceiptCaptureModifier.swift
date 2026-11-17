@@ -82,11 +82,26 @@ private struct ReceiptCaptureModifier: ViewModifier {
             }
     }
 
+    /// Debug builds accept `-BifazDisableModel YES` to exercise the rules-only path.
+    private static var modelAllowed: Bool {
+        #if DEBUG
+        !UserDefaults.standard.bool(forKey: "BifazDisableModel")
+        #else
+        true
+        #endif
+    }
+
     private func process(_ input: ReceiptInput) {
         isProcessing = true
         Task {
             do {
-                let captured = try await ReceiptCapture.process(input)
+                let start = ContinuousClock.now
+                let captured = try await ReceiptCapture.process(input, reader: ReceiptReader(useModel: Self.modelAllowed))
+                let seconds = (ContinuousClock.now - start).components.seconds
+                Log.app.info("""
+                    Receipt read in \(seconds, privacy: .public) s · method \(captured.reading.method.rawValue, privacy: .public) \
+                    · model \(captured.reading.modelOutcome.rawValue, privacy: .public)
+                    """)
                 isProcessing = false
                 onCaptured(captured)
             } catch {
