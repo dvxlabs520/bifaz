@@ -4,8 +4,7 @@ import os
 
 // MARK: - Schema
 
-/// Version 1 of the Bifaz schema. Future versions add a new `VersionedSchema`
-/// and a stage to `BifazMigrationPlan`.
+/// Version 1 of the Bifaz schema (phases 0–2). Frozen: see `ModelsV1.swift`.
 public enum BifazSchemaV1: VersionedSchema {
     public static let versionIdentifier = Schema.Version(1, 0, 0)
 
@@ -23,9 +22,40 @@ public enum BifazSchemaV1: VersionedSchema {
     }
 }
 
+/// Version 2 (phase 3): adds `ExpenseVATLine`, one line per VAT rate of an expense.
+public enum BifazSchemaV2: VersionedSchema {
+    public static let versionIdentifier = Schema.Version(2, 0, 0)
+
+    public static var models: [any PersistentModel.Type] {
+        [
+            Expense.self,
+            ExpenseVATLine.self,
+            Receipt.self,
+            ExpenseCategory.self,
+            Tag.self,
+            Budget.self,
+            RecurringRule.self,
+            ExpenseSession.self,
+            MerchantRule.self,
+        ]
+    }
+}
+
 public enum BifazMigrationPlan: SchemaMigrationPlan {
-    public static var schemas: [any VersionedSchema.Type] { [BifazSchemaV1.self] }
-    public static var stages: [MigrationStage] { [] }
+    public static var schemas: [any VersionedSchema.Type] { [BifazSchemaV1.self, BifazSchemaV2.self] }
+    public static var stages: [MigrationStage] { [v1ToV2] }
+
+    /// V1 → V2. The store change is additive (a new entity and an optional
+    /// relationship); after it, each expense with VAT gets its line from the
+    /// v1 fields, which v2 keeps with the same meaning. See `VATMigration`.
+    static let v1ToV2 = MigrationStage.custom(
+        fromVersion: BifazSchemaV1.self,
+        toVersion: BifazSchemaV2.self,
+        willMigrate: nil,
+        didMigrate: { context in
+            try VATMigration.createLines(in: context)
+        }
+    )
 }
 
 // MARK: - Store
@@ -67,7 +97,7 @@ public enum BifazStore {
     }
 
     /// The schema of the current version.
-    public static var schema: Schema { Schema(versionedSchema: BifazSchemaV1.self) }
+    public static var schema: Schema { Schema(versionedSchema: BifazSchemaV2.self) }
 
     /// Creates the container. Pass `inMemory: true` for tests and previews.
     public static func makeContainer(inMemory: Bool = false) throws -> ModelContainer {
@@ -80,10 +110,20 @@ public enum BifazStore {
                 cloudKitDatabase: .none
             )
         } else {
-            let url = try storeURL()
-            logger.info("Opening store at \(url.path(percentEncoded: false), privacy: .private)")
-            configuration = ModelConfiguration(schema: schema, url: url, cloudKitDatabase: .none)
+            return try makeContainer(at: storeURL())
         }
+        return try ModelContainer(
+            for: schema,
+            migrationPlan: BifazMigrationPlan.self,
+            configurations: configuration
+        )
+    }
+
+    /// Opens (and migrates, if needed) the store at `url`. The app uses the App
+    /// Group URL; migration tests pass a temporary file.
+    public static func makeContainer(at url: URL) throws -> ModelContainer {
+        logger.info("Opening store at \(url.path(percentEncoded: false), privacy: .private)")
+        let configuration = ModelConfiguration(schema: schema, url: url, cloudKitDatabase: .none)
         return try ModelContainer(
             for: schema,
             migrationPlan: BifazMigrationPlan.self,

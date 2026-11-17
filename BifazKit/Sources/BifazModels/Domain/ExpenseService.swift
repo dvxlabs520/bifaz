@@ -14,7 +14,7 @@ public enum ExpenseService {
         if let error = draft.validate() { throw error }
         let expense = Expense(amount: 0, space: draft.space, source: draft.source)
         context.insert(expense)
-        apply(draft, to: expense)
+        apply(draft, to: expense, in: context)
         if let receipt { attach(receipt, to: expense, in: context) }
         MerchantMemory.remember(expense, in: context)
         try context.save()
@@ -24,7 +24,7 @@ public enum ExpenseService {
     /// Applies an edited draft to an existing expense.
     public static func update(_ expense: Expense, with draft: ExpenseDraft, in context: ModelContext) throws {
         if let error = draft.validate() { throw error }
-        apply(draft, to: expense)
+        apply(draft, to: expense, in: context)
         expense.updatedAt = .now
         MerchantMemory.remember(expense, in: context)
         try context.save()
@@ -69,7 +69,23 @@ public enum ExpenseService {
         if expense.status == .receiptPending { expense.status = .confirmed }
     }
 
-    private static func apply(_ draft: ExpenseDraft, to expense: Expense) {
+    /// Replaces the VAT lines when they changed, and keeps `vatRate` (main line)
+    /// and `vatAmount` (sum) in step with them.
+    static func setVATLines(_ parts: [VATPart], on expense: Expense, in context: ModelContext) {
+        let parts = VATBreakdown.sorted(parts)
+        guard expense.sortedVATLines.map(VATPart.init) != parts else { return }
+        for line in expense.vatLines ?? [] { context.delete(line) }
+        expense.vatLines = []
+        for (index, part) in parts.enumerated() {
+            let line = ExpenseVATLine(rate: part.rate, base: part.base, vat: part.vat, total: part.total, sortOrder: index)
+            context.insert(line)
+            line.expense = expense
+        }
+        expense.vatRate = parts.first?.rate
+        expense.vatAmount = parts.isEmpty ? nil : parts.reduce(0) { $0 + $1.vat }
+    }
+
+    private static func apply(_ draft: ExpenseDraft, to expense: Expense, in context: ModelContext) {
         let amount = (draft.amount ?? 0).rounded(scale: 2)
         expense.amount = amount
         expense.currencyCode = "EUR"
@@ -78,8 +94,7 @@ public enum ExpenseService {
         expense.date = draft.date
         expense.space = draft.space
         expense.category = draft.category
-        expense.vatRate = draft.vatRate?.fraction
-        expense.vatAmount = draft.vatAmount
+        setVATLines(draft.vatLines, on: expense, in: context)
         expense.note = draft.note.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

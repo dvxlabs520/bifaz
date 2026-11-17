@@ -9,10 +9,9 @@ import SwiftData
 // - no `.unique` attributes and no `.deny` delete rules.
 // Money is always `Decimal`. Enums are stored as raw strings.
 //
-// The model classes are nested in `BifazSchemaV1` so this version stays frozen
-// once real data exists: a future V2 copies them into `BifazSchemaV2` and the
-// migration plan maps one to the other. Top-level typealiases (below) point at
-// the current version, so the rest of the code never names the schema.
+// FROZEN: version 1 as shipped in phases 0–2. Do not edit these classes; the
+// current version is `BifazSchemaV2` (ModelsV2.swift) and `BifazMigrationPlan`
+// maps one to the other.
 //
 // Sensitive fields carry `.allowsCloudEncryption` so that, when iCloud sync is
 // switched on (phase 6), CloudKit stores them encrypted from the first deployment.
@@ -367,14 +366,3 @@ extension BifazSchemaV1 {
         }
     }
 }
-
-// MARK: - Current version
-
-public typealias Expense = BifazSchemaV1.Expense
-public typealias Receipt = BifazSchemaV1.Receipt
-public typealias ExpenseCategory = BifazSchemaV1.ExpenseCategory
-public typealias Tag = BifazSchemaV1.Tag
-public typealias Budget = BifazSchemaV1.Budget
-public typealias RecurringRule = BifazSchemaV1.RecurringRule
-public typealias ExpenseSession = BifazSchemaV1.ExpenseSession
-public typealias MerchantRule = BifazSchemaV1.MerchantRule
