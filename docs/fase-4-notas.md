@@ -139,7 +139,9 @@ Criterio: un gasto en USD y un abono mensual salen bien en el Resumen y en el hi
 - **Pruebas de interfaz nuevas:**
   - gasto de 48 USD con tipo 1,2 tecleado: 40,00 € en el Resumen y «$48.00» en la fila;
   - regla mensual creada desde Ajustes que genera su gasto del día y aparece en el Resumen.
-- **Batería completa:** ver el informe final, con las cifras de la última pasada.
+- **Batería completa** del esquema `Bifaz`, sobre `e16eb2a`:
+  - 195 pruebas de modelos, 10 de diseño y 60 de lectura, más 5 de interfaz;
+  - en verde y sin avisos del compilador (solo el aviso habitual de `appintentsmetadataprocessor`).
 
 ## No comprobado, o que no se puede probar en el simulador
 - **Tocar una notificación desde la pantalla de bloqueo** no abrió la app con los toques simulados. La lógica de rutas está probada; el gesto real no.
