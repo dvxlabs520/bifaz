@@ -524,7 +524,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aucune dépense ne correspond à ta recherche ou à tes filtres."
+            "value" : "Aucune dépense ne correspond à votre recherche ou à vos filtres."
           }
         }
       }

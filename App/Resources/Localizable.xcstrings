@@ -68,7 +68,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bientôt, tu pourras poser tes questions avec tes mots. Les réponses sont calculées sur ton iPhone, sans envoyer tes données nulle part."
+            "value" : "Bientôt, vous pourrez poser vos questions avec vos mots. Les réponses sont calculées sur votre iPhone, sans envoyer vos données nulle part."
           }
         }
       }
@@ -92,7 +92,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pose tes questions sur tes dépenses"
+            "value" : "Posez vos questions sur vos dépenses"
           }
         }
       }
@@ -212,7 +212,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scanne une facture ou ajoute une dépense."
+            "value" : "Scannez une facture ou ajoutez une dépense."
           }
         }
       }
@@ -860,7 +860,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tes dépenses apparaîtront ici"
+            "value" : "Vos dépenses apparaîtront ici"
           }
         }
       }
@@ -956,7 +956,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saisis un montant comme 12,50"
+            "value" : "Saisissez un montant comme 12,50"
           }
         }
       }
@@ -1100,7 +1100,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vérifie le montant et réessaie."
+            "value" : "Vérifiez le montant et réessayez."
           }
         }
       }
@@ -1196,7 +1196,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Où as-tu dépensé ?"
+            "value" : "Où avez-vous dépensé ?"
           }
         }
       }
@@ -1676,7 +1676,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tes données sont toujours sur cet iPhone. Réessaie ; si le problème persiste, redémarre ton iPhone ou mets Bifaz à jour."
+            "value" : "Vos données sont toujours sur cet iPhone. Réessayez ; si le problème persiste, redémarrez votre iPhone ou mettez Bifaz à jour."
           }
         }
       }
@@ -1724,7 +1724,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossible d’ouvrir tes données"
+            "value" : "Impossible d’ouvrir vos données"
           }
         }
       }
@@ -1748,7 +1748,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajoute ta première dépense : montant, catégorie, c’est fait. Le pro et le perso sont comptés séparément."
+            "value" : "Ajoutez votre première dépense : montant, catégorie, c’est fait. Le pro et le perso sont comptés séparément."
           }
         }
       }

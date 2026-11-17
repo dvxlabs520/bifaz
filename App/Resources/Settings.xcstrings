@@ -92,7 +92,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajoute-en une avec le bouton + pour organiser tes dépenses."
+            "value" : "Ajoutez-en une avec le bouton + pour organiser vos dépenses."
           }
         }
       }
@@ -140,7 +140,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Utilise la poignée pour changer l’ordre."
+            "value" : "Utilisez la poignée pour changer l’ordre."
           }
         }
       }
@@ -428,7 +428,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ouvre l’éditeur de la catégorie."
+            "value" : "Ouvrez l’éditeur de la catégorie."
           }
         }
       }
@@ -1340,7 +1340,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Désactive cette option si tu es micro-entrepreneur en franchise en base de TVA. Les champs de TVA seront alors masqués lors de la saisie des dépenses."
+            "value" : "Désactivez cette option si vous êtes micro-entrepreneur en franchise en base de TVA. Les champs de TVA seront alors masqués lors de la saisie des dépenses."
           }
         }
       }
