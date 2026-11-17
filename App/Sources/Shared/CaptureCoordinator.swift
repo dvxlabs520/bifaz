@@ -15,6 +15,8 @@ final class AppNavigation {
     var capturedReceipt: CaptureResult?
     /// The Summary tab's navigation (a category's history, an expense).
     var summaryPath = NavigationPath()
+    /// The floating capture button is slid away while a list scrolls down.
+    var isCaptureButtonHidden = false
     /// The Settings tab's navigation (opened by a recurring-expense notification).
     var settingsPath = NavigationPath()
     /// A budget that a save just pushed near or over its limit (shown as a banner).

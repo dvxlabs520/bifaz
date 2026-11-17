@@ -44,10 +44,16 @@ extension View {
     /// Places the capture button at the bottom trailing corner, above the tab bar.
     func captureButtonOverlay() -> some View {
         overlay(alignment: .bottomTrailing) {
-            CaptureButton()
+            FloatingCaptureButton()
                 .padding(.trailing, BifazSpacing.screen)
                 .padding(.bottom, BifazSpacing.m)
         }
+    }
+
+    /// Hides the capture button while this scroll view moves down, shows it again
+    /// when it moves up or stops (so it does not sit on amounts while reading a list).
+    func hidesCaptureButtonWhileScrolling() -> some View {
+        modifier(CaptureButtonScrollHiding())
     }
 
     /// Leaves room under scrolling content so its last row ends above the
@@ -61,6 +67,54 @@ extension View {
         background(Color.bifazPaper)
             .captureButtonClearance()
             .captureButtonOverlay()
+    }
+}
+
+/// The capture button, slid away while a list scrolls down. With Reduce Motion it
+/// only fades; with VoiceOver on it never hides (see `CaptureButtonScrollHiding`).
+private struct FloatingCaptureButton: View {
+    @Environment(AppNavigation.self) private var navigation
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        let hidden = navigation.isCaptureButtonHidden
+        CaptureButton()
+            .offset(y: hidden && !reduceMotion ? 96 : 0)
+            .opacity(hidden ? 0 : 1)
+            .allowsHitTesting(!hidden)
+            .animation(reduceMotion ? .easeInOut(duration: 0.15) : .snappy(duration: 0.25), value: hidden)
+    }
+}
+
+private struct CaptureButtonScrollHiding: ViewModifier {
+    @Environment(AppNavigation.self) private var navigation
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
+
+    /// Points of movement before the button reacts (ignores tiny jitters).
+    private static let threshold: CGFloat = 8
+
+    func body(content: Content) -> some View {
+        content
+            .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                geometry.contentOffset.y + geometry.contentInsets.top
+            } action: { old, new in
+                guard !voiceOverEnabled else { return setHidden(false) }
+                if new <= 0 {
+                    setHidden(false)
+                } else if new - old > Self.threshold {
+                    setHidden(true)
+                } else if old - new > Self.threshold {
+                    setHidden(false)
+                }
+            }
+            .onScrollPhaseChange { _, phase in
+                if phase == .idle { setHidden(false) }
+            }
+            .onDisappear { setHidden(false) }
+    }
+
+    private func setHidden(_ hidden: Bool) {
+        if navigation.isCaptureButtonHidden != hidden { navigation.isCaptureButtonHidden = hidden }
     }
 }
 

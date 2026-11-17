@@ -54,6 +54,7 @@ struct RootView: View {
             NotificationScheduler.shared.onRoute = { route in open(route) }
             await runMaintenance()
         }
+        .onChange(of: navigation.selectedTab) { navigation.isCaptureButtonHidden = false }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { Task { await runMaintenance() } }
         }

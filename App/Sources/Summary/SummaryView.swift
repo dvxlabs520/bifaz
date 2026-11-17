@@ -170,6 +170,7 @@ private struct SummaryContent: View {
             .padding(.horizontal, BifazSpacing.screen)
             .padding(.bottom, BifazSpacing.xxxl)
         }
+        .hidesCaptureButtonWhileScrolling()
         .task(id: LoadKey(month: month, space: spaceFilter, version: storeVersion)) { await load() }
         .onReceive(NotificationCenter.default.publisher(for: ModelContext.didSave)) { _ in
             storeVersion += 1

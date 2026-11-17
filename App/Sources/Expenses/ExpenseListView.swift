@@ -117,6 +117,7 @@ private struct ExpenseListContent: View {
             }
         }
         .listStyle(.plain)
+        .hidesCaptureButtonWhileScrolling()
         .scrollContentBackground(.hidden)
         .background(Color.bifazPaper)
     }

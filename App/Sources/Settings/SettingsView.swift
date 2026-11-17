@@ -122,6 +122,7 @@ struct SettingsView: View {
                 .padding(.horizontal, BifazSpacing.screen)
                 .padding(.top, BifazSpacing.xs)
             }
+            .hidesCaptureButtonWhileScrolling()
             .navigationTitle("tab.settings")
             .navigationDestination(for: SettingsRoute.self) { route in
                 switch route {
