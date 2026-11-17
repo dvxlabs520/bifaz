@@ -99,7 +99,6 @@ private struct SummaryContent: View {
                 }
             }
             .padding(.horizontal, BifazSpacing.screen)
-            .padding(.bottom, BifazSpacing.xxxl * 2)
         }
     }
 

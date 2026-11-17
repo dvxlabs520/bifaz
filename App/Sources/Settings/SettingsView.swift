@@ -83,7 +83,6 @@ struct SettingsView: View {
                 }
                 .padding(.horizontal, BifazSpacing.screen)
                 .padding(.top, BifazSpacing.xs)
-                .padding(.bottom, BifazSpacing.xxxl * 2)
             }
             .navigationTitle("tab.settings")
             .bifazScreen()

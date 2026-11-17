@@ -37,10 +37,27 @@ extension View {
         }
     }
 
+    /// Leaves room under scrolling content so its last row ends above the
+    /// floating capture button (and so above the tab bar). Scales with Dynamic Type.
+    func captureButtonClearance() -> some View {
+        modifier(CaptureButtonClearance())
+    }
+
     /// Standard screen chrome: Paper background and room for the capture button.
     func bifazScreen() -> some View {
         background(Color.bifazPaper)
+            .captureButtonClearance()
             .captureButtonOverlay()
+    }
+}
+
+private struct CaptureButtonClearance: ViewModifier {
+    /// Same metric as `CaptureButton.side`.
+    @ScaledMetric(relativeTo: .title2) private var side: CGFloat = 56
+
+    func body(content: Content) -> some View {
+        // Button height + its bottom padding + breathing room above it.
+        content.contentMargins(.bottom, side + BifazSpacing.m + BifazSpacing.m, for: .scrollContent)
     }
 }
 

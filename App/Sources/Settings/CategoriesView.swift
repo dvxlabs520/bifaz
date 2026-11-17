@@ -174,7 +174,7 @@ private struct CategoryList: View {
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .background(Color.bifazPaper)
-        .contentMargins(.bottom, 96, for: .scrollContent)
+
     }
 
     private func row(_ category: ExpenseCategory) -> some View {

@@ -119,12 +119,6 @@ private struct ExpenseListContent: View {
                     monthHeader(group)
                 }
             }
-            // Room for the floating capture button.
-            Color.clear
-                .frame(height: BifazSpacing.xxxl * 2)
-                .listRowBackground(Color.bifazPaper)
-                .listRowSeparator(.hidden)
-                .accessibilityHidden(true)
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
@@ -190,7 +184,6 @@ private struct ExpenseListContent: View {
             }
             .padding(.horizontal, BifazSpacing.screen)
             .padding(.top, BifazSpacing.xl)
-            .padding(.bottom, BifazSpacing.xxxl * 2)
         }
         .scrollDismissesKeyboard(.interactively)
     }
