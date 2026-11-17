@@ -1,0 +1,501 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0C405C457B4600536F663D18 /* BifazModels in Frameworks */ = {isa = PBXBuildFile; productRef = 18EF2C4E2F7F22290B48D91F /* BifazModels */; };
+		0C732F47924A27C1EBBC0C97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 131C3C664CDC56712A9781DA /* Assets.xcassets */; };
+		3BEF69AE32F2A40226D3F0F4 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = B18DFDBFC825568481FAE708 /* AppIcon.icon */; };
+		3E7AD9F831C205B4869A5050 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149EA7E314AB40070BBAB287 /* RootView.swift */; };
+		406AF32C3C7625221288A91E /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA80D6D590995B39B6F3C8C8 /* AppTab.swift */; };
+		4B696BD0BB297B065C0AB0DB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30033BBDF258E6D8892A09CE /* SettingsView.swift */; };
+		65D6D844D7A6E427CCE7C586 /* AssistantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7189CBC1123B45B893585570 /* AssistantView.swift */; };
+		6B783C901C510C8D39FDF3FA /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14FEE9BE3E1360AC927D2C7 /* SummaryView.swift */; };
+		6DB3F8A892069C0E859FEDAD /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237FE0699B20C036FDFD1BF2 /* Log.swift */; };
+		84CCFDEC4F76B37C1CFA68DF /* ExpensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6F95F708EF55AC76200852 /* ExpensesView.swift */; };
+		9022408D2C03D49A49A3723D /* StoreErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399A901B3FD5DE9E80F79AD9 /* StoreErrorView.swift */; };
+		96927527FFEF9DFA67EB4395 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2519A55C560092F139062327 /* Appearance.swift */; };
+		BB5027E9B31F8E156FAA806C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 1B1E0EA0B2F495B0D1056A37 /* Localizable.xcstrings */; };
+		BF586BB9D1A63B6BA720C083 /* BifazApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF661489BE599A5EA6AD309 /* BifazApp.swift */; };
+		C3AB785358861819C8879070 /* BifazDesign in Frameworks */ = {isa = PBXBuildFile; productRef = EF36F71680D2DD28A362210E /* BifazDesign */; };
+		E76065FDC20E23D910FA67BD /* PreviewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4735E56651A1EA8F848B629E /* PreviewContainer.swift */; };
+		F914D1D300B3EABA04B0AB46 /* CaptureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F753C9F98CD65EC87DBB613 /* CaptureButton.swift */; };
+		FBDA64E60116CD3B0089D496 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 91DE7FDFC123E116D5BB9468 /* InfoPlist.xcstrings */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0CF661489BE599A5EA6AD309 /* BifazApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BifazApp.swift; sourceTree = "<group>"; };
+		131C3C664CDC56712A9781DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		149EA7E314AB40070BBAB287 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		1B1E0EA0B2F495B0D1056A37 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		237FE0699B20C036FDFD1BF2 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		2519A55C560092F139062327 /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
+		30033BBDF258E6D8892A09CE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		399A901B3FD5DE9E80F79AD9 /* StoreErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreErrorView.swift; sourceTree = "<group>"; };
+		3E6F95F708EF55AC76200852 /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
+		4735E56651A1EA8F848B629E /* PreviewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainer.swift; sourceTree = "<group>"; };
+		4F753C9F98CD65EC87DBB613 /* CaptureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureButton.swift; sourceTree = "<group>"; };
+		7189CBC1123B45B893585570 /* AssistantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantView.swift; sourceTree = "<group>"; };
+		8FE43B63D39C4C48A2A6012B /* BifazKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BifazKit; path = BifazKit; sourceTree = SOURCE_ROOT; };
+		91DE7FDFC123E116D5BB9468 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		AA80D6D590995B39B6F3C8C8 /* AppTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTab.swift; sourceTree = "<group>"; };
+		B18DFDBFC825568481FAE708 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		C14FEE9BE3E1360AC927D2C7 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
+		E595CB2FC30B14735AF0210F /* Bifaz.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Bifaz.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BDAC3474C4F21CE9DBDFAC83 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0C405C457B4600536F663D18 /* BifazModels in Frameworks */,
+				C3AB785358861819C8879070 /* BifazDesign in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		25AD52DF7FB6952DC56755A5 = {
+			isa = PBXGroup;
+			children = (
+				C1BBE1387F1CE9B1A3A37BAA /* App */,
+				D6365FA95242F9DEA26B02CA /* Packages */,
+				99C9A0983BF21906ABFE3A68 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3064B91223811083C4A635EF /* Summary */ = {
+			isa = PBXGroup;
+			children = (
+				C14FEE9BE3E1360AC927D2C7 /* SummaryView.swift */,
+			);
+			path = Summary;
+			sourceTree = "<group>";
+		};
+		500887052FB6B8995EDB2F4E /* Assistant */ = {
+			isa = PBXGroup;
+			children = (
+				7189CBC1123B45B893585570 /* AssistantView.swift */,
+			);
+			path = Assistant;
+			sourceTree = "<group>";
+		};
+		6065577051A111EA4744E667 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				AA80D6D590995B39B6F3C8C8 /* AppTab.swift */,
+				149EA7E314AB40070BBAB287 /* RootView.swift */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
+		60F957CD889AD238631E4AD8 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				500887052FB6B8995EDB2F4E /* Assistant */,
+				C7C5A04CA1276EDB561BD979 /* Expenses */,
+				6065577051A111EA4744E667 /* Root */,
+				E57E54FA905F6DCAA4C7725E /* Settings */,
+				6A02949F99A77E952235B05F /* Shared */,
+				3064B91223811083C4A635EF /* Summary */,
+				0CF661489BE599A5EA6AD309 /* BifazApp.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		6A02949F99A77E952235B05F /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				2519A55C560092F139062327 /* Appearance.swift */,
+				4F753C9F98CD65EC87DBB613 /* CaptureButton.swift */,
+				237FE0699B20C036FDFD1BF2 /* Log.swift */,
+				4735E56651A1EA8F848B629E /* PreviewContainer.swift */,
+				399A901B3FD5DE9E80F79AD9 /* StoreErrorView.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		99C9A0983BF21906ABFE3A68 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E595CB2FC30B14735AF0210F /* Bifaz.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C1BBE1387F1CE9B1A3A37BAA /* App */ = {
+			isa = PBXGroup;
+			children = (
+				D5FE356133FD0CC3B1892C68 /* Resources */,
+				60F957CD889AD238631E4AD8 /* Sources */,
+				B18DFDBFC825568481FAE708 /* AppIcon.icon */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		C7C5A04CA1276EDB561BD979 /* Expenses */ = {
+			isa = PBXGroup;
+			children = (
+				3E6F95F708EF55AC76200852 /* ExpensesView.swift */,
+			);
+			path = Expenses;
+			sourceTree = "<group>";
+		};
+		D5FE356133FD0CC3B1892C68 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				131C3C664CDC56712A9781DA /* Assets.xcassets */,
+				91DE7FDFC123E116D5BB9468 /* InfoPlist.xcstrings */,
+				1B1E0EA0B2F495B0D1056A37 /* Localizable.xcstrings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D6365FA95242F9DEA26B02CA /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				8FE43B63D39C4C48A2A6012B /* BifazKit */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		E57E54FA905F6DCAA4C7725E /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				30033BBDF258E6D8892A09CE /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F3BA5B070C8B965E7E76EBF7 /* Bifaz */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 335C29B5B7B5F6CE3BD34079 /* Build configuration list for PBXNativeTarget "Bifaz" */;
+			buildPhases = (
+				A1A8851C5C8BACEA175A3268 /* Sources */,
+				06676F4F97F27FB94FDB4CA5 /* Resources */,
+				BDAC3474C4F21CE9DBDFAC83 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Bifaz;
+			packageProductDependencies = (
+				18EF2C4E2F7F22290B48D91F /* BifazModels */,
+				EF36F71680D2DD28A362210E /* BifazDesign */,
+			);
+			productName = Bifaz;
+			productReference = E595CB2FC30B14735AF0210F /* Bifaz.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B737725121BD1D82707D8CEB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2710;
+				TargetAttributes = {
+					F3BA5B070C8B965E7E76EBF7 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 5FEA175CA9CF0B7C30462C35 /* Build configuration list for PBXProject "Bifaz" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+				es,
+				fr,
+			);
+			mainGroup = 25AD52DF7FB6952DC56755A5;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				41E00E05668A9ECC94C39338 /* XCLocalSwiftPackageReference "BifazKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 99C9A0983BF21906ABFE3A68 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F3BA5B070C8B965E7E76EBF7 /* Bifaz */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		06676F4F97F27FB94FDB4CA5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BEF69AE32F2A40226D3F0F4 /* AppIcon.icon in Resources */,
+				0C732F47924A27C1EBBC0C97 /* Assets.xcassets in Resources */,
+				FBDA64E60116CD3B0089D496 /* InfoPlist.xcstrings in Resources */,
+				BB5027E9B31F8E156FAA806C /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A1A8851C5C8BACEA175A3268 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				406AF32C3C7625221288A91E /* AppTab.swift in Sources */,
+				96927527FFEF9DFA67EB4395 /* Appearance.swift in Sources */,
+				65D6D844D7A6E427CCE7C586 /* AssistantView.swift in Sources */,
+				BF586BB9D1A63B6BA720C083 /* BifazApp.swift in Sources */,
+				F914D1D300B3EABA04B0AB46 /* CaptureButton.swift in Sources */,
+				84CCFDEC4F76B37C1CFA68DF /* ExpensesView.swift in Sources */,
+				6DB3F8A892069C0E859FEDAD /* Log.swift in Sources */,
+				E76065FDC20E23D910FA67BD /* PreviewContainer.swift in Sources */,
+				3E7AD9F831C205B4869A5050 /* RootView.swift in Sources */,
+				4B696BD0BB297B065C0AB0DB /* SettingsView.swift in Sources */,
+				9022408D2C03D49A49A3723D /* StoreErrorView.swift in Sources */,
+				6B783C901C510C8D39FDF3FA /* SummaryView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		03067731683BA82A1708C779 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = App/Bifaz.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dvxlabs.bifaz;
+				PRODUCT_NAME = Bifaz;
+				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		34BAA890C1CF0286BE65E2E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		4EF231F5DE8E3B135C195C92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = App/Bifaz.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dvxlabs.bifaz;
+				PRODUCT_NAME = Bifaz;
+				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		EE76CA556C8B6CE8707195D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		335C29B5B7B5F6CE3BD34079 /* Build configuration list for PBXNativeTarget "Bifaz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4EF231F5DE8E3B135C195C92 /* Debug */,
+				03067731683BA82A1708C779 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5FEA175CA9CF0B7C30462C35 /* Build configuration list for PBXProject "Bifaz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE76CA556C8B6CE8707195D7 /* Debug */,
+				34BAA890C1CF0286BE65E2E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		41E00E05668A9ECC94C39338 /* XCLocalSwiftPackageReference "BifazKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = BifazKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		18EF2C4E2F7F22290B48D91F /* BifazModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BifazModels;
+		};
+		EF36F71680D2DD28A362210E /* BifazDesign */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BifazDesign;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = B737725121BD1D82707D8CEB /* Project object */;
+}

@@ -1,0 +1,89 @@
+# Bifaz — XcodeGen spec. Source of truth for Bifaz.xcodeproj.
+# Regenerate with: xcodegen generate
+name: Bifaz
+
+options:
+  bundleIdPrefix: com.dvxlabs
+  deploymentTarget:
+    iOS: "26.0"
+  developmentLanguage: en
+  createIntermediateGroups: true
+  groupSortPosition: top
+  xcodeVersion: "27.1"
+  postGenCommand: Scripts/xcodegen-postgen.sh
+
+packages:
+  BifazKit:
+    path: BifazKit
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_EMIT_LOC_STRINGS: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    DEAD_CODE_STRIPPING: YES
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  Bifaz:
+    type: application
+    platform: iOS
+    sources:
+      - path: App/Sources
+      - path: App/Resources
+      - path: App/AppIcon.icon
+        type: file
+        buildPhase: resources
+    dependencies:
+      - package: BifazKit
+        product: BifazModels
+      - package: BifazKit
+        product: BifazDesign
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDevelopmentRegion: en
+        CFBundleDisplayName: Bifaz
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleLocalizations: [en, es, fr]
+        ITSAppUsesNonExemptEncryption: false
+        LSApplicationCategoryType: public.app-category.finance
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+          UIImageName: LaunchCoin
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+    entitlements:
+      path: App/Bifaz.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.dvxlabs.bifaz
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dvxlabs.bifaz
+        PRODUCT_NAME: Bifaz
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+        SWIFT_APPROACHABLE_CONCURRENCY: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""
+        CODE_SIGN_IDENTITY[sdk=iphonesimulator*]: "-"
+        ENABLE_PREVIEWS: YES
+
+schemes:
+  Bifaz:
+    build:
+      targets:
+        Bifaz: all
+    run:
+      config: Debug
+    archive:
+      config: Release
