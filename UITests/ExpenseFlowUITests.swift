@@ -81,7 +81,11 @@ final class ExpenseFlowUITests: XCTestCase {
 
     @MainActor
     private func addExpense(amount: String, merchant: String, in app: XCUIApplication) {
+        // "+" opens the capture menu (scan, photo, file, expense without receipt).
         app.buttons["ui.captureButton"].tap()
+        let manual = app.buttons["ui.captureManual"]
+        XCTAssertTrue(manual.waitForExistence(timeout: 5), "The capture menu opens")
+        manual.tap()
         let amountField = app.textFields["ui.formAmount"]
         XCTAssertTrue(amountField.waitForExistence(timeout: 5), "Quick add opens")
         amountField.tap()

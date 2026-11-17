@@ -212,7 +212,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Essaie avec une autre photo ou un PDF. Tu peux toujours ajouter la dépense à la main."
+            "value" : "Essayez avec une autre photo ou un PDF. Vous pouvez toujours ajouter la dépense à la main."
           }
         }
       }
@@ -404,7 +404,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lecture de ton justificatif…"
+            "value" : "Lecture de votre justificatif…"
           }
         }
       }
@@ -428,7 +428,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sur ton iPhone. Rien n’en sort."
+            "value" : "Sur votre iPhone. Rien n’en sort."
           }
         }
       }
@@ -1484,7 +1484,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lu par Bifaz : vérifie avant d’enregistrer"
+            "value" : "Lu par Bifaz : vérifiez avant d’enregistrer"
           }
         }
       }
@@ -1580,7 +1580,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Avec Apple Intelligence, sur ton iPhone"
+            "value" : "Avec Apple Intelligence, sur votre iPhone"
           }
         }
       }
@@ -1604,7 +1604,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lecture impossible : renseigne les informations"
+            "value" : "Lecture impossible : renseignez les informations"
           }
         }
       }
@@ -1628,7 +1628,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sur ton iPhone"
+            "value" : "Sur votre iPhone"
           }
         }
       }
@@ -1700,7 +1700,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vérifie et enregistre"
+            "value" : "Vérifiez et enregistrez"
           }
         }
       }

@@ -20,6 +20,7 @@ struct CaptureButton: View {
             } label: {
                 Label { Text("capture.manual") } icon: { BifazIcon.edit.image }
             }
+            .accessibilityIdentifier("ui.captureManual")
         } label: {
             BifazIconView(.plus, size: 24, relativeTo: .title2)
                 .foregroundStyle(Color.bifazPaper)
