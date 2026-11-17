@@ -44,10 +44,30 @@ Las facturas sintéticas son pruebas de regresión, **no sirven para aceptar la 
 - El modelo solo es más débil que las reglas en tipos de TVA (9/19: no expresa varios tipos) y en
   totales/fechas con varios importes o fechas impresos; el contraste con las reglas lo corrige.
 
-## Cambios respecto al plan (para anotar en `PLAN.md` si el manager lo aprueba)
+## Cambios respecto al plan (aprobados por el manager)
 - **Origen del gasto**: «Escaneado» pasa a llamarse «Desde un justificante» (cubre escaneo, foto y PDF);
   el valor guardado sigue siendo `scanner`.
 - Nada más cambia de alcance. La extensión de compartir sigue en la fase 8.
+
+## Mejoras de la revisión del manager (rama `fase-2`)
+1. **Categoría propuesta** tras la lectura: la última usada con ese comercio y, si no hay, una tabla de
+   marcas y palabras francesas (supermercados, carburante, peajes y parking, tren y taxi, restaurantes,
+   farmacia, telefonía, software, hotel). Sin pista clara o con pistas contradictorias, nada. Etiqueta
+   «Proposée»; otro toque la cambia; al cambiar de espacio se propone la equivalente (TotalEnergies:
+   «Transports» en Perso, «Véhicule et carburant» en Pro). Supermercado o farmacia en Pro: nada.
+2. **Nombre del comercio**: una línea que empieza por una marca conocida se muestra como la marca
+   («TotalEnergies», «SNCF», «G7», «Carrefour City»), también si la da el modelo. Las líneas en mayúsculas
+   se recomponen sin romper siglas (SNCF, IKEA, BHV, A6) y con «de/du/et» en minúscula; como esas
+   mayúsculas son una suposición, ese nombre queda «À vérifier», nunca «Sûr». Probado nombre a nombre en
+   las 20 facturas sintéticas.
+3. **Pantalla de lectura** opaca en claro y oscuro, sin fundido de entrada.
+4. **Descartar**: la X pide confirmación con un justificante leído o con cambios sin guardar (y se bloquea
+   el deslizar para cerrar); un gasto vacío se cierra directo. Sin archivos huérfanos al descartar.
+5. **Menú «+»**: el botón deja de ser Liquid Glass tintado (el menú se fundía con su tinte oscuro); ahora
+   es un disco plano de 56 pt y el menú se abre y cierra sobre fondo claro. Comprobado fotograma a
+   fotograma en un vídeo del simulador.
+
+Capturas en `docs/capturas/fase-2-mejoras/` (francés; 2b y 3b en oscuro).
 
 ## Pendiente de iPhone real
 - Escáner de documentos (VisionKit no está en el simulador): recorte, enderezado, varias páginas.
