@@ -21,15 +21,11 @@ public struct SpaceSelector: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .animation(reduceMotion ? nil : .spring(duration: 0.3, bounce: 0.15), value: selection)
-        .accessibilityRepresentation {
-            Picker(selection: $selection) {
-                ForEach(filters) { filter in
-                    Text(filter.title).tag(filter)
-                }
-            } label: {
-                Text("spaceSelector.label", bundle: .module)
-            }
-        }
+        // The chips themselves are the accessibility elements (buttons, the chosen one
+        // "selected"), grouped under one label. A Picker representation gave VoiceOver
+        // frames that did not match the chips (the accessibility audit flagged them).
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(Text("spaceSelector.label", bundle: .module))
     }
 
     private var chips: some View {
