@@ -73,6 +73,30 @@
         }
       }
     },
+    "detail.client" : {
+      "extractionState" : "manual",
+      "comment" : "Detail row label.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client"
+          }
+        }
+      }
+    },
     "detail.created %@" : {
       "comment" : "Creation date caption. %@ is a date.",
       "extractionState" : "manual",
@@ -189,6 +213,198 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Origine"
+          }
+        }
+      }
+    },
+    "detail.project" : {
+      "extractionState" : "manual",
+      "comment" : "Detail row label.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proyecto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projet"
+          }
+        }
+      }
+    },
+    "detail.rate" : {
+      "extractionState" : "manual",
+      "comment" : "Detail row label (foreign currency).",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exchange rate"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo de cambio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taux de change"
+          }
+        }
+      }
+    },
+    "detail.rateSource" : {
+      "extractionState" : "manual",
+      "comment" : "Detail row label: where the exchange rate came from.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rate from"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Origen del tipo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Origine du taux"
+          }
+        }
+      }
+    },
+    "detail.rateSource.approximate %@" : {
+      "extractionState" : "manual",
+      "comment" : "Detail: ECB rate of another day. Argument: date.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ECB, %@ (approximate)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BCE, %@ (aproximado)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BCE, %@ (approximatif)"
+          }
+        }
+      }
+    },
+    "detail.rateSource.ecb %@" : {
+      "extractionState" : "manual",
+      "comment" : "Detail: ECB rate of that day. Argument: date.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ECB, %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BCE, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BCE, %@"
+          }
+        }
+      }
+    },
+    "detail.rateSource.manual" : {
+      "extractionState" : "manual",
+      "comment" : "Detail: rate typed or implied by the euro amount.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entered by you"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indicado por usted"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisi par vous"
+          }
+        }
+      }
+    },
+    "detail.recurring" : {
+      "extractionState" : "manual",
+      "comment" : "Detail row label: the rule that generated the expense.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recurring"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recurrente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Récurrente"
+          }
+        }
+      }
+    },
+    "detail.repeat" : {
+      "extractionState" : "manual",
+      "comment" : "Detail toolbar: make a recurring expense from this one.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repetir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Répéter"
           }
         }
       }
@@ -693,6 +909,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Voir les résultats"
+          }
+        }
+      }
+    },
+    "history.filter.tags" : {
+      "extractionState" : "manual",
+      "comment" : "Filter sheet section title.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client and project"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente y proyecto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client et projet"
           }
         }
       }

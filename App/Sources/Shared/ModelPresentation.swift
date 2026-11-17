@@ -60,7 +60,8 @@ extension ExpenseRow {
             amount: expense.amountInEUR,
             currencyCode: "EUR",
             space: expense.space,
-            receiptState: expense.receiptState
+            receiptState: expense.receiptState,
+            originalAmount: expense.isForeignCurrency ? (expense.amount, expense.currencyCode) : nil
         )
     }
 }

@@ -19,7 +19,41 @@ public enum RuleBasedReceiptParser {
         let vat = vatSummary(in: rows)
         fields.total = total(in: rows, payment: payment, vat: vat)
         apply(vat, total: fields.total?.value, to: &fields)
+        fields.currencyCode = currency(in: lines)
         return fields
+    }
+
+    // MARK: - Currency (phase 4)
+
+    /// ISO codes recognised as whole words.
+    static let currencyCodes: Set<String> = ["EUR", "USD", "GBP", "CHF", "CAD", "AUD", "JPY", "SEK", "NOK", "DKK", "PLN", "CZK"]
+    /// Symbols, longest first so "CA$" is not read as "$".
+    static let currencySymbols: [(symbol: String, code: String)] = [
+        ("US$", "USD"), ("CA$", "CAD"), ("C$", "CAD"), ("A$", "AUD"),
+        ("€", "EUR"), ("£", "GBP"), ("¥", "JPY"), ("ZŁ", "PLN"), ("KČ", "CZK"), ("$", "USD"),
+    ]
+
+    /// The receipt's currency: EUR unless another currency is marked more often
+    /// than the euro (a euro receipt may mention a foreign amount once).
+    static func currency(in lines: [String]) -> String {
+        var counts: [String: Int] = [:]
+        for line in lines {
+            var text = line.uppercased()
+            for (symbol, code) in currencySymbols {
+                let parts = text.components(separatedBy: symbol)
+                if parts.count > 1 {
+                    counts[code, default: 0] += parts.count - 1
+                    text = parts.joined(separator: " ")
+                }
+            }
+            for word in text.split(whereSeparator: { !$0.isLetter }) where currencyCodes.contains(String(word)) {
+                counts[String(word), default: 0] += 1
+            }
+        }
+        let euro = counts["EUR"] ?? 0
+        guard let (code, count) = counts.filter({ $0.key != "EUR" && $0.value > 0 }).max(by: { $0.value < $1.value }),
+              count > euro else { return "EUR" }
+        return code
     }
 
     // MARK: - Rows

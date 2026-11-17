@@ -10,6 +10,7 @@ struct RootView: View {
     @AppStorage("spaceFilter") private var spaceFilter: SpaceFilter = .all
     @Environment(\.modelContext) private var context
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         TabView(selection: $navigation.selectedTab) {
@@ -48,6 +49,61 @@ struct RootView: View {
         }
         // After the sheets, so the forms they present can reach it too.
         .environment(navigation)
+        .task {
+            NotificationScheduler.shared.install()
+            NotificationScheduler.shared.onRoute = { route in open(route) }
+            await runMaintenance()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { Task { await runMaintenance() } }
+        }
+    }
+
+    /// On launch and on every return to the foreground: generate the recurring
+    /// expenses due (no backend, so this is the moment), notify budgets they
+    /// crossed, and reschedule the reminders.
+    private func runMaintenance() async {
+        do {
+            let created = try RecurringService.generateDue(in: context)
+            if !created.isEmpty {
+                Log.app.notice("Generated \(created.count, privacy: .public) recurring expenses")
+                await NotificationScheduler.shared.post(budgetAlerts(for: created), in: context)
+            }
+        } catch {
+            Log.app.error("Recurring generation failed: \(String(describing: type(of: error)), privacy: .public)")
+        }
+        await NotificationScheduler.shared.reschedule(in: context)
+    }
+
+    /// Budgets that the generated expenses pushed near or over their limit.
+    private func budgetAlerts(for created: [Expense]) -> [BudgetAlert] {
+        var alerts: [BudgetAlert] = []
+        let groups = Dictionary(grouping: created.filter { $0.category != nil }) { expense in
+            "\(expense.category!.id)|\(ExpenseGrouping.monthInterval(containing: expense.date).start.timeIntervalSince1970)"
+        }
+        for expenses in groups.values {
+            guard let first = expenses.first, let category = first.category,
+                  let after = try? BudgetService.status(of: category, at: first.date, in: context) else { continue }
+            var before = after
+            before.spent -= expenses.reduce(Decimal(0)) { $0 + $1.amountInEUR }
+            if let alert = BudgetService.alert(before: before, after: after) { alerts.append(alert) }
+        }
+        return alerts
+    }
+
+    /// Where a tapped notification leads.
+    private func open(_ route: ReminderRoute) {
+        switch route {
+        case .vatSummary:
+            spaceFilter = .pro
+            navigation.selectedTab = .summary
+        case .budgets:
+            navigation.selectedTab = .summary
+            navigation.summaryPath.append(SummaryRoute.budgets)
+        case .recurringRule(let id):
+            navigation.selectedTab = .settings
+            navigation.settingsPath = NavigationPath([SettingsRoute.recurringRule(id)])
+        }
     }
 
     /// Shown for a few seconds after a save that pushed a budget near or over its limit.

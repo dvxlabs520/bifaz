@@ -15,6 +15,8 @@ final class AppNavigation {
     var capturedReceipt: CaptureResult?
     /// The Summary tab's navigation (a category's history, an expense).
     var summaryPath = NavigationPath()
+    /// The Settings tab's navigation (opened by a recurring-expense notification).
+    var settingsPath = NavigationPath()
     /// A budget that a save just pushed near or over its limit (shown as a banner).
     var budgetAlert: BudgetAlert?
     /// Space to preselect for a captured receipt (the filter's, when the capture started).

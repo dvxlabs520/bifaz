@@ -30,6 +30,11 @@ struct ExpenseFormView: View {
     @State private var draft: ExpenseDraft
     @State private var amountText: String
     @State private var secondVATText = ""
+    @State private var rateLookup: ExchangeRateService.Lookup?
+    @State private var isLookingUp = false
+    /// VAT fields of a foreign-currency expense are hidden until the user adds them.
+    @State private var showsForeignVAT = false
+    @State private var tagsAreProposal = false
     @State private var merchantSuggestions: [String] = []
     @State private var isConfirmingDelete = false
     @State private var saveError: Error?
@@ -76,7 +81,8 @@ struct ExpenseFormView: View {
             space: defaultSpace
         )
         draft.source = .scanner
-        if defaultSpace == .pro { Self.applyRead(readVAT, rate: readVATRate, to: &draft) }
+        draft.currencyCode = fields.currencyCode
+        if defaultSpace == .pro, fields.currencyCode == "EUR" { Self.applyRead(readVAT, rate: readVATRate, to: &draft) }
         _draft = State(initialValue: draft)
         _amountText = State(initialValue: draft.amount.map { $0.formatted(Self.amountInputStyle) } ?? "")
         _secondVATText = State(initialValue: draft.secondVAT?.total.map { $0.formatted(Self.amountInputStyle) } ?? "")
@@ -93,7 +99,9 @@ struct ExpenseFormView: View {
     private var isEditing: Bool { expense != nil }
     private var isConfirmingCapture: Bool { capture != nil }
     private var spaceCategories: [ExpenseCategory] { categories.filter { $0.space == draft.space } }
-    private var showsVAT: Bool { isVATRegistered && draft.space == .pro }
+    private var showsVAT: Bool {
+        isVATRegistered && draft.space == .pro && (!draft.isForeignCurrency || showsForeignVAT)
+    }
     private var amountIsInvalid: Bool { !amountText.isEmpty && MoneyParser.parse(amountText) == nil }
     private var hasChanges: Bool { baseline.map { $0 != draft } ?? false }
     /// A read receipt or unsaved changes would be lost: ask before closing.
@@ -115,6 +123,14 @@ struct ExpenseFormView: View {
                     amountSection
                     field("form.space") { spacePicker }
                     field("form.category", proposed: categoryIsProposal && draft.category != nil) { categoryPicker }
+                    if draft.space == .pro {
+                        field("form.tags", proposed: tagsAreProposal && (draft.client != nil || draft.project != nil)) {
+                            HStack(spacing: BifazSpacing.xs) {
+                                TagPicker(kind: .client, selection: $draft.client)
+                                TagPicker(kind: .project, selection: $draft.project)
+                            }
+                        }
+                    }
                     field("form.merchant", read: .merchant) { merchantField }
                     field("form.date", read: .date) {
                         DatePicker(selection: $draft.date, displayedComponents: .date) {
@@ -125,6 +141,16 @@ struct ExpenseFormView: View {
                     }
                     if showsVAT {
                         field("form.vat", read: .vat) { vatPicker }
+                    } else if isVATRegistered, draft.space == .pro, draft.isForeignCurrency {
+                        Button {
+                            showsForeignVAT = true
+                        } label: {
+                            Label { Text("form.currency.addVAT") } icon: { BifazIconView(.plus, size: 16) }
+                                .font(.bifazCaption)
+                                .foregroundStyle(.bifazInk)
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.bottom, BifazSpacing.l)
                     }
                     field("form.note", divider: false) {
                         TextField("form.note.placeholder", text: $draft.note, axis: .vertical)
@@ -172,12 +198,30 @@ struct ExpenseFormView: View {
                 draft.secondVAT?.total = MoneyParser.parse(text)
             }
             .onChange(of: draft.merchant) { old, _ in if !old.isEmpty { confidence[.merchant] = nil } }
-            .onChange(of: draft.date) { confidence[.date] = nil }
+            .onChange(of: draft.date) {
+                confidence[.date] = nil
+                // An ECB rate belongs to a day: follow the expense's date (a typed rate stays).
+                if draft.isForeignCurrency, draft.exchangeRate?.source != .manual { lookUpRate() }
+            }
+            .onChange(of: draft.currencyCode) { _, code in
+                draft.amountInEUROverride = nil
+                draft.exchangeRate = nil
+                if code != "EUR", !showsForeignVAT {
+                    draft.vatRate = nil
+                    draft.fixedVATLines = nil
+                    removeSecondVAT()
+                }
+                if code != "EUR" { lookUpRate() }
+            }
+            .onChange(of: draft.client) { tagsAreProposal = false }
+            .onChange(of: draft.project) { tagsAreProposal = false }
             .onChange(of: draft.space) { _, space in
                 spaceChanged(to: space)
                 if isConfirmingCapture, draft.category == nil { proposeCategory() }
             }
             .onAppear {
+                if draft.isForeignCurrency, draft.exchangeRate == nil { lookUpRate() }
+                if isEditing, draft.isForeignCurrency, draft.vatRate != nil || draft.fixedVATLines != nil { showsForeignVAT = true }
                 if isConfirmingCapture {
                     if !draft.merchant.isEmpty { applyMemory(for: draft.merchant) }
                     spaceChanged(to: draft.space)
@@ -234,15 +278,16 @@ struct ExpenseFormView: View {
                 .accessibilityIdentifier("ui.formAmount")
                 .focused($focus, equals: .amount)
                 .foregroundStyle(.bifazInk)
-                Text(verbatim: Self.currencySymbol)
-                    .font(.bifazAmountHero)
-                    .foregroundStyle(.bifazInkSecondary)
-                    .accessibilityHidden(true)
+                CurrencyMenu(currencyCode: $draft.currencyCode)
             }
             if amountIsInvalid {
                 Text("form.amount.invalid")
                     .font(.bifazCaption)
                     .foregroundStyle(.bifazError)
+            }
+            if draft.isForeignCurrency {
+                ConversionPanel(draft: $draft, lookup: rateLookup, isLookingUp: isLookingUp)
+                    .padding(.top, BifazSpacing.xs)
             }
         }
         .padding(.top, BifazSpacing.l)
@@ -456,7 +501,7 @@ struct ExpenseFormView: View {
     /// Keeps the category and VAT consistent with the chosen space.
     private func spaceChanged(to space: Space) {
         if let category = draft.category, category.space != space { draft.category = nil }
-        if space == .pro, isVATRegistered {
+        if space == .pro, isVATRegistered, !draft.isForeignCurrency || showsForeignVAT {
             if draft.vatRate == nil, draft.fixedVATLines == nil {
                 if isConfirmingCapture {
                     // What the receipt says, never a guess.
@@ -489,6 +534,28 @@ struct ExpenseFormView: View {
         if let category = rule.category {
             draft.category = category
             categoryIsProposal = isConfirmingCapture
+        }
+        // Pro: the client and project of last time, as a proposal.
+        if rule.space == .pro, draft.client == nil, draft.project == nil, rule.client != nil || rule.project != nil {
+            draft.client = rule.client.flatMap { $0.isArchived ? nil : $0 }
+            draft.project = rule.project.flatMap { $0.isArchived ? nil : $0 }
+            tagsAreProposal = true
+        }
+    }
+
+    /// Asks the rate service for the expense's currency and day (download at most
+    /// once a day, only when allowed); falls back to the stored table, or to typing.
+    private func lookUpRate() {
+        let code = draft.currencyCode
+        let date = draft.date
+        guard code != "EUR" else { return }
+        isLookingUp = true
+        Task {
+            let lookup = await ExchangeRates.service.lookup(code, on: date, allowDownload: ExchangeRates.downloadsAllowed)
+            guard draft.currencyCode == code else { return }
+            rateLookup = lookup
+            isLookingUp = false
+            if draft.exchangeRate?.source != .manual { draft.exchangeRate = lookup.quote }
         }
     }
 

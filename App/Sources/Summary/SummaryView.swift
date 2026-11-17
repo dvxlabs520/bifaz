@@ -24,6 +24,11 @@ struct SummaryView: View {
                 .navigationDestination(for: SummaryHistoryRoute.self) { route in
                     SummaryHistoryView(route: route)
                 }
+                .navigationDestination(for: SummaryRoute.self) { route in
+                    switch route {
+                    case .budgets: BudgetsView()
+                    }
+                }
                 .bifazScreen()
         }
     }
@@ -39,6 +44,11 @@ struct ExpenseDestination: View {
             ExpenseDetailView(expense: expense)
         }
     }
+}
+
+/// Other places the Summary opens (from a notification).
+enum SummaryRoute: Hashable {
+    case budgets
 }
 
 /// The history of one category (or of "No category") in one month and space.

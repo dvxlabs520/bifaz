@@ -41,6 +41,8 @@ enum HistoryPeriod: CaseIterable, Identifiable {
 struct HistoryRefinements: Equatable {
     var period: HistoryPeriod = .allTime
     var categoryIDs: Set<UUID> = []
+    /// Client and project tags (Pro), all required.
+    var tagIDs: Set<UUID> = []
     var onlyReceiptPending = false
 
     var isDefault: Bool { self == HistoryRefinements() }
@@ -53,6 +55,7 @@ struct ExpenseFilterSheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \ExpenseCategory.sortOrder) private var categories: [ExpenseCategory]
+    @Query(sort: \Tag.name) private var tags: [Tag]
 
     var body: some View {
         NavigationStack {
@@ -60,6 +63,7 @@ struct ExpenseFilterSheet: View {
                 VStack(alignment: .leading, spacing: BifazSpacing.xl) {
                     periodSection
                     categoriesSection
+                    tagsSection
                     receiptSection
                 }
                 .padding(.horizontal, BifazSpacing.l)
@@ -143,6 +147,31 @@ struct ExpenseFilterSheet: View {
         }
         .buttonStyle(.plain)
         .sensoryFeedback(.selection, trigger: isSelected)
+    }
+
+    /// Clients and projects (Pro only), archived ones included: old expenses keep them.
+    @ViewBuilder
+    private var tagsSection: some View {
+        if spaceFilter.includes(.pro), !tags.isEmpty {
+            VStack(alignment: .leading, spacing: BifazSpacing.s) {
+                SectionHeader(LocalizedStringResource("history.filter.tags", table: "History"))
+                FlowLayout(spacing: BifazSpacing.xs, lineSpacing: BifazSpacing.xs) {
+                    ForEach(tags.sorted { ($0.kindRawValue, $0.name) < ($1.kindRawValue, $1.name) }) { tag in
+                        FilterChip(LocalizedStringResource(stringLiteral: tag.name), icon: tag.kind.icon, symbolTint: .bifazPro,
+                                   isSelected: refinements.tagIDs.contains(tag.id)) {
+                            if refinements.tagIDs.contains(tag.id) {
+                                refinements.tagIDs.remove(tag.id)
+                            } else {
+                                // One client and one project at most: replace the other of the same kind.
+                                for other in tags where other.kind == tag.kind { refinements.tagIDs.remove(other.id) }
+                                refinements.tagIDs.insert(tag.id)
+                            }
+                        }
+                        .accessibilityIdentifier("ui.filterTag")
+                    }
+                }
+            }
+        }
     }
 
     private var receiptSection: some View {

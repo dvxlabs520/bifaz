@@ -18,6 +18,9 @@ public struct ExpenseRow: View {
     private let currencyCode: String
     private let space: Space
     private let receiptState: ReceiptThumbnail.State
+    /// For a foreign-currency expense: the original amount ("48,00 $US"), shown
+    /// under the euro amount instead of the date.
+    private let originalAmount: (amount: Decimal, currencyCode: String)?
 
     public init(
         merchant: String,
@@ -27,8 +30,10 @@ public struct ExpenseRow: View {
         amount: Decimal,
         currencyCode: String = "EUR",
         space: Space,
-        receiptState: ReceiptThumbnail.State
+        receiptState: ReceiptThumbnail.State,
+        originalAmount: (amount: Decimal, currencyCode: String)? = nil
     ) {
+        self.originalAmount = originalAmount
         self.merchant = merchant
         self.categoryName = categoryName
         self.categoryIcon = categoryIcon
@@ -97,9 +102,17 @@ public struct ExpenseRow: View {
     private func trailing(alignment: HorizontalAlignment) -> some View {
         VStack(alignment: alignment, spacing: 2) {
             AmountView(amount, currencyCode: currencyCode, style: .row)
-            Text(verbatim: date.formatted(.dateTime.day().month(.abbreviated).locale(locale)))
-                .font(.bifazCaption)
-                .foregroundStyle(Color.bifazInkSecondary)
+            Group {
+                if let originalAmount {
+                    Text(verbatim: originalAmount.amount.formatted(.currency(code: originalAmount.currencyCode).locale(locale))
+                         + " · " + date.formatted(.dateTime.day().month(.abbreviated).locale(locale)))
+                } else {
+                    Text(verbatim: date.formatted(.dateTime.day().month(.abbreviated).locale(locale)))
+                }
+            }
+            .font(.bifazCaption)
+            .monospacedDigit()
+            .foregroundStyle(Color.bifazInkSecondary)
         }
     }
 
@@ -107,7 +120,10 @@ public struct ExpenseRow: View {
         let category = categoryName.flatMap { $0.isEmpty ? nil : $0 }
             ?? LocalizedStringResource("expenseRow.uncategorised", bundle: .module).resolved(in: locale)
         let dateText = date.formatted(.dateTime.day().month(.wide).locale(locale))
-        let amountText = amount.formatted(.currency(code: currencyCode).locale(locale))
+        var amountText = amount.formatted(.currency(code: currencyCode).locale(locale))
+        if let originalAmount {
+            amountText += ", " + originalAmount.amount.formatted(.currency(code: originalAmount.currencyCode).locale(locale))
+        }
         var parts = [
             LocalizedStringResource(
                 "expenseRow.accessibility \(merchant) \(category) \(dateText) \(amountText)",

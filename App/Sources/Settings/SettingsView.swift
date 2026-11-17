@@ -6,7 +6,12 @@ import BifazDesign
 /// Settings tab: brand header, organisation (categories), VAT switch and "About".
 struct SettingsView: View {
     @AppStorage(VATSetting.key) private var isVATRegistered = VATSetting.defaultValue
+    @AppStorage(ExchangeRateSetting.key) private var downloadsRates = ExchangeRateSetting.defaultValue
     @Query private var categories: [ExpenseCategory]
+    @Query private var tags: [Tag]
+    @Query private var rules: [RecurringRule]
+    @Environment(\.modelContext) private var context
+    @Environment(AppNavigation.self) private var navigation
 
     private var version: String {
         let info = Bundle.main.infoDictionary
@@ -16,7 +21,8 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        @Bindable var navigation = navigation
+        NavigationStack(path: $navigation.settingsPath) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     header
@@ -44,7 +50,39 @@ struct SettingsView: View {
                         }
                         .buttonStyle(.plain)
                         .accessibilityElement(children: .combine)
+                        HairlineDivider()
+                        navigationRow("settings.tags", count: tags.filter { !$0.isArchived }.count, identifier: "ui.settingsTags") {
+                            TagsView()
+                        }
+                        HairlineDivider()
+                        navigationRow("settings.recurring", count: rules.filter(\.isActive).count, identifier: "ui.settingsRecurring") {
+                            RecurringRulesView()
+                        }
                     }
+
+                    section("settings.section.notifications") {
+                        navigationRow("settings.notifications", count: nil, identifier: "ui.settingsNotifications") {
+                            NotificationSettingsView {
+                                Task { await NotificationScheduler.shared.reschedule(in: context) }
+                            }
+                        }
+                    }
+
+                    section("settings.section.rates") {
+                        Toggle(isOn: $downloadsRates) {
+                            Text("settings.rates.toggle", tableName: "Settings")
+                                .font(.bifazBody)
+                                .foregroundStyle(.bifazInk)
+                        }
+                        .tint(.bifazInk)
+                        .padding(.vertical, BifazSpacing.xs)
+                        .frame(minHeight: 44)
+                        .accessibilityIdentifier("ui.settingsRates")
+                    }
+                    Text("settings.rates.caption", tableName: "Settings")
+                        .font(.bifazCaption)
+                        .foregroundStyle(.bifazInkSecondary)
+                        .padding(.top, BifazSpacing.s)
 
                     section("settings.section.vat") {
                         Toggle(isOn: $isVATRegistered) {
@@ -85,6 +123,12 @@ struct SettingsView: View {
                 .padding(.top, BifazSpacing.xs)
             }
             .navigationTitle("tab.settings")
+            .navigationDestination(for: SettingsRoute.self) { route in
+                switch route {
+                case .recurringRules: RecurringRulesView()
+                case .recurringRule(let id): RecurringRuleDestination(id: id)
+                }
+            }
             .bifazScreen()
         }
     }
@@ -102,6 +146,39 @@ struct SettingsView: View {
             }
         }
         .accessibilityElement(children: .combine)
+    }
+
+    /// A row that pushes a screen, with an optional count on the right.
+    private func navigationRow<Destination: View>(
+        _ title: String.LocalizationValue,
+        count: Int?,
+        identifier: String,
+        @ViewBuilder destination: @escaping () -> Destination
+    ) -> some View {
+        NavigationLink {
+            destination()
+        } label: {
+            HStack(spacing: BifazSpacing.xs) {
+                Text(LocalizedStringResource(title, table: "Settings"))
+                    .font(.bifazBody)
+                    .foregroundStyle(.bifazInk)
+                Spacer(minLength: BifazSpacing.xs)
+                if let count {
+                    Text(verbatim: count.formatted())
+                        .font(.bifazBody)
+                        .monospacedDigit()
+                        .foregroundStyle(.bifazInkSecondary)
+                }
+                BifazIconView(.chevronRight, size: 14, relativeTo: .body)
+                    .foregroundStyle(.bifazInkSecondary)
+            }
+            .padding(.vertical, BifazSpacing.s)
+            .frame(minHeight: 44)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier(identifier)
     }
 
     /// A titled group of rows framed by hairlines.
@@ -146,16 +223,39 @@ private enum SettingsPreviewData {
 #Preview("Light") {
     SettingsView()
         .modelContainer(SettingsPreviewData.container)
+        .environment(AppNavigation())
 }
 
 #Preview("Dark") {
     SettingsView()
         .modelContainer(SettingsPreviewData.container)
+        .environment(AppNavigation())
         .preferredColorScheme(.dark)
 }
 
 #Preview("Large text") {
     SettingsView()
         .modelContainer(SettingsPreviewData.container)
+        .environment(AppNavigation())
         .dynamicTypeSize(.accessibility3)
+}
+
+/// Places a notification can open inside Settings.
+enum SettingsRoute: Hashable {
+    case recurringRules
+    case recurringRule(UUID)
+}
+
+/// Opens the editor of a rule by id (from a notification).
+private struct RecurringRuleDestination: View {
+    let id: UUID
+    @Query private var rules: [RecurringRule]
+    @State private var isEditing = true
+
+    var body: some View {
+        RecurringRulesView()
+            .sheet(isPresented: $isEditing) {
+                if let rule = rules.first(where: { $0.id == id }) { RecurringRuleEditorView(rule: rule) }
+            }
+    }
 }

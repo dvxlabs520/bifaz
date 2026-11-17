@@ -410,25 +410,25 @@
       }
     },
     "capture.reading.onDevice" : {
-      "comment" : "Reassurance under the reading overlay: processing happens on the device.",
       "extractionState" : "manual",
+      "comment" : "Reassurance under the reading overlay: the receipt is read on the device and never sent (phase 4: scoped to the receipt, the app may download ECB rates).",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "On your iPhone. Nothing leaves it."
+            "value" : "Read on your iPhone. The receipt never leaves it."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En tu iPhone. Nada sale de él."
+            "value" : "Se lee en tu iPhone. El justificante no sale de él."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sur votre iPhone. Rien n’en sort."
+            "value" : "Lu sur votre iPhone. Le justificatif n’en sort pas."
           }
         }
       }
@@ -1249,6 +1249,438 @@
         }
       }
     },
+    "form.currency %@" : {
+      "extractionState" : "manual",
+      "comment" : "Accessibility label of the currency menu. Argument: currency name.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Currency: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moneda: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Devise : %@"
+          }
+        }
+      }
+    },
+    "form.currency.addVAT" : {
+      "extractionState" : "manual",
+      "comment" : "Shows the VAT fields of a foreign-currency expense (hidden by default).",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add VAT"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir TVA"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter la TVA"
+          }
+        }
+      }
+    },
+    "form.currency.bankAmount" : {
+      "extractionState" : "manual",
+      "comment" : "Caption when the user typed the euro amount.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Euro amount charged by your bank"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importe en euros cargado por su banco"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant débité en euros par votre banque"
+          }
+        }
+      }
+    },
+    "form.currency.editEuros" : {
+      "extractionState" : "manual",
+      "comment" : "Button to type the euro amount the bank charged.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the euros charged"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indicar los euros cargados"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisir le montant débité"
+          }
+        }
+      }
+    },
+    "form.currency.editRate" : {
+      "extractionState" : "manual",
+      "comment" : "Button to type the exchange rate.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change the rate"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar el tipo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier le taux"
+          }
+        }
+      }
+    },
+    "form.currency.euros %@" : {
+      "extractionState" : "manual",
+      "comment" : "Euro equivalent of a foreign amount. Argument: euro amount.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "≈ %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "≈ %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "≈ %@"
+          }
+        }
+      }
+    },
+    "form.currency.eurosField" : {
+      "extractionState" : "manual",
+      "comment" : "Accessibility label of the euro amount field.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Euro amount"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importe en euros"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant en euros"
+          }
+        }
+      }
+    },
+    "form.currency.lookingUp" : {
+      "extractionState" : "manual",
+      "comment" : "While the exchange rate is fetched.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Looking up the ECB rate…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscando el tipo del BCE…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recherche du taux de la BCE…"
+          }
+        }
+      }
+    },
+    "form.currency.noRate" : {
+      "extractionState" : "manual",
+      "comment" : "No exchange rate known for this currency.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No rate available: enter the rate or the euro amount your bank charged."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin tipo disponible: indique el tipo o el importe en euros que cargó su banco."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun taux disponible : saisissez le taux ou le montant débité en euros."
+          }
+        }
+      }
+    },
+    "form.currency.orEuros" : {
+      "extractionState" : "manual",
+      "comment" : "Before the euro amount field: 'or charged 44,10 €'.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "or charged"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "o cargado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ou débité"
+          }
+        }
+      }
+    },
+    "form.currency.other" : {
+      "extractionState" : "manual",
+      "comment" : "Currency menu: type another ISO code.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other currency…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otra moneda…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autre devise…"
+          }
+        }
+      }
+    },
+    "form.currency.other.message" : {
+      "extractionState" : "manual",
+      "comment" : "Alert message for another currency.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Three-letter code, e.g. MAD. You will enter the rate yourself."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Código de tres letras, p. ej. MAD. Indicará el tipo usted mismo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code à trois lettres, par exemple MAD. Vous saisirez le taux vous-même."
+          }
+        }
+      }
+    },
+    "form.currency.rate.approximate %@ %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "Rate of another day than the expense. 1: rate, 2: code, 3: day.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 € = %1$@ %2$@ · approximate (ECB rate of %3$@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 € = %1$@ %2$@ · aproximado (tipo del BCE del %3$@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 € = %1$@ %2$@ · approximatif (taux BCE du %3$@)"
+          }
+        }
+      }
+    },
+    "form.currency.rate.ecb %@ %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "1: rate, 2: currency code, 3: day of the rate.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 € = %1$@ %2$@ · ECB rate of %3$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 € = %1$@ %2$@ · tipo del BCE del %3$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 € = %1$@ %2$@ · taux BCE du %3$@"
+          }
+        }
+      }
+    },
+    "form.currency.rate.manual %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "1: rate, 2: currency code.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 € = %1$@ %2$@ · rate entered by you"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 € = %1$@ %2$@ · tipo indicado por usted"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 € = %1$@ %2$@ · taux saisi par vous"
+          }
+        }
+      }
+    },
+    "form.currency.rateField" : {
+      "extractionState" : "manual",
+      "comment" : "Accessibility label of the rate field.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exchange rate"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo de cambio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taux de change"
+          }
+        }
+      }
+    },
+    "form.currency.storedTable %@" : {
+      "extractionState" : "manual",
+      "comment" : "The stored ECB table was used. Argument: download day.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline: last rates saved on %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin conexión: últimos tipos guardados el %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hors ligne : derniers taux enregistrés le %@"
+          }
+        }
+      }
+    },
+    "form.currency.use" : {
+      "extractionState" : "manual",
+      "comment" : "Alert button: use the typed currency code.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser"
+          }
+        }
+      }
+    },
     "form.date" : {
       "comment" : "Date field label.",
       "extractionState" : "manual",
@@ -1821,6 +2253,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Espace"
+          }
+        }
+      }
+    },
+    "form.tags" : {
+      "extractionState" : "manual",
+      "comment" : "Form: label of the client and project pickers (Pro).",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client and project"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliente y proyecto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client et projet"
           }
         }
       }

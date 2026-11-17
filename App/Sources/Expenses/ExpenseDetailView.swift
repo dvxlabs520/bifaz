@@ -12,6 +12,7 @@ struct ExpenseDetailView: View {
     @Environment(\.locale) private var locale
     @AppStorage(VATSetting.key) private var isVATRegistered = VATSetting.defaultValue
     @State private var isEditing = false
+    @State private var isRepeating = false
 
     private static let longDate = Date.FormatStyle.dateTime.day().month(.wide).year()
     private static let timestamp = Date.FormatStyle.dateTime.day().month(.abbreviated).year().hour().minute()
@@ -43,6 +44,16 @@ struct ExpenseDetailView: View {
         .background(Color.bifazPaper)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            if !expense.isForeignCurrency, expense.recurringRule == nil {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isRepeating = true
+                    } label: {
+                        Text("detail.repeat", tableName: "History")
+                    }
+                    .accessibilityIdentifier("ui.detailRepeat")
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     isEditing = true
@@ -54,6 +65,9 @@ struct ExpenseDetailView: View {
         }
         .sheet(isPresented: $isEditing) {
             ExpenseFormView(editing: expense, onDeleted: { dismiss() })
+        }
+        .sheet(isPresented: $isRepeating) {
+            RecurringRuleEditorView(template: RecurringRuleEditorView.template(repeating: ExpenseDraft(expense: expense)))
         }
     }
 
@@ -80,6 +94,12 @@ struct ExpenseDetailView: View {
             .foregroundStyle(Color.bifazInk)
             .accessibilityAddTraits(.isHeader)
             AmountView(expense.amountInEUR, style: .hero)
+            if expense.isForeignCurrency {
+                Text(verbatim: expense.amount.formatted(.currency(code: expense.currencyCode).locale(locale)))
+                    .font(.bifazBody)
+                    .monospacedDigit()
+                    .foregroundStyle(Color.bifazInkSecondary)
+            }
             Text(verbatim: expense.date.formatted(Self.longDate.locale(locale)))
                 .font(.bifazBody)
                 .foregroundStyle(Color.bifazInkSecondary)
@@ -116,6 +136,30 @@ struct ExpenseDetailView: View {
                 } else {
                     Text("detail.category.none", tableName: "History")
                         .foregroundStyle(Color.bifazInkSecondary)
+                }
+            }
+            if expense.space == .pro, let client = expense.client {
+                HairlineDivider()
+                DetailRow("detail.client") { Text(verbatim: client.name) }
+            }
+            if expense.space == .pro, let project = expense.project {
+                HairlineDivider()
+                DetailRow("detail.project") { Text(verbatim: project.name) }
+            }
+            if expense.isForeignCurrency, let rate = expense.exchangeRate {
+                HairlineDivider()
+                DetailRow("detail.rate") {
+                    Text(verbatim: "1 € = \(rate.formatted(.number.precision(.fractionLength(0...6)))) \(expense.currencyCode)")
+                }
+                HairlineDivider()
+                DetailRow("detail.rateSource") {
+                    rateSource
+                }
+            }
+            if let rule = expense.recurringRule {
+                HairlineDivider()
+                DetailRow("detail.recurring") {
+                    Text(verbatim: rule.merchant.isEmpty ? String(localized: rule.frequency.title) : "\(rule.merchant) · \(String(localized: rule.frequency.title))")
                 }
             }
             if showsVAT {
@@ -156,6 +200,16 @@ struct ExpenseDetailView: View {
                     .foregroundStyle(expense.status == .receiptPending ? Color.bifazWarning : Color.bifazInk)
             }
             HairlineDivider()
+        }
+    }
+
+    @ViewBuilder
+    private var rateSource: some View {
+        let day = expense.exchangeRateDate.map { $0.formatted(.dateTime.day().month(.abbreviated).year().locale(locale)) } ?? ""
+        switch expense.exchangeRateSource {
+        case .ecb: Text("detail.rateSource.ecb \(day)", tableName: "History")
+        case .ecbApproximate: Text("detail.rateSource.approximate \(day)", tableName: "History").foregroundStyle(Color.bifazWarning)
+        case .manual, nil: Text("detail.rateSource.manual", tableName: "History")
         }
     }
 

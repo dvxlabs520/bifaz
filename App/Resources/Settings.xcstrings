@@ -1273,6 +1273,126 @@
         }
       }
     },
+    "settings.notifications" : {
+      "extractionState" : "manual",
+      "comment" : "Settings row: local reminders.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminders"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recordatorios"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rappels"
+          }
+        }
+      }
+    },
+    "settings.rates.caption" : {
+      "extractionState" : "manual",
+      "comment" : "Settings caption under the ECB toggle.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only when you enter an amount in a foreign currency, at most once a day, from the European Central Bank’s public tables. Nothing about you or your expenses is sent. Turned off, Bifaz never uses the network: you enter the rate or the euro amount yourself."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo cuando indica un importe en moneda extranjera, como mucho una vez al día, desde las tablas públicas del Banco Central Europeo. No se envía nada sobre usted ni sus gastos. Desactivado, Bifaz nunca usa la red: indica usted el tipo o el importe en euros."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uniquement quand vous saisissez un montant en devise étrangère, au plus une fois par jour, depuis les tables publiques de la Banque centrale européenne. Rien sur vous ni sur vos dépenses n’est envoyé. Désactivé, Bifaz n’utilise jamais le réseau : vous saisissez le taux ou le montant en euros vous-même."
+          }
+        }
+      }
+    },
+    "settings.rates.toggle" : {
+      "extractionState" : "manual",
+      "comment" : "Settings toggle: allow the only network use of the app.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download ECB exchange rates"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descargar los tipos de cambio del BCE"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Télécharger les taux de change de la BCE"
+          }
+        }
+      }
+    },
+    "settings.recurring" : {
+      "extractionState" : "manual",
+      "comment" : "Settings row: recurring rules.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recurring expenses"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gastos recurrentes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dépenses récurrentes"
+          }
+        }
+      }
+    },
+    "settings.section.notifications" : {
+      "extractionState" : "manual",
+      "comment" : "Settings section title.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notificaciones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications"
+          }
+        }
+      }
+    },
     "settings.section.organisation" : {
       "comment" : "Settings section header for organisation (categories).",
       "extractionState" : "manual",
@@ -1297,6 +1417,30 @@
         }
       }
     },
+    "settings.section.rates" : {
+      "extractionState" : "manual",
+      "comment" : "Settings section title.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exchange rates"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipos de cambio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taux de change"
+          }
+        }
+      }
+    },
     "settings.section.vat" : {
       "comment" : "Settings section header for VAT.",
       "extractionState" : "manual",
@@ -1317,6 +1461,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "TVA"
+          }
+        }
+      }
+    },
+    "settings.tags" : {
+      "extractionState" : "manual",
+      "comment" : "Settings row: client and project tags.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clients and projects"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clientes y proyectos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clients et projets"
           }
         }
       }

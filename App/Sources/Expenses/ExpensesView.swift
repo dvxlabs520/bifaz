@@ -15,6 +15,7 @@ struct ExpensesView: View {
         ExpenseFilter(
             space: spaceFilter,
             categoryIDs: refinements.categoryIDs,
+            tagIDs: refinements.tagIDs,
             dateInterval: refinements.period.interval(),
             onlyReceiptPending: refinements.onlyReceiptPending,
             searchText: searchText
@@ -50,6 +51,7 @@ struct ExpensesView: View {
             .onChange(of: spaceFilter) {
                 // Category choices belong to a space: start clean when it changes.
                 refinements.categoryIDs = []
+                if spaceFilter == .personal { refinements.tagIDs = [] }
             }
             .bifazScreen()
         }
