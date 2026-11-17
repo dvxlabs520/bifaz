@@ -1,0 +1,462 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "summary.categories.close" : {
+      "extractionState" : "manual",
+      "comment" : "Accessibility label of the close button of the categories sheet.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerrar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermer"
+          }
+        }
+      }
+    },
+    "summary.categories.seeAll" : {
+      "extractionState" : "manual",
+      "comment" : "Button under the category breakdown that opens the full list.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See all categories"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver todas las categorías"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir toutes les catégories"
+          }
+        }
+      }
+    },
+    "summary.categories.title" : {
+      "extractionState" : "manual",
+      "comment" : "Title of the sheet with every category of the month.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Categories"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Categorías"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catégories"
+          }
+        }
+      }
+    },
+    "summary.category.none" : {
+      "extractionState" : "manual",
+      "comment" : "Row of expenses without a category in the category breakdown.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No category"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin categoría"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans catégorie"
+          }
+        }
+      }
+    },
+    "summary.change.down %@ %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "Month comparison, spending went down. 1: amount, 2: previous month name, 3: signed percentage.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ less than in %2$@ (%3$@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ menos que en %2$@ (%3$@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ de moins qu'en %2$@ (%3$@)"
+          }
+        }
+      }
+    },
+    "summary.change.down.partial %@ %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "Comparison of the running month with the whole previous month, spending lower. 1: amount, 2: previous month name, 3: signed percentage.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Month in progress: %1$@ less than all of %2$@ (%3$@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mes en curso: %1$@ menos que todo %2$@ (%3$@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mois en cours : %1$@ de moins que tout %2$@ (%3$@)"
+          }
+        }
+      }
+    },
+    "summary.change.flat %@" : {
+      "extractionState" : "manual",
+      "comment" : "Month comparison, no change. Argument: previous month name.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Same as in %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Igual que en %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comme en %@"
+          }
+        }
+      }
+    },
+    "summary.change.flat.partial %@" : {
+      "extractionState" : "manual",
+      "comment" : "Running month equal to the whole previous month. Argument: previous month name.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Month in progress: same as all of %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mes en curso: igual que todo %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mois en cours : comme tout %@"
+          }
+        }
+      }
+    },
+    "summary.change.up %@ %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "Month comparison, spending went up. 1: amount, 2: previous month name, 3: signed percentage.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ more than in %2$@ (%3$@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ más que en %2$@ (%3$@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ de plus qu'en %2$@ (%3$@)"
+          }
+        }
+      }
+    },
+    "summary.change.up.partial %@ %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "Comparison of the running month with the whole previous month, spending higher. 1: amount, 2: previous month name, 3: signed percentage.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Month in progress: %1$@ more than all of %2$@ (%3$@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mes en curso: %1$@ más que todo %2$@ (%3$@)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mois en cours : %1$@ de plus que tout %2$@ (%3$@)"
+          }
+        }
+      }
+    },
+    "summary.vat.base %@" : {
+      "extractionState" : "manual",
+      "comment" : "VAT card line: amount before VAT at this rate.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excl. VAT %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Base %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HT %@"
+          }
+        }
+      }
+    },
+    "summary.vat.none.month" : {
+      "extractionState" : "manual",
+      "comment" : "VAT card, month block without VAT lines.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No VAT this month"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin TVA este mes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune TVA ce mois-ci"
+          }
+        }
+      }
+    },
+    "summary.vat.none.quarter" : {
+      "extractionState" : "manual",
+      "comment" : "VAT card, quarter block without VAT lines.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No VAT this quarter"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin TVA este trimestre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune TVA ce trimestre"
+          }
+        }
+      }
+    },
+    "summary.vat.quarter.1" : {
+      "extractionState" : "manual",
+      "comment" : "Quarter label, used in the VAT card quarter title.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q1"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1.er trimestre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1er trimestre"
+          }
+        }
+      }
+    },
+    "summary.vat.quarter.2" : {
+      "extractionState" : "manual",
+      "comment" : "Quarter label, used in the VAT card quarter title.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q2"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2.º trimestre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2e trimestre"
+          }
+        }
+      }
+    },
+    "summary.vat.quarter.3" : {
+      "extractionState" : "manual",
+      "comment" : "Quarter label, used in the VAT card quarter title.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q3"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3.er trimestre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3e trimestre"
+          }
+        }
+      }
+    },
+    "summary.vat.quarter.4" : {
+      "extractionState" : "manual",
+      "comment" : "Quarter label, used in the VAT card quarter title.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q4"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4.º trimestre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4e trimestre"
+          }
+        }
+      }
+    },
+    "summary.vat.quarterToDate %@ %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "VAT card quarter block title. 1: quarter label, 2: year, 3: month name the quarter runs to.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@, through end of %3$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@, hasta fin de %3$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@, jusqu'à fin %3$@"
+          }
+        }
+      }
+    },
+    "summary.vat.title" : {
+      "extractionState" : "manual",
+      "comment" : "Title of the VAT card on the Summary.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deductible VAT"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TVA deducible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TVA déductible"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
