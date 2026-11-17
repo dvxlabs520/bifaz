@@ -32,7 +32,7 @@ extension View {
     func captureButtonOverlay() -> some View {
         overlay(alignment: .bottomTrailing) {
             CaptureButton()
-                .padding(.trailing, BifazSpacing.l)
+                .padding(.trailing, BifazSpacing.screen)
                 .padding(.bottom, BifazSpacing.m)
         }
     }

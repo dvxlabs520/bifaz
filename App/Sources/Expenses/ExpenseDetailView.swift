@@ -35,7 +35,7 @@ struct ExpenseDetailView: View {
                 timestamps
                     .padding(.top, BifazSpacing.l)
             }
-            .padding(.horizontal, BifazSpacing.l)
+            .padding(.horizontal, BifazSpacing.screen)
             .padding(.top, BifazSpacing.m)
             .padding(.bottom, BifazSpacing.xxl)
         }

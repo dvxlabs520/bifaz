@@ -36,7 +36,7 @@ struct CategoriesView: View {
                 }
                 Spacer(minLength: 0)
             }
-            .padding(.horizontal, BifazSpacing.l)
+            .padding(.horizontal, BifazSpacing.screen)
             .padding(.vertical, BifazSpacing.s)
 
             CategoryList(space: space) { category in
@@ -109,7 +109,7 @@ private struct CategoryList: View {
                         title: LocalizedStringResource("categories.empty.title", table: "Settings"),
                         message: LocalizedStringResource("categories.empty.message", table: "Settings")
                     )
-                    .padding(.horizontal, BifazSpacing.l)
+                    .padding(.horizontal, BifazSpacing.screen)
                     .padding(.top, BifazSpacing.xl)
                 }
             } else {
@@ -157,9 +157,9 @@ private struct CategoryList: View {
                 .listRowSeparatorTint(.bifazHairline)
                 .listRowInsets(EdgeInsets(
                     top: BifazSpacing.xxs,
-                    leading: BifazSpacing.l,
+                    leading: BifazSpacing.screen,
                     bottom: BifazSpacing.xxs,
-                    trailing: BifazSpacing.l
+                    trailing: BifazSpacing.screen
                 ))
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button(role: .destructive) {

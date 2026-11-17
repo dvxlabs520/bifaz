@@ -100,7 +100,7 @@ private struct ExpenseListContent: View {
                         .listRowBackground(Color.bifazPaper)
                         .listRowSeparatorTint(Color.bifazHairline)
                         .listRowInsets(EdgeInsets(
-                            top: 0, leading: BifazSpacing.l, bottom: 0, trailing: BifazSpacing.l
+                            top: 0, leading: BifazSpacing.screen, bottom: 0, trailing: BifazSpacing.screen
                         ))
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button(role: .destructive) {
@@ -148,7 +148,7 @@ private struct ExpenseListContent: View {
             if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: BifazSpacing.xs) }
             AmountView(group.totals.total, style: .row, tint: .bifazInkSecondary)
         }
-        .padding(.horizontal, BifazSpacing.l)
+        .padding(.horizontal, BifazSpacing.screen)
         .padding(.top, BifazSpacing.m)
         .padding(.bottom, BifazSpacing.xxs)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -188,7 +188,7 @@ private struct ExpenseListContent: View {
                     )
                 }
             }
-            .padding(.horizontal, BifazSpacing.l)
+            .padding(.horizontal, BifazSpacing.screen)
             .padding(.top, BifazSpacing.xl)
             .padding(.bottom, BifazSpacing.xxxl * 2)
         }

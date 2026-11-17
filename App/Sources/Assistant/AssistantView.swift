@@ -32,7 +32,7 @@ struct AssistantView: View {
                         .padding(.vertical, BifazSpacing.s)
                     }
                 }
-                .padding(.horizontal, BifazSpacing.l)
+                .padding(.horizontal, BifazSpacing.screen)
                 .padding(.top, BifazSpacing.xs)
                 .padding(.bottom, BifazSpacing.xxxl * 2)
             }

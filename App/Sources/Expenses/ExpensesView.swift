@@ -26,7 +26,7 @@ struct ExpensesView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 SpaceSelector(selection: $spaceFilter)
-                    .padding(.horizontal, BifazSpacing.l)
+                    .padding(.horizontal, BifazSpacing.screen)
                     .padding(.bottom, BifazSpacing.xs)
                 ExpenseListView(filter: filter, onClearFilters: clearFilters)
             }

@@ -81,7 +81,7 @@ struct SettingsView: View {
                         .foregroundStyle(.bifazInkSecondary)
                         .padding(.top, BifazSpacing.s)
                 }
-                .padding(.horizontal, BifazSpacing.l)
+                .padding(.horizontal, BifazSpacing.screen)
                 .padding(.top, BifazSpacing.xs)
                 .padding(.bottom, BifazSpacing.xxxl * 2)
             }

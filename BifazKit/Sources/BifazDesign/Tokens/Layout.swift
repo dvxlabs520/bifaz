@@ -19,6 +19,10 @@ public enum BifazSpacing {
     /// 48 pt
     public static let xxxl: CGFloat = 48
 
+    /// Horizontal margin of every screen: 16 pt, the inset iOS uses for large
+    /// navigation titles, so titles and content start on the same line.
+    public static let screen: CGFloat = 16
+
     /// Multiple of the 4 pt grid.
     public static func grid(_ steps: Int) -> CGFloat { CGFloat(steps) * 4 }
 }
