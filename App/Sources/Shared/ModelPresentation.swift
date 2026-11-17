@@ -94,6 +94,16 @@ extension VATRate {
     }
 }
 
+extension VATPart {
+    /// "20 %", "8,5 %" for a rate outside the French list, or "Rate not detailed"
+    /// for a v1 receipt with several rates.
+    var rateText: String {
+        guard let rate else { return String(localized: "vat.rate.unknown") }
+        return VATRate(fraction: rate)?.percentText
+            ?? (rate as NSDecimalNumber).doubleValue.formatted(.percent.precision(.fractionLength(0...1)))
+    }
+}
+
 /// Whether the user charges VAT ("Sujeto a TVA"); hides VAT fields when false.
 enum VATSetting {
     static let key = "isVATRegistered"

@@ -313,6 +313,30 @@
         }
       }
     },
+    "detail.vatLine %@" : {
+      "extractionState" : "manual",
+      "comment" : "Detail row label: VAT at one rate, e.g. 'TVA 20 %'.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VAT %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TVA %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TVA %@"
+          }
+        }
+      }
+    },
     "history.categories.title" : {
       "comment" : "Section header of the category filter.",
       "extractionState" : "manual",

@@ -90,7 +90,10 @@ struct ExpenseDetailView: View {
 
     // MARK: Rows
 
-    private var showsVAT: Bool { isVATRegistered && expense.vatRate != nil }
+    private var showsVAT: Bool { isVATRegistered && !vatLines.isEmpty }
+
+    /// The stored lines (schema v2).
+    private var vatLines: [VATPart] { expense.sortedVATLines.map(VATPart.init) }
 
     private var rows: some View {
         VStack(spacing: 0) {
@@ -115,27 +118,26 @@ struct ExpenseDetailView: View {
                         .foregroundStyle(Color.bifazInkSecondary)
                 }
             }
-            if showsVAT, let rate = expense.vatRate {
-                HairlineDivider()
-                DetailRow("detail.vat") {
-                    Text(verbatim: VATRate(fraction: rate)?.percentText
-                        ?? (rate as NSDecimalNumber).doubleValue.formatted(.percent.precision(.fractionLength(0...1))))
+            if showsVAT {
+                let lines = vatLines
+                if lines.count == 1, let line = lines.first {
+                    HairlineDivider()
+                    DetailRow("detail.vat") { Text(verbatim: line.rateText) }
+                } else {
+                    ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
+                        HairlineDivider()
+                        DetailRow("detail.vatLine \(line.rateText)") {
+                            AmountView(line.vat, currencyCode: expense.currencyCode, style: .row)
+                        }
+                    }
                 }
                 HairlineDivider()
                 DetailRow("detail.vatAmount") {
-                    AmountView(
-                        expense.vatAmount ?? VATCalculator.vatAmount(includedIn: expense.amount, rate: rate),
-                        currencyCode: expense.currencyCode,
-                        style: .row
-                    )
+                    AmountView(lines.reduce(0) { $0 + $1.vat }, currencyCode: expense.currencyCode, style: .row)
                 }
                 HairlineDivider()
                 DetailRow("detail.amountExclVAT") {
-                    AmountView(
-                        VATCalculator.amountExcludingVAT(expense.amount, rate: rate),
-                        currencyCode: expense.currencyCode,
-                        style: .row
-                    )
+                    AmountView(lines.reduce(0) { $0 + $1.base }, currencyCode: expense.currencyCode, style: .row)
                 }
             }
             if !expense.note.isEmpty {

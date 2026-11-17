@@ -15,9 +15,10 @@ struct ExpenseFormView: View {
     private let expense: Expense?
     private let capture: CapturedReceipt?
     private let onDeleted: () -> Void
-    /// VAT read from the receipt, restored when the user switches to Pro.
+    /// VAT read from the receipt (one line per rate), restored when the user switches to Pro.
+    private let readVAT: [VATPart]
+    /// The rate read when the total was not: no lines can be built, the rate is still useful.
     private let readVATRate: VATRate?
-    private let readVATOverride: Decimal?
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
@@ -27,6 +28,7 @@ struct ExpenseFormView: View {
 
     @State private var draft: ExpenseDraft
     @State private var amountText: String
+    @State private var secondVATText = ""
     @State private var merchantSuggestions: [String] = []
     @State private var isConfirmingDelete = false
     @State private var saveError: Error?
@@ -47,11 +49,12 @@ struct ExpenseFormView: View {
         self.expense = expense
         self.capture = nil
         self.onDeleted = onDeleted
+        self.readVAT = []
         self.readVATRate = nil
-        self.readVATOverride = nil
         let draft = expense.map(ExpenseDraft.init(expense:)) ?? ExpenseDraft(space: defaultSpace)
         _draft = State(initialValue: draft)
         _amountText = State(initialValue: draft.amount.map { $0.formatted(Self.amountInputStyle) } ?? "")
+        _secondVATText = State(initialValue: draft.secondVAT?.total.map { $0.formatted(Self.amountInputStyle) } ?? "")
     }
 
     /// Confirmation of a captured receipt, prefilled with what was read.
@@ -61,19 +64,21 @@ struct ExpenseFormView: View {
         self.capture = capture
         self.onDeleted = {}
         self.readVATRate = fields.vatRate.flatMap { VATRate(fraction: $0.value) }
-        // Several rates: keep the printed total VAT instead of a single-rate computation.
-        self.readVATOverride = fields.vatLines.count > 1 ? fields.vatAmount?.value : nil
+        // One line per printed rate (see the rounding rule on `VATPart`).
+        var printed = fields.vatLines.map { PrintedVATLine(rate: $0.rate, base: $0.base, vat: $0.vat) }
+        if printed.isEmpty, let rate = fields.vatRate?.value { printed = [PrintedVATLine(rate: rate)] }
+        self.readVAT = fields.total.map { VATBreakdown.lines(fromPrinted: printed, total: $0.value) } ?? []
         var draft = ExpenseDraft(
             amount: fields.total?.value,
             merchant: fields.merchant?.value ?? "",
             date: fields.date?.value ?? .now,
-            space: defaultSpace,
-            vatRate: defaultSpace == .pro ? readVATRate : nil
+            space: defaultSpace
         )
         draft.source = .scanner
-        draft.vatAmountOverride = defaultSpace == .pro ? readVATOverride : nil
+        if defaultSpace == .pro { Self.applyRead(readVAT, rate: readVATRate, to: &draft) }
         _draft = State(initialValue: draft)
         _amountText = State(initialValue: draft.amount.map { $0.formatted(Self.amountInputStyle) } ?? "")
+        _secondVATText = State(initialValue: draft.secondVAT?.total.map { $0.formatted(Self.amountInputStyle) } ?? "")
         var confidence: [ReadField: ReadingConfidence] = [:]
         confidence[.amount] = fields.total?.confidence
         confidence[.merchant] = fields.merchant?.confidence
@@ -152,8 +157,18 @@ struct ExpenseFormView: View {
             .toolbar { toolbar }
             .onChange(of: amountText) { _, text in
                 let amount = MoneyParser.parse(text)
-                if amount != draft.amount { confidence[.amount] = nil }
+                if amount != draft.amount {
+                    confidence[.amount] = nil
+                    // Read lines belong to the read total; a new amount goes back to hand rates.
+                    if draft.fixedVATLines != nil {
+                        draft.clearFixedVAT()
+                        confidence[.vat] = nil
+                    }
+                }
                 draft.amount = amount
+            }
+            .onChange(of: secondVATText) { _, text in
+                draft.secondVAT?.total = MoneyParser.parse(text)
             }
             .onChange(of: draft.merchant) { old, _ in if !old.isEmpty { confidence[.merchant] = nil } }
             .onChange(of: draft.date) { confidence[.date] = nil }
@@ -294,24 +309,104 @@ struct ExpenseFormView: View {
     }
 
     private var vatPicker: some View {
-        VStack(alignment: .leading, spacing: BifazSpacing.xs) {
-            FlowLayout(spacing: BifazSpacing.xs, lineSpacing: BifazSpacing.xs) {
-                ForEach(VATRate.allCases) { rate in
-                    FilterChip(LocalizedStringResource(stringLiteral: rate.percentText), isSelected: draft.vatRate == rate) {
-                        draft.vatRate = draft.vatRate == rate ? nil : rate
-                        draft.vatAmountOverride = nil
+        VStack(alignment: .leading, spacing: BifazSpacing.s) {
+            if let lines = draft.fixedVATLines {
+                // Read from the receipt: shown as printed; picking a rate switches to hand rates.
+                ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
+                    VATLineRow(line: line)
+                }
+            }
+            rateChips(selection: draft.fixedVATLines == nil ? draft.vatRate : nil) { rate in
+                draft.clearFixedVAT()
+                draft.vatRate = draft.vatRate == rate && draft.secondVAT == nil ? nil : rate
+                if draft.vatRate == nil { removeSecondVAT() }
+                confidence[.vat] = nil
+            }
+            if draft.fixedVATLines == nil, draft.vatRate != nil {
+                if let second = draft.secondVAT {
+                    secondVATEditor(second)
+                } else {
+                    Button {
+                        draft.secondVAT = .init(rate: draft.vatRate == .standard ? .reduced : .standard)
                         confidence[.vat] = nil
+                    } label: {
+                        Label {
+                            Text("form.vat.addRate")
+                        } icon: {
+                            BifazIconView(.plus, size: 16)
+                        }
+                        .font(.bifazCaption)
+                        .foregroundStyle(.bifazInk)
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("ui.formVATAddRate")
                 }
             }
             if let vat = draft.vatAmount {
-                Text(draft.vatAmountOverride != nil
+                Text(draft.vatLines.count > 1
                      ? "form.vat.multiple \(vat.formatted(.currency(code: "EUR")))"
                      : "form.vat.included \(vat.formatted(.currency(code: "EUR")))")
                     .font(.bifazCaption)
                     .foregroundStyle(.bifazInkSecondary)
             }
         }
+    }
+
+    private func rateChips(selection: VATRate?, action: @escaping (VATRate) -> Void) -> some View {
+        FlowLayout(spacing: BifazSpacing.xs, lineSpacing: BifazSpacing.xs) {
+            ForEach(VATRate.allCases) { rate in
+                FilterChip(LocalizedStringResource(stringLiteral: rate.percentText), isSelected: selection == rate) {
+                    action(rate)
+                }
+            }
+        }
+    }
+
+    /// The second rate and the part of the amount it covers; the main rate takes the rest.
+    private func secondVATEditor(_ second: ExpenseDraft.SecondVAT) -> some View {
+        VStack(alignment: .leading, spacing: BifazSpacing.xs) {
+            HStack {
+                Text("form.vat.secondRate")
+                    .font(.bifazCaption)
+                    .foregroundStyle(.bifazInkSecondary)
+                Spacer()
+                Button("form.vat.removeRate", action: removeSecondVAT)
+                    .font(.bifazCaption)
+                    .foregroundStyle(.bifazInk)
+                    .buttonStyle(.plain)
+            }
+            rateChips(selection: second.rate) { rate in
+                draft.secondVAT?.rate = rate
+            }
+            HStack(alignment: .firstTextBaseline, spacing: BifazSpacing.xs) {
+                TextField(text: $secondVATText, prompt: Text(verbatim: Decimal(0).formatted(Self.amountInputStyle))) {
+                    Text("form.vat.secondAmount")
+                }
+                .font(.bifazBody)
+                .monospacedDigit()
+                .keyboardType(.decimalPad)
+                .accessibilityIdentifier("ui.formVATSecondAmount")
+                .fixedSize()
+                Text(verbatim: Self.currencySymbol)
+                    .font(.bifazBody)
+                    .foregroundStyle(.bifazInkSecondary)
+                    .accessibilityHidden(true)
+                Text("form.vat.secondAmount")
+                    .font(.bifazCaption)
+                    .foregroundStyle(.bifazInkSecondary)
+                    .accessibilityHidden(true)
+            }
+            if draft.validate() == .secondVATPartInvalid, !secondVATText.isEmpty {
+                Text("form.vat.secondAmount.invalid")
+                    .font(.bifazCaption)
+                    .foregroundStyle(.bifazError)
+            }
+        }
+    }
+
+    private func removeSecondVAT() {
+        draft.secondVAT = nil
+        secondVATText = ""
     }
 
     @ToolbarContentBuilder
@@ -361,18 +456,28 @@ struct ExpenseFormView: View {
     private func spaceChanged(to space: Space) {
         if let category = draft.category, category.space != space { draft.category = nil }
         if space == .pro, isVATRegistered {
-            if draft.vatRate == nil, draft.vatAmountOverride == nil {
+            if draft.vatRate == nil, draft.fixedVATLines == nil {
                 if isConfirmingCapture {
                     // What the receipt says, never a guess.
-                    draft.vatRate = readVATRate
-                    draft.vatAmountOverride = readVATOverride
+                    Self.applyRead(readVAT, rate: readVATRate, to: &draft)
+                    secondVATText = draft.secondVAT?.total.map { $0.formatted(Self.amountInputStyle) } ?? ""
                 } else if !isEditing || expense?.space != .pro {
                     draft.vatRate = .standard
                 }
             }
         } else {
             draft.vatRate = nil
-            draft.vatAmountOverride = nil
+            draft.fixedVATLines = nil
+            removeSecondVAT()
+        }
+    }
+
+    /// The VAT read from a receipt: its lines, or only its rate when the total was not read.
+    private static func applyRead(_ lines: [VATPart], rate: VATRate?, to draft: inout ExpenseDraft) {
+        if lines.isEmpty {
+            draft.vatRate = rate
+        } else {
+            draft.setVAT(lines)
         }
     }
 
@@ -447,6 +552,25 @@ struct ExpenseFormView: View {
 }
 
 /// The captured receipt at the top of the confirmation form: thumbnail and how it was read.
+/// A VAT line read from a receipt: rate, base and VAT.
+private struct VATLineRow: View {
+    let line: VATPart
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text(verbatim: line.rateText)
+                .font(.bifazBody)
+                .foregroundStyle(.bifazInk)
+            Spacer(minLength: BifazSpacing.s)
+            Text("form.vat.lineAmounts \(line.base.formatted(.currency(code: "EUR"))) \(line.vat.formatted(.currency(code: "EUR")))")
+                .font(.bifazCaption)
+                .monospacedDigit()
+                .foregroundStyle(.bifazInkSecondary)
+        }
+        .accessibilityElement(children: .combine)
+    }
+}
+
 private struct ReadReceiptHeader: View {
     let capture: CapturedReceipt
 

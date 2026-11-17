@@ -1921,6 +1921,30 @@
         }
       }
     },
+    "form.vat.addRate" : {
+      "extractionState" : "manual",
+      "comment" : "Form: button under the VAT rate chips to split the amount between two rates.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a second rate"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir un segundo tipo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un second taux"
+          }
+        }
+      }
+    },
     "form.vat.included %@" : {
       "comment" : "Shows the VAT amount included in the total; %@ is a formatted currency amount.",
       "extractionState" : "manual",
@@ -1945,6 +1969,30 @@
         }
       }
     },
+    "form.vat.lineAmounts %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "Form: a VAT line read from a receipt, base then VAT.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excl. VAT %1$@ · VAT %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin TVA %1$@ · TVA %2$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HT %1$@ · TVA %2$@"
+          }
+        }
+      }
+    },
     "form.vat.multiple %@" : {
       "comment" : "VAT amount label when the receipt has several VAT rates. %@ is the amount.",
       "extractionState" : "manual",
@@ -1965,6 +2013,102 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ de TVA (plusieurs taux)"
+          }
+        }
+      }
+    },
+    "form.vat.removeRate" : {
+      "extractionState" : "manual",
+      "comment" : "Form: removes the second VAT rate.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer"
+          }
+        }
+      }
+    },
+    "form.vat.secondAmount" : {
+      "extractionState" : "manual",
+      "comment" : "Form: field for the part of the amount (VAT included) at the second rate; the first rate takes the rest.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "incl. VAT at this rate"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "con TVA a este tipo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TTC à ce taux"
+          }
+        }
+      }
+    },
+    "form.vat.secondAmount.invalid" : {
+      "extractionState" : "manual",
+      "comment" : "Form: error under the second VAT amount.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a part smaller than the total amount."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indique una parte menor que el importe total."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indiquez une part inférieure au montant total."
+          }
+        }
+      }
+    },
+    "form.vat.secondRate" : {
+      "extractionState" : "manual",
+      "comment" : "Form: label of the second VAT rate.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Second rate"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segundo tipo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Second taux"
           }
         }
       }
@@ -2589,6 +2733,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Résumé"
+          }
+        }
+      }
+    },
+    "vat.rate.unknown" : {
+      "extractionState" : "manual",
+      "comment" : "A VAT line saved before version 2 from a receipt with several rates: the split by rate is unknown.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rate not detailed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo sin detallar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taux non détaillé"
           }
         }
       }
