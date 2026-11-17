@@ -4,9 +4,9 @@ App iOS para guardar facturas profesionales y gastos personales en un mismo siti
 Simple de usar, con acabado premium y preparada para publicarse en el App Store.
 
 Estado: **fases 0 y 1 entregadas y revisadas el 17-11-2026 (commits `213828c` y `344cd4d`).
-Las 6 correcciones de la fase 1 están hechas y revisadas en la rama `fase1-correcciones` (`72df666`),
-pendientes de integrar en `main`. La fase 2 está empezada sin commit en el directorio principal
-y sin revisar.**
+Las 6 correcciones de la fase 1 están integradas en `main` (`838147d`). La fase 2 está en curso en la rama
+`fase-2` (`730823e`), con 169 pruebas en verde, sin entregar para revisión y sin aceptar: falta probarla
+con facturas reales (`TestData/Real/`, fuera de git) y en un iPhone real (escáner, modelo de Apple, cifrado).**
 
 ## 1. Decisiones cerradas
 
