@@ -326,6 +326,23 @@ Lista de mejoras (todas hechas en la rama):
 - Avisos de presupuesto dentro de la app (cerca del límite al 80 %, superado al 100 %). Las notificaciones
   del sistema se dejan para la fase 4, junto con el recordatorio de TVA.
 
+**Fase 4, decisiones del manager al encargarla (17-11-2026), a petición del usuario de seguir sin esperar
+a la revisión de la fase 3:**
+- Parte de `fase-3` en una rama `fase-4`. Las correcciones que salgan de la revisión de la fase 3 se hacen
+  como commits en la rama más alta.
+- **Etiquetas**: solo en Pro. Un gasto puede llevar un cliente y un proyecto.
+- **Tipo de cambio**: tablas diarias públicas del BCE, descargadas como mucho una vez al día y solo cuando
+  el usuario usa una moneda extranjera; la petición no lleva ningún dato del usuario. El tipo queda fijado
+  en el gasto al guardarlo, con su fecha y su origen (BCE o manual), y siempre es editable. Sin conexión se
+  usa el último tipo guardado, indicando su fecha; si no hay ninguno, se pide a mano. Ajuste para desactivar
+  la descarga. Es el primer uso de red de la app y debe decirse así en la ficha de privacidad.
+- **Notificaciones**: todas locales y desactivadas hasta que el usuario las activa; el permiso se pide en
+  ese momento, nunca al arrancar. Tres avisos: cierre del periodo de TVA (mensual o trimestral, con día
+  configurable), gasto recurrente previsto para hoy, y presupuesto cruzado por un gasto creado sin que el
+  usuario esté en la app. Si el usuario está añadiendo el gasto, basta el aviso dentro de la app.
+- **Recurrentes**: sin backend, se generan al abrir la app, recuperando las fechas pasadas pendientes;
+  los de Pro nacen con el justificante pendiente.
+
 Tras la fase 2 la app ya sirve a diario; Apple Pay va después de seguridad porque depende
 de cómo queda protegida la base de datos; el asistente va casi al final porque nada depende de él.
 
