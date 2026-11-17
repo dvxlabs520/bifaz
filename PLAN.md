@@ -4,9 +4,9 @@ App iOS para guardar facturas profesionales y gastos personales en un mismo siti
 Simple de usar, con acabado premium y preparada para publicarse en el App Store.
 
 Estado: **fases 0 y 1 entregadas y revisadas el 17-11-2026 (commits `213828c` y `344cd4d`).
-Las 6 correcciones de la fase 1 están integradas en `main` (`838147d`). La fase 2 está en curso en la rama
-`fase-2` (`730823e`), con 169 pruebas en verde, sin entregar para revisión y sin aceptar: falta probarla
-con facturas reales (`TestData/Real/`, fuera de git) y en un iPhone real (escáner, modelo de Apple, cifrado).**
+Las 6 correcciones de la fase 1 están integradas en `main` (`838147d`). La fase 2 está entregada y revisada
+en simulador en la rama `fase-2` (`301e7ff`), sin fusionar y **sin aceptar**: falta probarla con facturas
+reales (`TestData/Real/`, fuera de git) y en un iPhone real (escáner, modelo de Apple, cifrado).**
 
 ## 1. Decisiones cerradas
 
@@ -286,6 +286,28 @@ Lista de correcciones (todas hechas en la rama):
 4. **Botón "+" flotante**: tapa los importes de las últimas filas visibles; añadir margen inferior a las listas.
 5. **Tratamiento en francés**: decidido por el usuario el 17-11-2026: **"vous"**. Pasar todos los textos franceses de "tu" a "vous".
 6. **Pruebas de interfaz**: no hay ninguna automatizada; añadir al menos alta, edición y borrado de un gasto.
+
+**Fase 2, revisada por el manager en simulador (17-11-2026), rama `fase-2` (`301e7ff`):** pasan 173 pruebas
+(112 + 10 + 49 de paquete y 2 de interfaz; la de facturas reales se omite por carpeta vacía).
+Probado con toques: menú del "+", importación de una foto con el selector privado del sistema, pantalla de
+lectura y confirmación de un ticket sintético con importe, comercio y fecha correctos en unos 4 s; al cancelar
+no se guarda nada. No probados por el manager (sí por el desarrollador): importación de PDF, visor del
+justificante y guardado tras la lectura. Cambio de alcance aprobado: el origen "Escaneado" se llama
+"Desde un justificante".
+
+Medidas del desarrollador sobre las 20 facturas sintéticas (regresión, no aceptación): reglas solas 20/20 en
+todos los campos; modelo de Apple solo, más débil (tipos de TVA 10/20); combinados 20/20. En el simulador el
+modelo responde con Apple Intelligence del Mac, así que no representa un iPhone.
+
+Para aceptar la fase: facturas y tickets reales del usuario leídos correctamente, y prueba en iPhone real
+del escáner, del modelo y de la protección de los justificantes.
+
+Mejoras detectadas en la revisión (no bloquean):
+1. La lectura no propone categoría: los gastos leídos quedan "Sin categoría" (p. ej. Monoprix, SNCF).
+2. El comercio sale con mayúsculas irregulares ("Totalenergies Relais A6 - AIRE DE Beaune") y aun así marcado "Seguro".
+3. El texto de "Leyendo su justificante…" se superpone al contenido de fondo; falta un velo más opaco.
+4. Cerrar la confirmación con la "X" descarta la lectura sin preguntar.
+5. El menú del "+" parpadea en oscuro al cerrarse.
 
 Tras la fase 2 la app ya sirve a diario; Apple Pay va después de seguridad porque depende
 de cómo queda protegida la base de datos; el asistente va casi al final porque nada depende de él.
