@@ -219,12 +219,16 @@ struct ConversionPanel: View {
             }
         }
         .onChange(of: rateText) { _, text in
+            // Keep the fields on screen while typing: once a first digit gives a rate,
+            // the panel would otherwise fold away under the user's fingers.
+            if !text.isEmpty { editsRate = true }
             guard let rate = RateParser.parse(text) else { return }
             draft.amountInEUROverride = nil
             eurosText = ""
             draft.exchangeRate = ExchangeRateQuote(currencyCode: draft.currencyCode, rate: rate, date: draft.date, source: .manual)
         }
         .onChange(of: eurosText) { _, text in
+            if !text.isEmpty { editsEuros = true }
             draft.amountInEUROverride = MoneyParser.parse(text)
             if draft.amountInEUROverride != nil { rateText = "" }
         }
