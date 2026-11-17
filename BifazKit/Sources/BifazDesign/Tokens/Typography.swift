@@ -1,31 +1,28 @@
 import SwiftUI
 
-/// Bifaz type scale. Every style is built on a Dynamic Type text style, so it
-/// scales with the user's text size.
-///
-/// - New York (the system serif) for titles and large amounts.
-/// - SF Pro for the interface.
-/// - Tabular figures (`monospacedDigit`) wherever numbers line up in lists.
+/// Bifaz type scale: SF Pro throughout, regular and medium weights, so the
+/// interface stays calm and the numbers carry the hierarchy. Every style is a
+/// Dynamic Type text style. Amounts always use tabular figures so they line up.
 public extension Font {
-    /// Screen titles and the wordmark. New York.
-    static let bifazDisplay = Font.system(.largeTitle, design: .serif, weight: .semibold)
-    /// Section and card titles. New York.
-    static let bifazTitle = Font.system(.title2, design: .serif, weight: .semibold)
-    /// Hero amount (month total). New York, tabular figures.
-    static let bifazAmountLarge = Font.system(.largeTitle, design: .serif, weight: .semibold).monospacedDigit()
-    /// Amount on a card. New York, tabular figures.
-    static let bifazAmountMedium = Font.system(.title2, design: .serif, weight: .semibold).monospacedDigit()
-    /// Amount in a list row. SF Pro, tabular figures.
-    static let bifazAmount = Font.system(.body, design: .default, weight: .semibold).monospacedDigit()
+    /// The month total at the top of Summary. 34 pt medium, tabular.
+    static let bifazAmountHero = Font.system(.largeTitle, weight: .medium).monospacedDigit()
+    /// Amounts on cards. 22 pt medium, tabular.
+    static let bifazAmountMedium = Font.system(.title2, weight: .medium).monospacedDigit()
+    /// Amounts in list rows. 17 pt regular, tabular.
+    static let bifazAmount = Font.system(.body).monospacedDigit()
 
-    /// Emphasised interface text. SF Pro.
-    static let bifazHeadline = Font.system(.headline)
-    /// Body text. SF Pro.
+    /// Section headings inside a screen ("To review", "Latest expenses").
+    static let bifazSectionTitle = Font.system(.headline)
+    /// Prominent text in a block (empty-state heading, card title).
+    static let bifazTitle = Font.system(.title3, weight: .semibold)
+    /// Row titles and body copy.
     static let bifazBody = Font.system(.body)
-    /// Secondary interface text. SF Pro.
+    /// Emphasised body (buttons).
+    static let bifazHeadline = Font.system(.body, weight: .medium)
+    /// Filter chips and secondary copy.
     static let bifazSubheadline = Font.system(.subheadline)
-    /// Metadata, captions. SF Pro.
+    /// Subtitles, dates, captions.
     static let bifazCaption = Font.system(.footnote)
-    /// Small labels on chips and badges. SF Pro.
+    /// Small labels and badges.
     static let bifazLabel = Font.system(.caption, weight: .medium)
 }

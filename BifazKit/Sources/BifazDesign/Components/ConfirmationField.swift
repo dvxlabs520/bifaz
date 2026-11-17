@@ -1,10 +1,10 @@
 import SwiftUI
 import BifazModels
 
-/// A labelled text field for the receipt confirmation screen. A trailing
-/// indicator (symbol and word) shows how sure the reader was about the value;
-/// low confidence also outlines the field. `nil` means the value was typed by
-/// hand and no indicator is shown.
+/// A labelled text field for the receipt confirmation screen. A small tag on
+/// the label row (symbol and word, on a tinted capsule) shows how sure the
+/// reader was about the value; low confidence also outlines the field in the
+/// error colour. `nil` means the value was typed by hand and no tag is shown.
 public struct ConfirmationField: View {
     @Environment(\.locale) private var locale
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -20,41 +20,41 @@ public struct ConfirmationField: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: BifazSpacing.xxs) {
-            Text(label)
-                .font(.bifazSubheadline)
-                .foregroundStyle(Color.bifazInkSecondary)
+        VStack(alignment: .leading, spacing: BifazSpacing.xs) {
             if dynamicTypeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: BifazSpacing.xs) { field; indicator }
+                VStack(alignment: .leading, spacing: BifazSpacing.xxs) { caption; tag }
             } else {
-                HStack(spacing: BifazSpacing.xs) { field; indicator }
+                HStack(alignment: .center, spacing: BifazSpacing.xs) {
+                    caption
+                    Spacer(minLength: BifazSpacing.xs)
+                    tag
+                }
             }
+            field
         }
-        .padding(BifazSpacing.s)
-        .background(Color.bifazSurface, in: shape)
-        .overlay(
-            shape.strokeBorder(
-                confidence == .low ? Color.bifazError : Color.bifazHairline,
-                lineWidth: confidence == .low ? 2 : 1
-            )
-        )
     }
 
-    private var shape: RoundedRectangle {
-        RoundedRectangle(cornerRadius: BifazRadius.small, style: .continuous)
+    private var caption: some View {
+        Text(label)
+            .font(.bifazCaption)
+            .foregroundStyle(Color.bifazInkSecondary)
     }
 
     private var field: some View {
-        TextField(text: $text, prompt: Text(verbatim: "—")) {
+        let shape = RoundedRectangle(cornerRadius: BifazRadius.small, style: .continuous)
+        return TextField(text: $text, prompt: Text(verbatim: "—")) {
             Text(label)
         }
         .font(.bifazBody)
         .foregroundStyle(Color.bifazInk)
+        .padding(BifazSpacing.s)
+        .background(Color.bifazSurface, in: shape)
+        .overlay(shape.strokeBorder(confidence == .low ? Color.bifazError : .bifazHairline, lineWidth: 1))
         .accessibilityHint(hintText)
     }
 
     @ViewBuilder
-    private var indicator: some View {
+    private var tag: some View {
         if let confidence {
             HStack(spacing: BifazSpacing.xxs) {
                 Image(systemName: confidence.symbolName)
@@ -62,6 +62,9 @@ public struct ConfirmationField: View {
             }
             .font(.bifazLabel)
             .foregroundStyle(confidence.color)
+            .padding(.horizontal, BifazSpacing.xs)
+            .padding(.vertical, BifazSpacing.xxs)
+            .background(confidence.tint, in: Capsule())
             .accessibilityHidden(true)
         }
     }
@@ -97,6 +100,14 @@ private extension ReadingConfidence {
         case .low: .bifazError
         }
     }
+
+    var tint: Color {
+        switch self {
+        case .high: .bifazSuccessTint
+        case .medium: .bifazWarningTint
+        case .low: .bifazErrorTint
+        }
+    }
 }
 
 #Preview("Light") {
@@ -113,8 +124,8 @@ private extension ReadingConfidence {
 
 private struct ConfirmationFieldSamples: View {
     @State private var merchant = "Monoprix"
-    @State private var total = "42,80"
     @State private var date = "17 nov."
+    @State private var total = "42,80"
     @State private var note = ""
 
     var body: some View {
@@ -125,7 +136,7 @@ private struct ConfirmationFieldSamples: View {
             ConfirmationField("Note", text: $note)
         }
         .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.bifazPaper)
     }
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// A card with a title, a medium amount and an optional detail line,
-/// read by VoiceOver as one element.
+/// A bordered card with a caption, an amount and an optional detail line, e.g.
+/// "Pro this month". Reads as one element for VoiceOver.
 public struct StatCard: View {
     private let title: LocalizedStringResource
     private let amount: Decimal
@@ -26,7 +26,7 @@ public struct StatCard: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: BifazSpacing.xxs) {
             Text(title)
-                .font(.bifazSubheadline)
+                .font(.bifazCaption)
                 .foregroundStyle(Color.bifazInkSecondary)
             AmountView(amount, currencyCode: currencyCode, style: .medium, tint: accent)
             if let detail {
@@ -56,20 +56,14 @@ public struct StatCard: View {
 private struct StatCardSamples: View {
     var body: some View {
         VStack(spacing: BifazSpacing.m) {
-            StatCard(
-                title: "Pro this month",
-                amount: 1234.50,
-                detail: "12 expenses",
-                accent: .bifazPro
-            )
-            StatCard(
-                title: "Personal this month",
-                amount: 486.20,
-                accent: .bifazPersonal
-            )
+            HStack(spacing: BifazSpacing.s) {
+                StatCard(title: "Pro", amount: 796.10, accent: .bifazPro)
+                StatCard(title: "Perso", amount: 488.40, accent: .bifazPersonal)
+            }
+            StatCard(title: "Dépensé en novembre", amount: 1284.50, detail: "12 dépenses chez Monoprix, SNCF, Adobe")
         }
         .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.bifazPaper)
     }
 }

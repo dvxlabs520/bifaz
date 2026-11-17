@@ -1,26 +1,74 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "assistant.empty.message" : {
-      "comment" : "Message of the empty state on the Assistant tab; includes an example question in quotes.",
+    "action.addExpense" : {
+      "comment" : "Primary button to add an expense manually.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Soon you’ll be able to ask in plain words, like “How much did I spend on restaurants in October?” Answers are computed on your iPhone."
+            "value" : "Add an expense"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pronto podrás preguntar con tus propias palabras, por ejemplo «¿Cuánto gasté en restaurantes en octubre?». Las respuestas se calculan en tu iPhone."
+            "value" : "Añadir un gasto"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bientôt, tu pourras poser tes questions avec tes mots, par exemple « Combien ai-je dépensé au restaurant en octobre ? ». Les réponses sont calculées sur ton iPhone."
+            "value" : "Ajouter une dépense"
+          }
+        }
+      }
+    },
+    "action.scanInvoice" : {
+      "comment" : "Secondary button to scan an invoice.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan an invoice"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanear una factura"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanner une facture"
+          }
+        }
+      }
+    },
+    "assistant.empty.message" : {
+      "comment" : "Message of the empty state on the Assistant tab.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soon you’ll ask questions in plain words, and answers are computed on your iPhone, without sending your data anywhere."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronto podrás preguntar con tus propias palabras. Las respuestas se calculan en tu iPhone, sin enviar tus datos a ningún sitio."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bientôt, tu pourras poser tes questions avec tes mots. Les réponses sont calculées sur ton iPhone, sans envoyer tes données nulle part."
           }
         }
       }
@@ -49,6 +97,102 @@
         }
       }
     },
+    "assistant.example.biggest" : {
+      "comment" : "Example question for the Assistant, shown without quotation marks.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What was my biggest Pro expense this year?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cuál fue mi mayor gasto Pro este año?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelle a été ma plus grosse dépense pro cette année ?"
+          }
+        }
+      }
+    },
+    "assistant.example.restaurants" : {
+      "comment" : "Example question for the Assistant, shown without quotation marks.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How much did I spend on restaurants in October?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cuánto gasté en restaurantes en octubre?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combien ai-je dépensé au restaurant en octobre ?"
+          }
+        }
+      }
+    },
+    "assistant.example.vat" : {
+      "comment" : "Example question for the Assistant, shown without quotation marks.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How much VAT can I deduct this quarter?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cuánta TVA puedo deducir este trimestre?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combien de TVA puis-je déduire ce trimestre ?"
+          }
+        }
+      }
+    },
+    "assistant.examples" : {
+      "comment" : "Section heading above example questions on the Assistant tab.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For example"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por ejemplo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par exemple"
+          }
+        }
+      }
+    },
     "capture.hint" : {
       "comment" : "VoiceOver hint of the floating + capture button.",
       "extractionState" : "manual",
@@ -56,7 +200,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scan a receipt or add an expense."
+            "value" : "Scan an invoice or add an expense."
           }
         },
         "es" : {
@@ -104,19 +248,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Everything you capture shows up here, month by month."
+            "value" : "Month by month, with search and filters by space, category and receipt."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Todo lo que captures aparecerá aquí, mes a mes."
+            "value" : "Mes a mes, con búsqueda y filtros por espacio, categoría y justificante."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tout ce que tu ajoutes apparaît ici, mois par mois."
+            "value" : "Mois par mois, avec recherche et filtres par espace, catégorie et justificatif."
           }
         }
       }
@@ -128,19 +272,67 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No expenses yet"
+            "value" : "Your expenses will show up here"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aún no hay gastos"
+            "value" : "Tus gastos aparecerán aquí"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aucune dépense pour l’instant"
+            "value" : "Tes dépenses apparaîtront ici"
+          }
+        }
+      }
+    },
+    "field.merchant" : {
+      "comment" : "Field label for the merchant of an expense.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merchant"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comercio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commerçant"
+          }
+        }
+      }
+    },
+    "field.total" : {
+      "comment" : "Field label for the total including tax.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total incl. VAT"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total con TVA"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total TTC"
           }
         }
       }
@@ -266,79 +458,31 @@
       }
     },
     "summary.empty.message" : {
-      "comment" : "Message of the welcome empty state on the Summary tab. '+' is the capture button.",
+      "comment" : "Message of the empty state on Summary; points to the two actions.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tap + to scan a receipt or jot down an expense. Pro and Personal stay separate."
+            "value" : "Scan an invoice or jot down an expense. Pro and Personal are counted separately."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Toca + para escanear una factura o apuntar un gasto. Pro y Personal siempre van por separado."
+            "value" : "Escanea una factura o anota un gasto. Lo profesional y lo personal se cuentan por separado."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Touche + pour scanner une facture ou noter une dépense. Pro et Perso restent séparés."
+            "value" : "Scanne une facture ou note une dépense. Le pro et le perso sont comptés séparément."
           }
         }
       }
     },
     "summary.empty.title" : {
-      "comment" : "Title of the welcome empty state on the Summary tab at first launch.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your ledger starts here"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tu cuenta empieza aquí"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tes comptes commencent ici"
-          }
-        }
-      }
-    },
-    "summary.monthTotal" : {
-      "comment" : "Title of the card on the Summary tab showing the month's total.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spent this month"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gastado este mes"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dépensé ce mois-ci"
-          }
-        }
-      }
-    },
-    "summary.monthTotal.empty" : {
-      "comment" : "Small caption under the month total card when there are no expenses yet.",
+      "comment" : "Heading of the empty state on Summary at first launch.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -357,6 +501,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aucune dépense pour l’instant"
+          }
+        }
+      }
+    },
+    "summary.spentIn %@" : {
+      "comment" : "Caption above the month total; the argument is the month name in lower case, e.g. “november”.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spent in %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gastado en %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dépensé en %@"
+          }
+        }
+      }
+    },
+    "summary.vatPaid" : {
+      "comment" : "Label of the card showing VAT paid this month on Pro expenses.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VAT paid"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TVA soportada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TVA déductible"
           }
         }
       }

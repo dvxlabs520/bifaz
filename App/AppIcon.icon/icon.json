@@ -1,17 +1,53 @@
 {
-  "fill" : {
-    "solid" : "srgb:0.06275,0.08235,0.11373,1.00000"
-  },
+  "fill-specializations" : [
+    {
+      "value" : {
+        "solid" : "srgb:0.15294,0.27843,0.84706,1.00000"
+      }
+    },
+    {
+      "appearance" : "dark",
+      "value" : {
+        "solid" : "srgb:0.09020,0.14510,0.45098,1.00000"
+      }
+    }
+  ],
   "groups" : [
     {
       "layers" : [
         {
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "srgb:1.00000,0.69020,0.54118,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "srgb:1.00000,0.69020,0.54118,1.00000"
+              }
+            }
+          ],
           "glass" : true,
           "hidden" : false,
           "image-name" : "coin-personal.svg",
           "name" : "coin-personal"
         },
         {
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
+              }
+            }
+          ],
           "glass" : true,
           "hidden" : false,
           "image-name" : "coin-pro.svg",

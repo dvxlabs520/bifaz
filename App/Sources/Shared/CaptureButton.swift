@@ -6,14 +6,14 @@ import BifazDesign
 /// Phase 0: present but without function. Phase 1 opens quick expense entry;
 /// phase 2 adds scanning and import; phase 7 adds "Start expense session".
 struct CaptureButton: View {
-    @ScaledMetric(relativeTo: .title2) private var side: CGFloat = 60
+    @ScaledMetric(relativeTo: .title2) private var side: CGFloat = 56
 
     var body: some View {
         Button {
             // Intentionally empty until phase 1.
         } label: {
             Image(systemName: "plus")
-                .font(.title2.weight(.semibold))
+                .font(.title2.weight(.medium))
                 .foregroundStyle(Color.bifazPaper)
                 .frame(width: side, height: side)
         }
@@ -33,6 +33,12 @@ extension View {
                 .padding(.trailing, BifazSpacing.l)
                 .padding(.bottom, BifazSpacing.m)
         }
+    }
+
+    /// Standard screen chrome: Paper background and room for the capture button.
+    func bifazScreen() -> some View {
+        background(Color.bifazPaper)
+            .captureButtonOverlay()
     }
 }
 

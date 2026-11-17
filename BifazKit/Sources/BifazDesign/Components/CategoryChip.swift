@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// A capsule chip for a category. Selected chips are filled with the tint;
-/// unselected chips use a soft tint with ink text.
+/// A non-interactive chip that names a category. Same look as `FilterChip`:
+/// outlined with the category symbol in its tint, or ink-filled when selected.
 public struct CategoryChip: View {
     private let name: String
     private let symbolName: String
@@ -16,19 +16,10 @@ public struct CategoryChip: View {
     }
 
     public var body: some View {
-        HStack(spacing: BifazSpacing.xxs) {
-            Image(systemName: symbolName)
-                .foregroundStyle(isSelected ? Color.bifazPaper : tint)
-                .accessibilityHidden(true)
-            Text(verbatim: name)
-                .foregroundStyle(isSelected ? Color.bifazPaper : Color.bifazInk)
-        }
-        .font(.bifazLabel)
-        .padding(.horizontal, BifazSpacing.s)
-        .padding(.vertical, BifazSpacing.xs)
-        .background(isSelected ? tint : tint.opacity(0.14), in: Capsule())
-        .accessibilityElement(children: .combine)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        ChipLabel(title: Text(verbatim: name), symbolName: symbolName, symbolTint: tint, isSelected: isSelected)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text(verbatim: name))
+            .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 
@@ -47,9 +38,9 @@ public struct CategoryChip: View {
 private struct CategoryChipSamples: View {
     var body: some View {
         VStack(alignment: .leading, spacing: BifazSpacing.s) {
-            CategoryChip("Courses", symbolName: "cart.fill", tint: .bifazPersonal, isSelected: true)
-            CategoryChip("Transport", symbolName: "tram.fill", tint: .bifazPro)
-            CategoryChip("Boulangerie", symbolName: "birthday.cake.fill", tint: .bifazPersonal)
+            CategoryChip("Courses", symbolName: "cart.fill", tint: .bifazPersonal)
+            CategoryChip("Transport", symbolName: "tram.fill", tint: .bifazPro, isSelected: true)
+            CategoryChip("Logiciels", symbolName: "app.fill", tint: .bifazPro)
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

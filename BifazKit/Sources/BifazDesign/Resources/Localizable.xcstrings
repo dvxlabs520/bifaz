@@ -5,189 +5,600 @@
       "comment" : "Category label shown when an expense has no category.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Uncategorised" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sin categoría" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Sans catégorie" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uncategorised"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin categoría"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans catégorie"
+          }
+        }
       }
     },
     "expenseRow.accessibility %@ %@ %@ %@" : {
       "comment" : "VoiceOver label of an expense row: merchant, category, date, amount.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%@, %@, %@, %@" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "%@, %@, %@, %@" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%@, %@, %@, %@" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@, %@, %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@, %@, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@, %@, %@"
+          }
+        }
       }
     },
     "receipt.attached" : {
       "comment" : "Accessibility label: a receipt is attached.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Receipt attached" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Justificante adjunto" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Justificatif joint" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Receipt attached"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Justificante adjunto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Justificatif joint"
+          }
+        }
       }
     },
     "receipt.pending" : {
       "comment" : "Accessibility label: the receipt is still missing.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Receipt pending" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Justificante pendiente" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Justificatif en attente" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Receipt pending"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Justificante pendiente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Justificatif en attente"
+          }
+        }
       }
     },
     "receipt.none" : {
       "comment" : "Accessibility label: no receipt.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "No receipt" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sin justificante" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucun justificatif" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No receipt"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin justificante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun justificatif"
+          }
+        }
       }
     },
     "budget.progress %@ %@" : {
       "comment" : "Budget progress text. First value is the amount spent, second the budget limit.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%@ of %@" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "%@ de %@" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%@ sur %@" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ of %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ de %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ sur %@"
+          }
+        }
       }
     },
     "budget.status.onTrack" : {
       "comment" : "Budget status below 80 % of the limit.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "On track" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Bajo control" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Dans les clous" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On track"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bajo control"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans les clous"
+          }
+        }
       }
     },
     "budget.status.closeToLimit" : {
       "comment" : "Budget status between 80 % and 100 % of the limit.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Close to limit" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cerca del límite" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Proche de la limite" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close to limit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca del límite"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proche de la limite"
+          }
+        }
       }
     },
     "budget.status.overBudget" : {
       "comment" : "Budget status above the limit.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Over budget" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Presupuesto superado" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Budget dépassé" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Over budget"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presupuesto superado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Budget dépassé"
+          }
+        }
       }
     },
     "budget.label" : {
       "comment" : "Accessibility label of the budget progress bar.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Budget" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Presupuesto" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Budget" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Budget"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presupuesto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Budget"
+          }
+        }
       }
     },
     "budget.accessibility.value %@ %@ %@" : {
       "comment" : "VoiceOver value of the budget bar: percentage used, amount text, status.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%@ used, %@, %@" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "%@ utilizado, %@, %@" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%@ utilisé, %@, %@" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ used, %@, %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ utilizado, %@, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ utilisé, %@, %@"
+          }
+        }
       }
     },
     "confidence.high" : {
       "comment" : "Short word for a high-confidence reading of a receipt value.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "High" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Alta" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Élevée" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "High"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Élevée"
+          }
+        }
       }
     },
     "confidence.medium" : {
       "comment" : "Short word for a medium-confidence reading of a receipt value.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Medium" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Media" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Moyenne" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medium"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Media"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moyenne"
+          }
+        }
       }
     },
     "confidence.low" : {
       "comment" : "Short word for a low-confidence reading of a receipt value.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Low" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Baja" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Faible" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Low"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baja"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faible"
+          }
+        }
       }
     },
     "confidence.accessibility %@" : {
       "comment" : "VoiceOver hint: how confident the reader is about this field. The value is High, Medium or Low.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Reading confidence: %@" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Confianza de lectura: %@" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Fiabilité de la lecture : %@" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading confidence: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confianza de lectura: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fiabilité de la lecture : %@"
+          }
+        }
       }
     },
     "spaceSelector.label" : {
       "comment" : "Accessibility label of the space selector.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Space" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Espacio" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Espace" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Space"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espacio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espace"
+          }
+        }
       }
     },
     "brand.name" : {
       "comment" : "App name in the logotype. Never translated.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Bifaz" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Bifaz" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Bifaz" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bifaz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bifaz"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bifaz"
+          }
+        }
       }
     },
     "brand.tagline" : {
       "comment" : "Brand tagline.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Two sides, one clear ledger." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Dos caras, una cuenta clara." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Deux faces, des comptes clairs." } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Two sides, one clear ledger."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dos caras, una cuenta clara."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deux faces, des comptes clairs."
+          }
+        }
       }
     },
     "space.all" : {
       "comment" : "Space selector option that shows both spaces together.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "All" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Todo" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tout" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout"
+          }
+        }
       }
     },
     "space.personal" : {
       "comment" : "Name of the personal space.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Personal" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Personal" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Perso" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personal"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personal"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perso"
+          }
+        }
       }
     },
     "space.pro" : {
       "comment" : "Name of the professional space.",
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Pro" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Pro" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Pro" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro"
+          }
+        }
+      }
+    },
+    "expenseRow.receiptMissing" : {
+      "comment" : "Expense row subtitle when a receipt is expected but not attached.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Receipt missing"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falta el justificante"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Justificatif manquant"
+          }
+        }
+      }
+    },
+    "spaceSplit.legend %@ %@" : {
+      "comment" : "Legend entry of the space split bar. First: space name, second: formatted amount.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@"
+          }
+        }
+      }
+    },
+    "spaceSplit.empty" : {
+      "comment" : "VoiceOver label of the space split bar when there is no spending.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No spending"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin gastos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune dépense"
+          }
+        }
+      }
+    },
+    "spaceSplit.accessibility %@ %@ %@ %@ %@ %@" : {
+      "comment" : "VoiceOver label of the space split bar. Space name, percentage and amount for Pro, then the same for Personal.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@, %@; %@ %@, %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@, %@; %@ %@, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@, %@; %@ %@, %@"
+          }
+        }
       }
     }
   },

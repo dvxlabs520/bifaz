@@ -1,14 +1,14 @@
 import SwiftUI
 import BifazModels
 
-/// A row in the expense list: category icon tinted with the space colour,
-/// merchant, category and date, the amount, and small indicators for the space
-/// and a pending receipt. VoiceOver reads it as one element. At accessibility
-/// text sizes the amount and indicators move below the merchant.
+/// A row in the expense list. It sits directly on the screen background: a
+/// pastel category icon with the space badge, merchant and category (or a
+/// "Receipt missing" warning), and the amount with the date below it on the
+/// right. VoiceOver reads it as one element. At accessibility text sizes the
+/// amount and date move under the text.
 public struct ExpenseRow: View {
     @Environment(\.locale) private var locale
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @ScaledMetric private var tileSide: CGFloat = 40
 
     private let merchant: String
     private let categoryName: String?
@@ -40,81 +40,71 @@ public struct ExpenseRow: View {
     }
 
     public var body: some View {
-        Group {
+        HStack(alignment: dynamicTypeSize.isAccessibilitySize ? .top : .center, spacing: BifazSpacing.s) {
+            CategoryIcon(
+                symbolName: categorySymbol ?? "tag",
+                tint: space.color,
+                background: space.tint,
+                badge: space
+            )
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: BifazSpacing.xs) {
-                    HStack(alignment: .top, spacing: BifazSpacing.s) {
-                        iconTile
-                        details
-                    }
-                    HStack(spacing: BifazSpacing.s) {
-                        AmountView(amount, currencyCode: currencyCode, style: .row)
-                        indicators
-                    }
+                    details
+                    trailing(alignment: .leading)
                 }
             } else {
-                HStack(spacing: BifazSpacing.s) {
-                    iconTile
-                    details
-                    Spacer(minLength: BifazSpacing.xs)
-                    VStack(alignment: .trailing, spacing: BifazSpacing.xxs) {
-                        AmountView(amount, currencyCode: currencyCode, style: .row)
-                        indicators
-                    }
-                }
+                details
+                Spacer(minLength: BifazSpacing.xs)
+                trailing(alignment: .trailing)
             }
         }
+        .padding(.vertical, BifazSpacing.s)
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityText)
     }
 
-    private var iconTile: some View {
-        Image(systemName: categorySymbol ?? "tag.fill")
-            .font(.bifazBody)
-            .foregroundStyle(space.color)
-            .frame(width: tileSide, height: tileSide)
-            .background(
-                space.color.opacity(0.14),
-                in: RoundedRectangle(cornerRadius: BifazRadius.small, style: .continuous)
-            )
-            .accessibilityHidden(true)
+    private var details: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(verbatim: merchant)
+                .font(.bifazBody)
+                .foregroundStyle(Color.bifazInk)
+                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
+            subtitle
+                .font(.bifazCaption)
+        }
     }
 
-    private var details: some View {
-        VStack(alignment: .leading, spacing: BifazSpacing.xxs) {
-            Text(verbatim: merchant)
-                .font(.bifazHeadline)
-                .foregroundStyle(Color.bifazInk)
-            Text(verbatim: metadata)
+    @ViewBuilder
+    private var subtitle: some View {
+        if receiptState == .pending {
+            Label {
+                Text("expenseRow.receiptMissing", bundle: .module)
+            } icon: {
+                Image(systemName: "doc.badge.clock")
+            }
+            .foregroundStyle(Color.bifazWarning)
+        } else if let categoryName, !categoryName.isEmpty {
+            Text(verbatim: categoryName)
+                .foregroundStyle(Color.bifazInkSecondary)
+        } else {
+            Text("expenseRow.uncategorised", bundle: .module)
+                .foregroundStyle(Color.bifazInkSecondary)
+        }
+    }
+
+    private func trailing(alignment: HorizontalAlignment) -> some View {
+        VStack(alignment: alignment, spacing: 2) {
+            AmountView(amount, currencyCode: currencyCode, style: .row)
+            Text(verbatim: date.formatted(.dateTime.day().month(.abbreviated).locale(locale)))
                 .font(.bifazCaption)
                 .foregroundStyle(Color.bifazInkSecondary)
         }
     }
 
-    private var indicators: some View {
-        HStack(spacing: BifazSpacing.xxs) {
-            if receiptState == .pending {
-                Image(systemName: "doc.badge.clock")
-                    .foregroundStyle(Color.bifazWarning)
-            }
-            Image(systemName: space.symbolName)
-                .foregroundStyle(space.color)
-        }
-        .font(.bifazLabel)
-        .accessibilityHidden(true)
-    }
-
-    private var category: String {
-        if let categoryName, !categoryName.isEmpty { return categoryName }
-        return LocalizedStringResource("expenseRow.uncategorised", bundle: .module).resolved(in: locale)
-    }
-
-    private var metadata: String {
-        "\(category) · \(date.formatted(.dateTime.day().month(.abbreviated).locale(locale)))"
-    }
-
     private var accessibilityText: String {
+        let category = categoryName.flatMap { $0.isEmpty ? nil : $0 }
+            ?? LocalizedStringResource("expenseRow.uncategorised", bundle: .module).resolved(in: locale)
         let dateText = date.formatted(.dateTime.day().month(.wide).locale(locale))
         let amountText = amount.formatted(.currency(code: currencyCode).locale(locale))
         var parts = [
@@ -145,15 +135,22 @@ public struct ExpenseRow: View {
 
 private struct ExpenseRowSamples: View {
     var body: some View {
-        VStack(spacing: BifazSpacing.l) {
+        VStack(spacing: 0) {
             ExpenseRow(
                 merchant: "Monoprix", categoryName: "Courses", categorySymbol: "cart.fill",
                 date: .now, amount: 42.80, space: .personal, receiptState: .none
             )
+            HairlineDivider(leadingInset: 48)
             ExpenseRow(
                 merchant: "SNCF", categoryName: "Transport", categorySymbol: "tram.fill",
-                date: .now, amount: 1234.50, space: .pro, receiptState: .pending
+                date: .now, amount: 1284.50, space: .pro, receiptState: .pending
             )
+            HairlineDivider(leadingInset: 48)
+            ExpenseRow(
+                merchant: "Adobe", categoryName: "Logiciels", categorySymbol: "app.fill",
+                date: .now, amount: 65.99, space: .pro, receiptState: .attached
+            )
+            HairlineDivider(leadingInset: 48)
             ExpenseRow(
                 merchant: "Boulangerie Paul", categoryName: nil, categorySymbol: nil,
                 date: .now, amount: 4.30, space: .personal, receiptState: .attached

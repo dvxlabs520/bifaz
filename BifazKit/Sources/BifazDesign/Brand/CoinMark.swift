@@ -14,23 +14,21 @@ public struct CoinHalfShape: Shape {
     }
 }
 
-/// The Bifaz coin: cobalt Pro half and terracotta Personal half.
-///
-/// The canvas is square; the coin fills about 70 % of it, leaving the same
-/// breathing room as the app icon.
+/// The Bifaz coin: one coin split in two, the Pro half nudged up and the
+/// Personal half nudged down. Square canvas; the coin fills about 70 % of it.
 public struct CoinMark: View {
     public enum Palette: Sendable {
-        /// Space colours for the current appearance (use on Paper or Surface).
-        case adaptive
-        /// Bright space colours, for use on the brand ink (launch, splash, icon).
-        case onInk
-        /// Single colour (tinted contexts).
+        /// Brand colours on cobalt: white Pro half, peach Personal half.
+        case brand
+        /// Space colours for the current appearance (on Paper or Surface).
+        case spaces
+        /// Single colour.
         case monochrome(Color)
     }
 
     private let palette: Palette
 
-    public init(palette: Palette = .adaptive) {
+    public init(palette: Palette = .brand) {
         self.palette = palette
     }
 
@@ -45,60 +43,76 @@ public struct CoinMark: View {
 
     private func color(for half: CoinGeometry.Half) -> Color {
         switch palette {
-        case .adaptive:
+        case .brand:
+            Color(uiColor: (half == .pro ? BifazPalette.Brand.coinPro : BifazPalette.Brand.coinPersonal).uiColor)
+        case .spaces:
             half == .pro ? .bifazPro : .bifazPersonal
-        case .onInk:
-            Color(uiColor: (half == .pro ? BifazPalette.pro : BifazPalette.personal).dark.uiColor)
         case .monochrome(let color):
             color
         }
     }
 }
 
-/// The logotype: the coin beside the initial B, then "Bifaz" in New York.
-/// Rendered as one accessible element labelled "Bifaz". Scales with Dynamic Type.
-public struct BifazWordmark: View {
-    public enum Size: Sendable {
-        case large
-        case medium
+/// The app icon drawn in SwiftUI: the brand coin on a cobalt squircle.
+/// Same geometry and colours as `AppIcon.icon`, for in-app branding.
+public struct BifazAppIcon: View {
+    private let side: CGFloat
 
-        var font: Font {
-            switch self {
-            case .large: .system(.largeTitle, design: .serif, weight: .semibold)
-            case .medium: .system(.title2, design: .serif, weight: .semibold)
-            }
-        }
-    }
-
-    private let size: Size
-    private let palette: CoinMark.Palette
-    private let textColor: Color
-    @ScaledMetric private var coinSide: CGFloat
-    @ScaledMetric private var gap: CGFloat
-
-    public init(size: Size = .large, palette: CoinMark.Palette = .adaptive, textColor: Color = .bifazInk) {
-        self.size = size
-        self.palette = palette
-        self.textColor = textColor
-        switch size {
-        case .large:
-            _coinSide = ScaledMetric(wrappedValue: 44, relativeTo: .largeTitle)
-            _gap = ScaledMetric(wrappedValue: 2, relativeTo: .largeTitle)
-        case .medium:
-            _coinSide = ScaledMetric(wrappedValue: 30, relativeTo: .title2)
-            _gap = ScaledMetric(wrappedValue: 1, relativeTo: .title2)
-        }
+    public init(side: CGFloat = 64) {
+        self.side = side
     }
 
     public var body: some View {
-        HStack(alignment: .center, spacing: gap) {
-            CoinMark(palette: palette)
-                .frame(width: coinSide, height: coinSide)
+        RoundedRectangle(cornerRadius: side * 0.225, style: .continuous)
+            .fill(Color.bifazBrandCobalt)
+            .overlay { CoinMark(palette: .brand) }
+            .frame(width: side, height: side)
+            .accessibilityHidden(true)
+    }
+}
+
+/// The logotype: app icon and "Bifaz". One accessible element labelled "Bifaz".
+public struct BifazWordmark: View {
+    @ScaledMetric(relativeTo: .title2) private var iconSide: CGFloat = 40
+
+    public init() {}
+
+    public var body: some View {
+        HStack(spacing: BifazSpacing.s) {
+            BifazAppIcon(side: iconSide)
             Text(BrandStrings.name)
-                .font(size.font)
-                .foregroundStyle(textColor)
+                .font(.system(.title2, weight: .semibold))
+                .foregroundStyle(.bifazInk)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(BrandStrings.name))
     }
+}
+
+#Preview("Light") {
+    VStack(spacing: BifazSpacing.xl) {
+        BifazAppIcon(side: 120)
+        BifazWordmark()
+        CoinMark(palette: .spaces).frame(width: 80)
+    }
+    .padding()
+    .background(Color.bifazPaper)
+}
+
+#Preview("Dark") {
+    VStack(spacing: BifazSpacing.xl) {
+        BifazAppIcon(side: 120)
+        BifazWordmark()
+        CoinMark(palette: .spaces).frame(width: 80)
+    }
+    .padding()
+    .background(Color.bifazPaper)
+    .preferredColorScheme(.dark)
+}
+
+#Preview("Large text") {
+    BifazWordmark()
+        .padding()
+        .background(Color.bifazPaper)
+        .dynamicTypeSize(.accessibility3)
 }

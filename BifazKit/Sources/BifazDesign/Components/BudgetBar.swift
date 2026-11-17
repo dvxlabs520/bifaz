@@ -7,7 +7,7 @@ public struct BudgetBar: View {
     @Environment(\.locale) private var locale
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @ScaledMetric private var barHeight: CGFloat = 8
+    @ScaledMetric private var barHeight: CGFloat = 6
 
     private let spent: Decimal
     private let limit: Decimal
@@ -71,7 +71,7 @@ public struct BudgetBar: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: BifazSpacing.xs) {
             Capsule()
-                .fill(Color.bifazHairline)
+                .fill(Color.bifazSurfaceMuted)
                 .frame(height: barHeight)
                 .overlay(alignment: .leading) {
                     GeometryReader { proxy in
@@ -142,7 +142,7 @@ private struct BudgetBarSamples: View {
             BudgetBar(spent: 0, limit: 0)
         }
         .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.bifazPaper)
     }
 }

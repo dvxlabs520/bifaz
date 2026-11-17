@@ -1,12 +1,12 @@
 import SwiftUI
 
-/// A monetary amount formatted for the current locale (`1 234,50 €` in French,
-/// `€1,234.50` in English), in tabular figures. Shrinks before it truncates.
+/// A monetary amount formatted for the current locale (`1 284,50 €` in French,
+/// `€1,284.50` in English), in tabular figures. Shrinks before it truncates.
 public struct AmountView: View {
     /// Size of the amount.
     public enum Style: Sendable {
         /// Hero amount, e.g. the month total.
-        case large
+        case hero
         /// Amount on a card.
         case medium
         /// Amount in a list row.
@@ -33,7 +33,7 @@ public struct AmountView: View {
 
     private var font: Font {
         switch style {
-        case .large: .bifazAmountLarge
+        case .hero: .bifazAmountHero
         case .medium: .bifazAmountMedium
         case .row: .bifazAmount
         }
@@ -44,7 +44,7 @@ public struct AmountView: View {
             .font(font)
             .foregroundStyle(tint)
             .lineLimit(1)
-            .minimumScaleFactor(0.6)
+            .minimumScaleFactor(0.5)
             .accessibilityLabel(formatted)
     }
 }
@@ -64,11 +64,10 @@ public struct AmountView: View {
 private struct AmountViewSamples: View {
     var body: some View {
         VStack(alignment: .leading, spacing: BifazSpacing.m) {
-            AmountView(1234.50, style: .large)
-            AmountView(86.20, style: .medium, tint: .bifazPro)
-            AmountView(4.30, style: .row)
-            AmountView(1234.50, style: .row)
-                .environment(\.locale, Locale(identifier: "en"))
+            AmountView(1284.50, style: .hero)
+            AmountView(796.10, style: .medium, tint: .bifazPro)
+            AmountView(42.80, style: .row)
+            AmountView(1284.50, style: .row)
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

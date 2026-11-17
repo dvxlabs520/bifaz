@@ -1,79 +1,63 @@
 import SwiftUI
 
-/// A centred empty state: illustration, title, message and an optional
-/// primary action. Content is capped at a readable width, so it also looks
-/// right on iPad.
+/// An empty state without illustration: a title, an explanation and up to two
+/// actions (primary, then secondary), leading aligned and capped in width so it
+/// also reads well on wide screens.
 public struct EmptyStateView: View {
-    /// The picture above the title.
-    public enum Illustration: Sendable {
-        /// The Bifaz coin.
-        case coin
-        /// An SF Symbol by name.
-        case symbol(String)
-    }
+    /// A button shown under the message.
+    public struct Action: Sendable {
+        let title: LocalizedStringResource
+        let perform: @MainActor () -> Void
 
-    @ScaledMetric private var illustrationSide: CGFloat = 88
+        public init(_ title: LocalizedStringResource, perform: @escaping @MainActor () -> Void) {
+            self.title = title
+            self.perform = perform
+        }
+    }
 
     private let title: LocalizedStringResource
     private let message: LocalizedStringResource
-    private let illustration: Illustration
-    private let actionTitle: LocalizedStringResource?
-    private let action: (@MainActor () -> Void)?
+    private let primaryAction: Action?
+    private let secondaryAction: Action?
 
     public init(
         title: LocalizedStringResource,
         message: LocalizedStringResource,
-        illustration: Illustration = .coin,
-        actionTitle: LocalizedStringResource? = nil,
-        action: (@MainActor () -> Void)? = nil
+        primaryAction: Action? = nil,
+        secondaryAction: Action? = nil
     ) {
         self.title = title
         self.message = message
-        self.illustration = illustration
-        self.actionTitle = actionTitle
-        self.action = action
+        self.primaryAction = primaryAction
+        self.secondaryAction = secondaryAction
     }
 
     public var body: some View {
-        VStack(spacing: BifazSpacing.l) {
-            illustrationView
-            VStack(spacing: BifazSpacing.xs) {
-                Text(title)
-                    .font(.bifazTitle)
-                    .foregroundStyle(Color.bifazInk)
-                Text(message)
-                    .font(.bifazBody)
-                    .foregroundStyle(Color.bifazInkSecondary)
-            }
-            .multilineTextAlignment(.center)
-            if let actionTitle, let action {
-                Button(action: action) {
-                    Text(actionTitle)
+        VStack(alignment: .leading, spacing: BifazSpacing.xs) {
+            Text(title)
+                .font(.bifazTitle)
+                .foregroundStyle(Color.bifazInk)
+                .accessibilityAddTraits(.isHeader)
+            Text(message)
+                .font(.bifazBody)
+                .foregroundStyle(Color.bifazInkSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+            if primaryAction != nil || secondaryAction != nil {
+                VStack(spacing: BifazSpacing.xs) {
+                    if let primaryAction {
+                        Button { primaryAction.perform() } label: { Text(primaryAction.title) }
+                            .buttonStyle(.bifazPrimary)
+                    }
+                    if let secondaryAction {
+                        Button { secondaryAction.perform() } label: { Text(secondaryAction.title) }
+                            .buttonStyle(.bifazSecondary)
+                    }
                 }
-                .buttonStyle(.bifazPrimary)
                 .padding(.top, BifazSpacing.xs)
             }
         }
-        .frame(maxWidth: 360)
-        .padding(BifazSpacing.xl)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-
-    @ViewBuilder
-    private var illustrationView: some View {
-        switch illustration {
-        case .coin:
-            CoinMark()
-                .frame(width: illustrationSide, height: illustrationSide)
-        case .symbol(let name):
-            Image(systemName: name)
-                .resizable()
-                .scaledToFit()
-                .foregroundStyle(Color.bifazInkSecondary)
-                .frame(width: illustrationSide * 0.6, height: illustrationSide * 0.6)
-                .frame(width: illustrationSide, height: illustrationSide)
-                .accessibilityHidden(true)
-        }
+        .frame(maxWidth: 520, alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -93,10 +77,12 @@ private struct EmptyStateSamples: View {
     var body: some View {
         EmptyStateView(
             title: "Aucune dépense",
-            message: "Scannez un ticket de Monoprix ou de la SNCF pour commencer.",
-            actionTitle: "Scanner un ticket",
-            action: {}
+            message: "Scanne un ticket de Monoprix ou ajoute une dépense à la main pour commencer.",
+            primaryAction: .init("Scanner un justificatif") {},
+            secondaryAction: .init("Ajouter à la main") {}
         )
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.bifazPaper)
     }
 }

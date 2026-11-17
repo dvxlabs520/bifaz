@@ -31,9 +31,9 @@ public struct ReceiptThumbnail: View {
     public var body: some View {
         content
             .frame(width: side, height: side)
-            .background(Color.bifazSurface, in: shape)
+            .background(state == .pending ? Color.bifazWarningTint : .bifazSurfaceMuted, in: shape)
             .clipShape(shape)
-            .overlay(border)
+            .overlay(shape.strokeBorder(Color.bifazHairline, lineWidth: 1))
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(Text(accessibilityText))
     }
@@ -47,16 +47,7 @@ public struct ReceiptThumbnail: View {
         } else {
             Image(systemName: symbolName)
                 .font(.bifazBody)
-                .foregroundStyle(state == .pending ? Color.bifazWarning : state == .none ? Color.bifazInkSecondary : Color.bifazInk)
-        }
-    }
-
-    @ViewBuilder
-    private var border: some View {
-        if state == .pending {
-            shape.strokeBorder(Color.bifazWarning, style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
-        } else {
-            shape.strokeBorder(Color.bifazHairline, lineWidth: 1)
+                .foregroundStyle(state == .pending ? Color.bifazWarning : .bifazInkSecondary)
         }
     }
 
@@ -98,7 +89,7 @@ private struct ReceiptThumbnailSamples: View {
             ReceiptThumbnail(state: .none)
         }
         .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(Color.bifazPaper)
     }
 }

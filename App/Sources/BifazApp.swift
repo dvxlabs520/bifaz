@@ -21,8 +21,15 @@ struct BifazApp: App {
     var body: some Scene {
         WindowGroup {
             if let container {
-                RootView()
-                    .modelContainer(container)
+                #if DEBUG
+                if UserDefaults.standard.bool(forKey: "BifazDesignGallery") {
+                    DesignGalleryView()
+                } else {
+                    RootView().modelContainer(container)
+                }
+                #else
+                RootView().modelContainer(container)
+                #endif
             } else {
                 StoreErrorView()
             }

@@ -2,49 +2,44 @@ import SwiftUI
 import BifazModels
 import BifazDesign
 
-/// Summary tab. Phase 0: month header, an empty total and the welcome state.
+/// Summary tab. Phase 0: space filter, the month's (empty) total and the
+/// first-launch state. Real totals arrive in phases 1 and 3.
 struct SummaryView: View {
     @Binding var spaceFilter: SpaceFilter
 
-    /// "November 2026", capitalised as a sentence in every language.
-    private var monthTitle: String {
-        Date.now.formatted(
-            Date.FormatStyle(capitalizationContext: .beginningOfSentence).month(.wide).year()
-        )
+    /// "November" / "noviembre" / "novembre", as used inside a sentence.
+    private var monthName: String {
+        Date.now.formatted(Date.FormatStyle(capitalizationContext: .middleOfSentence).month(.wide))
     }
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: BifazSpacing.xl) {
+                VStack(alignment: .leading, spacing: 0) {
                     SpaceSelector(selection: $spaceFilter)
+                        .padding(.bottom, BifazSpacing.xl)
 
-                    VStack(alignment: .leading, spacing: BifazSpacing.s) {
-                        Text(verbatim: monthTitle)
-                            .font(.bifazTitle)
-                            .foregroundStyle(.bifazInk)
-                            .accessibilityAddTraits(.isHeader)
-                        StatCard(
-                            title: "summary.monthTotal",
-                            amount: 0,
-                            detail: "summary.monthTotal.empty",
-                            accent: spaceFilter.color
-                        )
-                    }
+                    Text("summary.spentIn \(monthName)")
+                        .font(.bifazCaption)
+                        .foregroundStyle(.bifazInkSecondary)
+                    AmountView(0, style: .hero, tint: .bifazInkSecondary)
+                        .padding(.top, BifazSpacing.xxs)
+                    SpaceSplitBar(pro: 0, personal: 0)
+                        .padding(.top, BifazSpacing.s)
 
                     EmptyStateView(
                         title: "summary.empty.title",
-                        message: "summary.empty.message"
+                        message: "summary.empty.message",
+                        primaryAction: .init("action.addExpense") {},
+                        secondaryAction: .init("action.scanInvoice") {}
                     )
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, BifazSpacing.m)
+                    .padding(.top, BifazSpacing.xxl)
                 }
-                .padding(.horizontal, BifazSpacing.m)
+                .padding(.horizontal, BifazSpacing.l)
                 .padding(.bottom, BifazSpacing.xxxl * 2)
             }
-            .background(Color.bifazPaper)
             .navigationTitle("tab.summary")
-            .captureButtonOverlay()
+            .bifazScreen()
         }
     }
 }

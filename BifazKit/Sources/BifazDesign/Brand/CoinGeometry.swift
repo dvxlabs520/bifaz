@@ -12,7 +12,7 @@ public enum CoinGeometry {
     /// Coin radius.
     public static let radius: Double = 0.34
     /// Half of the horizontal gap between the halves.
-    public static let halfGap: Double = 0.016
+    public static let halfGap: Double = 0.024
     /// Vertical offset of each half (Pro up, Personal down).
     public static let shift: Double = 0.045
 

@@ -19,6 +19,7 @@
 		84CCFDEC4F76B37C1CFA68DF /* ExpensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6F95F708EF55AC76200852 /* ExpensesView.swift */; };
 		9022408D2C03D49A49A3723D /* StoreErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399A901B3FD5DE9E80F79AD9 /* StoreErrorView.swift */; };
 		96927527FFEF9DFA67EB4395 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2519A55C560092F139062327 /* Appearance.swift */; };
+		99B376B7C77272912241E26E /* DesignGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BB96F8FEB099CF6E9AD781 /* DesignGalleryView.swift */; };
 		BB5027E9B31F8E156FAA806C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 1B1E0EA0B2F495B0D1056A37 /* Localizable.xcstrings */; };
 		BF586BB9D1A63B6BA720C083 /* BifazApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF661489BE599A5EA6AD309 /* BifazApp.swift */; };
 		C3AB785358861819C8879070 /* BifazDesign in Frameworks */ = {isa = PBXBuildFile; productRef = EF36F71680D2DD28A362210E /* BifazDesign */; };
@@ -39,6 +40,7 @@
 		3E6F95F708EF55AC76200852 /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
 		4735E56651A1EA8F848B629E /* PreviewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainer.swift; sourceTree = "<group>"; };
 		4F753C9F98CD65EC87DBB613 /* CaptureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureButton.swift; sourceTree = "<group>"; };
+		54BB96F8FEB099CF6E9AD781 /* DesignGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignGalleryView.swift; sourceTree = "<group>"; };
 		7189CBC1123B45B893585570 /* AssistantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantView.swift; sourceTree = "<group>"; };
 		8FE43B63D39C4C48A2A6012B /* BifazKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BifazKit; path = BifazKit; sourceTree = SOURCE_ROOT; };
 		91DE7FDFC123E116D5BB9468 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
@@ -61,6 +63,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B80DF028FB1A84BEFA7A8BD /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				54BB96F8FEB099CF6E9AD781 /* DesignGalleryView.swift */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
 		25AD52DF7FB6952DC56755A5 = {
 			isa = PBXGroup;
 			children = (
@@ -99,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				500887052FB6B8995EDB2F4E /* Assistant */,
+				0B80DF028FB1A84BEFA7A8BD /* Debug */,
 				C7C5A04CA1276EDB561BD979 /* Expenses */,
 				6065577051A111EA4744E667 /* Root */,
 				E57E54FA905F6DCAA4C7725E /* Settings */,
@@ -260,6 +271,7 @@
 				65D6D844D7A6E427CCE7C586 /* AssistantView.swift in Sources */,
 				BF586BB9D1A63B6BA720C083 /* BifazApp.swift in Sources */,
 				F914D1D300B3EABA04B0AB46 /* CaptureButton.swift in Sources */,
+				99B376B7C77272912241E26E /* DesignGalleryView.swift in Sources */,
 				84CCFDEC4F76B37C1CFA68DF /* ExpensesView.swift in Sources */,
 				6DB3F8A892069C0E859FEDAD /* Log.swift in Sources */,
 				E76065FDC20E23D910FA67BD /* PreviewContainer.swift in Sources */,

@@ -2,29 +2,28 @@ import SwiftUI
 import BifazModels
 import BifazDesign
 
-/// Expenses tab. Phase 0: space selector and empty state.
+/// Expenses tab. Phase 0: space filter and empty state; the history arrives in phase 1.
 struct ExpensesView: View {
     @Binding var spaceFilter: SpaceFilter
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: BifazSpacing.xxl) {
+                VStack(alignment: .leading, spacing: 0) {
                     SpaceSelector(selection: $spaceFilter)
+                        .padding(.bottom, BifazSpacing.xxl)
 
                     EmptyStateView(
                         title: "expenses.empty.title",
                         message: "expenses.empty.message",
-                        illustration: .symbol("tray")
+                        primaryAction: .init("action.addExpense") {}
                     )
-                    .padding(.top, BifazSpacing.xxl)
                 }
-                .padding(.horizontal, BifazSpacing.m)
+                .padding(.horizontal, BifazSpacing.l)
                 .padding(.bottom, BifazSpacing.xxxl * 2)
             }
-            .background(Color.bifazPaper)
             .navigationTitle("tab.expenses")
-            .captureButtonOverlay()
+            .bifazScreen()
         }
     }
 }
