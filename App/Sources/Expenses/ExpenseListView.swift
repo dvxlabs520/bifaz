@@ -75,7 +75,7 @@ private struct ExpenseListContent: View {
                 Text("history.delete.cancel", tableName: "History")
             }
         } message: { expense in
-            Text("history.delete.message \(expense.merchant)", tableName: "History")
+            DeleteExpenseMessage(merchant: expense.merchant)
         }
         .alert(
             Text("history.delete.failed", tableName: "History"),

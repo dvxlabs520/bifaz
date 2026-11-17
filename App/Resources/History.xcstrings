@@ -457,6 +457,30 @@
         }
       }
     },
+    "history.delete.message.noMerchant" : {
+      "comment" : "Body of the delete confirmation when the expense has no merchant.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This expense and its receipt will be deleted. This can't be undone."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se eliminarán este gasto y su justificante. No se puede deshacer."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette dépense et son justificatif seront supprimés. Cette action est irréversible."
+          }
+        }
+      }
+    },
     "history.delete.title" : {
       "comment" : "Title of the delete confirmation dialog.",
       "extractionState" : "manual",

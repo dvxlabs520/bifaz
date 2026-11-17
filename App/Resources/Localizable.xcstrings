@@ -1057,30 +1057,6 @@
         }
       }
     },
-    "form.delete.message" : {
-      "comment" : "Message of the delete confirmation.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This can’t be undone."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se puede deshacer."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cette action est irréversible."
-          }
-        }
-      }
-    },
     "form.delete.title" : {
       "comment" : "Title of the delete confirmation.",
       "extractionState" : "manual",

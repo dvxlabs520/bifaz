@@ -108,7 +108,7 @@ struct ExpenseFormView: View {
             .confirmationDialog("form.delete.title", isPresented: $isConfirmingDelete, titleVisibility: .visible) {
                 Button("form.delete", role: .destructive, action: delete)
             } message: {
-                Text("form.delete.message")
+                DeleteExpenseMessage(merchant: expense?.merchant ?? "")
             }
             .alert("form.error.title", isPresented: .constant(saveError != nil)) {
                 Button("form.error.ok") { saveError = nil }

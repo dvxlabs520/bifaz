@@ -117,7 +117,7 @@ private struct CategoryList: View {
             }
         }
         .confirmationDialog(
-            Text("category.delete.title \(pendingDeletion?.name ?? "")", tableName: "Settings"),
+            Text("category.delete.title \(pendingDeletion?.displayName ?? "")", tableName: "Settings"),
             isPresented: Binding(
                 get: { pendingDeletion != nil },
                 set: { if !$0 { pendingDeletion = nil } }
