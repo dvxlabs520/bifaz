@@ -45,6 +45,13 @@ public enum MerchantMemory {
         return ((try? context.fetch(descriptor)) ?? []).map(\.merchantName)
     }
 
+    /// The most recently used merchant names (offered as chips before typing).
+    public static func recentMerchants(limit: Int = 6, in context: ModelContext) -> [String] {
+        var descriptor = FetchDescriptor<MerchantRule>(sortBy: [SortDescriptor(\.updatedAt, order: .reverse)])
+        descriptor.fetchLimit = limit
+        return ((try? context.fetch(descriptor)) ?? []).map(\.merchantName)
+    }
+
     private static func rule(forKey key: String, in context: ModelContext) -> MerchantRule? {
         var descriptor = FetchDescriptor<MerchantRule>(predicate: #Predicate { $0.merchantKey == key })
         descriptor.fetchLimit = 1

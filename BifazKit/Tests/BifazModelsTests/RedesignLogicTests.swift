@@ -104,3 +104,20 @@ struct DaysAndTrendTests {
         #expect(summary.trend.last == summary.totals.total)
     }
 }
+
+@MainActor
+@Suite("Recent merchants")
+struct RecentMerchantsTests {
+    @Test("Most recent first, one per merchant, limited")
+    func recent() async throws {
+        let container = try makeTestContainer()
+        defer { withExtendedLifetime(container) {} }
+        let context = container.mainContext
+        for name in ["Carrefour", "Monoprix", "SNCF", "carrefour", "Fnac"] {
+            try ExpenseService.create(from: ExpenseDraft(amount: 1, merchant: name), in: context)
+            try? await Task.sleep(for: .milliseconds(5))
+        }
+        #expect(MerchantMemory.recentMerchants(limit: 3, in: context) == ["Fnac", "carrefour", "SNCF"])
+        #expect(MerchantMemory.recentMerchants(in: context).count == 4)
+    }
+}
