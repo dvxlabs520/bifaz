@@ -120,6 +120,8 @@ public struct MonthSummary: Sendable, Equatable {
     /// Pro VAT by rate; `nil` when the space filter leaves Pro out.
     public var vat: VATSummary?
     public var isCurrentMonth: Bool
+    /// Spending so far, day by day (see `SummaryCalculator.cumulativeTrend`).
+    public var trend: [Decimal] = []
 }
 
 public enum SummaryCalculator {
@@ -187,8 +189,40 @@ public enum SummaryCalculator {
             categories: categories(of: thisMonth, total: totals.total),
             evolution: evolution(of: inSpace, endingWith: month, calendar: calendar),
             vat: vat,
-            isCurrentMonth: isCurrent
+            isCurrentMonth: isCurrent,
+            trend: cumulativeTrend(of: figures, month: month, space: space, now: now, calendar: calendar)
         )
+    }
+
+    /// The month's spending so far, day by day: point `i` is the total from the
+    /// first day to the end of day `i + 1`. Up to today for the current month, the
+    /// whole month for a past one (v2 trend line next to the hero amount).
+    public static func cumulativeTrend(
+        of figures: [ExpenseFigure],
+        month: DateInterval,
+        space: SpaceFilter,
+        now: Date = .now,
+        calendar: Calendar = .current
+    ) -> [Decimal] {
+        let dayCount = calendar.range(of: .day, in: .month, for: month.start)?.count ?? 0
+        let lastDay: Int
+        if month.containsHalfOpen(now) {
+            lastDay = calendar.component(.day, from: now)
+        } else if now < month.start {
+            return []
+        } else {
+            lastDay = dayCount
+        }
+        var perDay = [Decimal](repeating: 0, count: max(lastDay, 0))
+        for figure in figures where space.includes(figure.space) && month.containsHalfOpen(figure.date) {
+            let day = calendar.component(.day, from: figure.date)
+            if day >= 1, day <= lastDay { perDay[day - 1] += figure.amount }
+        }
+        var running: Decimal = 0
+        return perDay.map { amount in
+            running += amount
+            return running
+        }
     }
 
     static func categories(of figures: [ExpenseFigure], total: Decimal) -> [CategoryShare] {

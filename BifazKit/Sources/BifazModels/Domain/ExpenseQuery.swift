@@ -141,6 +141,16 @@ public struct MonthGroup: Identifiable {
     public var id: Date { month }
 }
 
+/// One day of expenses for the v2 history ("Yesterday · €93.00").
+public struct DayGroup: Identifiable {
+    /// First instant of the day.
+    public let day: Date
+    public let expenses: [Expense]
+    public let totals: ExpenseTotals
+
+    public var id: Date { day }
+}
+
 public enum ExpenseGrouping {
     /// Groups expenses (any order) by calendar month, newest month first,
     /// keeping the incoming order inside each month.
@@ -155,6 +165,19 @@ public enum ExpenseGrouping {
         return order.sorted(by: >).map { month in
             let items = buckets[month] ?? []
             return MonthGroup(month: month, expenses: items, totals: ExpenseTotals(items))
+        }
+    }
+
+    /// Groups expenses (any order) by calendar day, newest day first, newest
+    /// expense first inside a day, with each day's totals (v2 history).
+    public static func byDay(_ expenses: [Expense], calendar: Calendar = .current) -> [DayGroup] {
+        var buckets: [Date: [Expense]] = [:]
+        for expense in expenses {
+            buckets[calendar.startOfDay(for: expense.date), default: []].append(expense)
+        }
+        return buckets.keys.sorted(by: >).map { day in
+            let items = (buckets[day] ?? []).sorted { ($0.date, $0.createdAt) > ($1.date, $1.createdAt) }
+            return DayGroup(day: day, expenses: items, totals: ExpenseTotals(items))
         }
     }
 
