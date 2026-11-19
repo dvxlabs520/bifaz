@@ -338,25 +338,25 @@
       }
     },
     "capture.manual" : {
-      "comment" : "Menu item on the + button: add an expense without a receipt.",
       "extractionState" : "manual",
+      "comment" : "Capture menu item: add an expense by hand, without a receipt. Kept short so it fits on one line (a longer label was hyphenated mid-word in Spanish).",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Expense without receipt"
+            "value" : "No receipt"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gasto sin justificante"
+            "value" : "Sin justificante"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dépense sans justificatif"
+            "value" : "Sans justificatif"
           }
         }
       }

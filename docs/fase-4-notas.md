@@ -153,6 +153,28 @@ Criterio: un gasto en USD y un abono mensual salen bien en el Resumen y en el hi
   - el comportamiento de la red móvil;
   - la generación con dos dispositivos sincronizados, que depende de iCloud (fase 6).
 
+## Correcciones de la revisión de la fase 4
+1. **Auditoría de accesibilidad determinista** (fallaba siempre en el iPhone 17).
+   - **Causa:** el bucle de `swipeUp` no dejaba pulsable «Gérer» y la auditoría «Budgets» se hacía sobre el Resumen.
+   - **Cambio:** ahora hay una prueba por pantalla (`testSummary`, `testExpenses`, `testDetailAndForm`, `testBudgets`, `testSettings`).
+     - Cada una arranca la app directamente donde toca: pestaña inicial, o `-BifazInitialRoute budgets` / `expense:<comercio>`, solo en Debug.
+     - Comprueba un identificador propio de la pantalla antes de auditar.
+     - Espera a que la pantalla esté quieta: marcador y buscador sin moverse durante 1 s.
+   - **Resultado:** pasa dos veces seguidas en el iPhone 17 y en el iPhone 18 Pro.
+   - **Contraste intermitente del botón «Pro» en Dépenses:** apareció en una de las primeras pasadas en el iPhone 18 Pro. Es tinta sobre blanco, 17:1. Se medía mientras el buscador se colocaba y desapareció con la espera a que la pantalla esté quieta, sin excluirlo.
+   - **Aviso «Potentially inaccessible text» (sin elemento):** lo reproduje con una prueba temporal. Sale en cualquier estado del Resumen desplazado, con texto pasando bajo las barras translúcidas. No sale con la pantalla en reposo. No es el gráfico: sale con el gráfico fuera de pantalla y no cuando está visible. Es la detección por imagen de la auditoría leyendo texto difuminado bajo las barras.
+     **Decisión:** no lo excluyo. La prueba ya no audita pantallas a medio desplazar, y si algún día aparece en reposo, fallará y habrá que mirarlo.
+2. **Avisos de aislamiento en las pruebas de interfaz:**
+   - `isKnownFalsePositive` pasa a `@MainActor`, lo que quita los 7 avisos.
+   - El target `BifazUITests` ya compilaba con `-warnings-as-errors`. El compilador mantiene este diagnóstico de XCTest como aviso incluso así, y ningún grupo de diagnósticos (`-Werror <grupo>`) lo convierte en error.
+   - También probé el aislamiento al actor principal por defecto en el target, pero choca con los `init` y `setUp` de XCTestCase.
+   - **Salvaguarda:** la prueba de paquete `UITestIsolationTests` falla si una función de las pruebas de interfaz no es `@MainActor`. Comprobé que habría detectado este caso.
+3. **Menú «+»:** «Gasto sin justificante» se partía a media palabra en español.
+   - La opción pasa a «Sin justificante» / «Sans justificatif» / «No receipt»; con el icono de lápiz se entiende.
+   - Las demás opciones ya caben en una línea, o se parten por palabras completas.
+   - **Prueba nueva, `CaptureMenuStringsTests`:** comprueba que las cuatro opciones existen y están traducidas en los tres idiomas, que no pasan de 25 caracteres y que, si no caben en una línea (18), ninguna palabra pasa de 9 caracteres. Las etiquetas antiguas en español y en francés habrían fallado.
+   - Según la regla nueva, no lo he mirado en el simulador.
+
 ## Nota de proceso
 El `PLAN.md` del manager con la revisión de la fase 3 quedó dentro de mi commit `9c8ee4c` («Piezas compartidas…»), no en uno propio. Lo editó mientras yo usaba `git add -A`. El contenido es el suyo, sin tocar. No he reescrito el historial porque pidió no rebasar. Desde entonces añado solo rutas explícitas.
 
