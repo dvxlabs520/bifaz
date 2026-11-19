@@ -145,6 +145,8 @@ public extension Color {
     static let bifazSuccessTint = BifazPalette.successTint.color
     static let bifazWarningTint = BifazPalette.warningTint.color
     static let bifazErrorTint = BifazPalette.errorTint.color
+    /// The only shadow in the app: a small one under floating controls (the capture button).
+    static let bifazShadow = Color.black.opacity(0.14)
     /// Brand cobalt, identical in light and dark (icon, launch screen).
     static let bifazBrandCobalt = Color(uiColor: BifazPalette.Brand.cobalt.uiColor)
 }

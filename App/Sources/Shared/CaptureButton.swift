@@ -29,7 +29,7 @@ struct CaptureButton: View {
                 .foregroundStyle(Color.bifazPaper)
                 .frame(width: side, height: side)
                 .background(Color.bifazInk, in: Circle())
-                .shadow(color: .black.opacity(0.18), radius: 10, y: 4)
+                .shadow(color: .bifazShadow, radius: 6, y: 3)
                 .contentShape(Circle())
         }
         .menuOrder(.fixed)

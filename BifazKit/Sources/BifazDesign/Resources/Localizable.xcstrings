@@ -433,6 +433,294 @@
         }
       }
     },
+    "sentence.ax.amount %@" : {
+      "extractionState" : "manual",
+      "comment" : "VoiceOver label of the amount piece of the entry sentence.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amount, %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importe, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant, %@"
+          }
+        }
+      }
+    },
+    "sentence.ax.category %@" : {
+      "extractionState" : "manual",
+      "comment" : "VoiceOver label of the category piece.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Category, %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Categoría, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catégorie, %@"
+          }
+        }
+      }
+    },
+    "sentence.ax.date %@" : {
+      "extractionState" : "manual",
+      "comment" : "VoiceOver label of the date piece.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date, %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fecha, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date, %@"
+          }
+        }
+      }
+    },
+    "sentence.ax.empty" : {
+      "extractionState" : "manual",
+      "comment" : "VoiceOver: a piece of the entry sentence that is still empty.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "not set"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sin indicar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "non renseigné"
+          }
+        }
+      }
+    },
+    "sentence.ax.merchant %@" : {
+      "extractionState" : "manual",
+      "comment" : "VoiceOver label of the merchant piece.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merchant, %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comercio, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commerçant, %@"
+          }
+        }
+      }
+    },
+    "sentence.ax.space %@" : {
+      "extractionState" : "manual",
+      "comment" : "VoiceOver label of the space piece.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Space, %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espacio, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espace, %@"
+          }
+        }
+      }
+    },
+    "sentence.date.on %@" : {
+      "extractionState" : "manual",
+      "comment" : "Entry sentence: the expense date, e.g. 'on 3 Nov'. Argument: day and month (and year if not this year).",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "on %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "el %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "le %@"
+          }
+        }
+      }
+    },
+    "sentence.date.today" : {
+      "extractionState" : "manual",
+      "comment" : "Entry sentence: the expense is dated today.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "today"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aujourd’hui"
+          }
+        }
+      }
+    },
+    "sentence.date.yesterday" : {
+      "extractionState" : "manual",
+      "comment" : "Entry sentence: the expense is dated yesterday.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "yesterday"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ayer"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hier"
+          }
+        }
+      }
+    },
+    "sentence.placeholder.category" : {
+      "extractionState" : "manual",
+      "comment" : "Entry sentence: shown in place of the category while it is empty.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "a category"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "una categoría"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "une catégorie"
+          }
+        }
+      }
+    },
+    "sentence.placeholder.merchant" : {
+      "extractionState" : "manual",
+      "comment" : "Entry sentence: shown in place of the merchant while it is empty.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "a shop"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "un comercio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "un commerçant"
+          }
+        }
+      }
+    },
+    "sentence.template" : {
+      "extractionState" : "manual",
+      "comment" : "Entry sentence of a new expense. Keep the slots in braces, in any order: {amount}, {merchant}, {category}, {space}, {date}. Each slot becomes a tappable piece. Write a natural sentence for the language, not a word-for-word translation.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I spent {amount} at {merchant} on {category} · {space} · {date}"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gasté {amount} en {merchant} para {category} · {space} · {date}"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "J’ai dépensé {amount} chez {merchant}, en {category} · {space} · {date}"
+          }
+        }
+      }
+    },
     "space.all" : {
       "comment" : "Space selector option that shows both spaces together.",
       "extractionState" : "manual",
