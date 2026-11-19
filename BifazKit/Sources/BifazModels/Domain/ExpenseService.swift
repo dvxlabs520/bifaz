@@ -22,6 +22,34 @@ public enum ExpenseService {
         return expense
     }
 
+    /// Saves a new expense and, with `frequency`, a rule repeating it from the next
+    /// period — all or nothing: both are validated before anything is inserted, and
+    /// saved together; if the save fails, the context is rolled back, so neither the
+    /// expense nor the rule stays and saving again cannot duplicate the expense (the
+    /// caller removes the receipt files it stored).
+    @discardableResult
+    public static func create(
+        from draft: ExpenseDraft,
+        receipt: StoredReceiptFiles? = nil,
+        repeating frequency: RecurrenceFrequency?,
+        in context: ModelContext,
+        now: Date = .now,
+        calendar: Calendar = .current
+    ) throws -> (expense: Expense, rule: RecurringRule?) {
+        if let error = draft.validate() { throw error }
+        let template = frequency.map { RecurringService.Template.repeating(draft, frequency: $0, calendar: calendar) }
+        if let error = template?.validate(calendar: calendar) { throw error }
+        do {
+            let expense = try create(from: draft, receipt: receipt, in: context, saving: false)
+            let rule = try template.map { try RecurringService.create($0, in: context, now: now, calendar: calendar, saving: false) }
+            try context.save()
+            return (expense, rule)
+        } catch {
+            context.rollback()
+            throw error
+        }
+    }
+
     /// Applies an edited draft to an existing expense. `saving: false` leaves the
     /// save to the caller (bulk inserts of generated data).
     public static func update(_ expense: Expense, with draft: ExpenseDraft, in context: ModelContext, saving: Bool = true) throws {

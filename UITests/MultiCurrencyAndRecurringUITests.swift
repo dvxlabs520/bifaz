@@ -123,6 +123,41 @@ final class MultiCurrencyAndRecurringUITests: XCTestCase {
         XCTAssertTrue(row.waitForExistence(timeout: 5), "The rule is listed")
     }
 
+    /// v2: "Repeat" is for euros; moving to a foreign currency drops the choice
+    /// (the chip hides), so coming back to euros shows it unset, not silently kept.
+    @MainActor
+    func testForeignCurrencyClearsRepeat() {
+        let app = launch()
+        app.buttons["ui.captureButton"].tap()
+        let manual = app.buttons["ui.captureManual"]
+        XCTAssertTrue(manual.waitForExistence(timeout: 5))
+        manual.tap()
+        let amount = app.textFields["ui.formAmount"]
+        XCTAssertTrue(amount.waitForExistence(timeout: 5))
+        amount.tap()
+        amount.typeText("20.00")
+        let repeatChip = app.buttons["ui.chip.repeat"]
+        repeatChip.tap()
+        let monthly = app.buttons["ui.repeat.monthly"]
+        XCTAssertTrue(monthly.waitForExistence(timeout: 5))
+        monthly.tap()
+        XCTAssertTrue(repeatChip.label.contains("Monthly"), "The chip shows the choice: \(repeatChip.label)")
+
+        app.buttons["ui.chip.currency"].tap()
+        app.buttons["ui.formCurrency"].tap()
+        let dollar = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "(USD)")).firstMatch
+        XCTAssertTrue(dollar.waitForExistence(timeout: 5))
+        dollar.tap()
+        XCTAssertTrue(repeatChip.waitForNonExistence(timeout: 5), "No repeat for a foreign amount")
+
+        app.buttons["ui.formCurrency"].tap()
+        let euro = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "(EUR)")).firstMatch
+        XCTAssertTrue(euro.waitForExistence(timeout: 5))
+        euro.tap()
+        XCTAssertTrue(repeatChip.waitForExistence(timeout: 5), "Back in euros, the chip is back")
+        XCTAssertFalse(repeatChip.label.contains("Monthly"), "…unset: \(repeatChip.label)")
+    }
+
     @MainActor
     private func waitForTotal(_ text: String, in app: XCUIApplication) -> Bool {
         let header = app.descendants(matching: .any)["ui.summaryHeader"]

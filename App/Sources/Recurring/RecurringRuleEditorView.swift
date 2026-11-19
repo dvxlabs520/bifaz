@@ -39,8 +39,7 @@ struct RecurringRuleEditorView: View {
     /// its date (same day next month by default).
     static func template(repeating draft: ExpenseDraft, frequency: RecurrenceFrequency = .monthly,
                          calendar: Calendar = .current) -> RecurringService.Template {
-        let first = RecurrenceCalendar.occurrence(1, start: draft.date, frequency: frequency, calendar: calendar) ?? draft.date
-        return RecurringService.Template(draft: draft, frequency: frequency, startDate: first)
+        RecurringService.Template.repeating(draft, frequency: frequency, calendar: calendar)
     }
 
     init(rule: RecurringRule? = nil, template: RecurringService.Template? = nil) {

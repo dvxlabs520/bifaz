@@ -43,6 +43,14 @@ public enum RecurringService {
             self.init(draft: draft, frequency: rule.frequency, startDate: rule.startDate, endDate: rule.endDate)
         }
 
+        /// A rule repeating a new expense: same values, first occurrence one period
+        /// after the expense's date (the expense itself is today's occurrence).
+        public static func repeating(_ draft: ExpenseDraft, frequency: RecurrenceFrequency,
+                                     calendar: Calendar = .current) -> Template {
+            let first = RecurrenceCalendar.occurrence(1, start: draft.date, frequency: frequency, calendar: calendar) ?? draft.date
+            return Template(draft: draft, frequency: frequency, startDate: first)
+        }
+
         public func validate(calendar: Calendar = .current) -> ValidationError? {
             guard let amount = draft.amount, amount > 0 else { return .amountNotPositive }
             if draft.isForeignCurrency { return .foreignCurrency }
@@ -54,13 +62,14 @@ public enum RecurringService {
     // MARK: Rules
 
     @discardableResult
-    public static func create(_ template: Template, in context: ModelContext, now: Date = .now, calendar: Calendar = .current) throws -> RecurringRule {
+    public static func create(_ template: Template, in context: ModelContext, now: Date = .now, calendar: Calendar = .current,
+                              saving: Bool = true) throws -> RecurringRule {
         if let error = template.validate(calendar: calendar) { throw error }
         let rule = RecurringRule(amount: 0, space: template.draft.space, frequency: template.frequency, nextDate: template.startDate)
         context.insert(rule)
         apply(template, to: rule, calendar: calendar)
         refreshNextDate(rule, now: now, calendar: calendar)
-        try context.save()
+        if saving { try context.save() }
         return rule
     }
 

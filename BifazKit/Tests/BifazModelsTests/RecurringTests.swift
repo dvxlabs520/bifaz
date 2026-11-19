@@ -189,3 +189,74 @@ struct RecurringTests {
         }
     }
 }
+
+/// "Repeat" on a new expense (phase 5): the expense and its rule are saved together or not at all.
+@Suite("New expense with its repeat rule")
+struct RepeatOnCreateTests {
+    static let usd = ExchangeRateQuote(currencyCode: "USD", rate: decimal("1.0989"), date: parisDate(2026, 11, 17), source: .ecb)
+
+    @MainActor
+    private func counts(_ context: ModelContext) throws -> (expenses: Int, rules: Int) {
+        (try context.fetchCount(FetchDescriptor<Expense>()), try context.fetchCount(FetchDescriptor<RecurringRule>()))
+    }
+
+    @Test("Success: the expense and a rule starting the next period, in one save")
+    @MainActor
+    func success() throws {
+        let container = try makeTestContainer()
+        defer { withExtendedLifetime(container) {} }
+        let context = container.mainContext
+        let draft = ExpenseDraft(amount: 15, merchant: "Gym Club", date: parisDate(2026, 11, 19), space: .personal)
+        let created = try ExpenseService.create(from: draft, repeating: .monthly, in: context,
+                                                now: parisDate(2026, 11, 19), calendar: parisCalendar)
+        #expect(created.expense.amount == 15)
+        let rule = try #require(created.rule)
+        #expect(rule.merchant == "Gym Club" && rule.amount == 15 && rule.frequency == .monthly)
+        #expect(parisCalendar.isDate(rule.startDate, inSameDayAs: parisDate(2026, 12, 19)))
+        #expect(parisCalendar.isDate(rule.nextDate, inSameDayAs: parisDate(2026, 12, 19)))
+        #expect(!context.hasChanges)
+        #expect(try counts(context) == (1, 1))
+        // Nothing due today: today's occurrence is the expense just saved.
+        #expect(try RecurringService.generateDue(in: context, now: parisDate(2026, 11, 19), calendar: parisCalendar).isEmpty)
+    }
+
+    @Test("An invalid rule saves nothing: no expense, no rule")
+    @MainActor
+    func invalidRule() throws {
+        let container = try makeTestContainer()
+        defer { withExtendedLifetime(container) {} }
+        let context = container.mainContext
+        var draft = ExpenseDraft(amount: 48, merchant: "GitHub", space: .pro)
+        draft.currencyCode = "USD"
+        draft.exchangeRate = Self.usd
+        #expect(draft.validate() == nil)
+        #expect(throws: RecurringService.ValidationError.foreignCurrency) {
+            try ExpenseService.create(from: draft, repeating: .monthly, in: context)
+        }
+        #expect(!context.hasChanges)
+        #expect(try counts(context) == (0, 0))
+    }
+
+    @Test("An invalid expense saves nothing either")
+    @MainActor
+    func invalidExpense() throws {
+        let container = try makeTestContainer()
+        defer { withExtendedLifetime(container) {} }
+        let context = container.mainContext
+        #expect(throws: (any Error).self) {
+            try ExpenseService.create(from: ExpenseDraft(amount: nil), repeating: .weekly, in: context)
+        }
+        #expect(try counts(context) == (0, 0))
+    }
+
+    @Test("Without a frequency it is a plain expense")
+    @MainActor
+    func noRepeat() throws {
+        let container = try makeTestContainer()
+        defer { withExtendedLifetime(container) {} }
+        let context = container.mainContext
+        let created = try ExpenseService.create(from: ExpenseDraft(amount: 4.2, space: .personal), repeating: nil, in: context)
+        #expect(created.rule == nil)
+        #expect(try counts(context) == (1, 0))
+    }
+}

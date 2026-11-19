@@ -225,6 +225,8 @@ struct ExpenseFormView: View {
                 if draft.isForeignCurrency, draft.exchangeRate?.source != .manual { lookUpRate() }
             }
             .onChange(of: draft.currencyCode) { _, code in
+                // Rules are in euros: a foreign amount cannot repeat (the chip hides too).
+                if code != "EUR" { repeatFrequency = nil }
                 draft.amountInEUROverride = nil
                 draft.exchangeRate = nil
                 if code != "EUR", !showsForeignVAT {
@@ -811,14 +813,9 @@ struct ExpenseFormView: View {
                         in: receiptStore
                     )
                 }
-                try ExpenseService.create(from: draft, receipt: storedFiles, in: context)
+                try createExpense(receipt: storedFiles)
             } else {
-                try ExpenseService.create(from: draft, in: context)
-            }
-            if let repeatFrequency, !isEditing, !draft.isForeignCurrency {
-                // Starts next period: today's expense is the one just saved.
-                try RecurringService.create(RecurringRuleEditorView.template(repeating: draft, frequency: repeatFrequency), in: context)
-                Task { await NotificationScheduler.shared.reschedule(in: context) }
+                try createExpense(receipt: nil)
             }
             savedCount += 1
             if let category = draft.category,
@@ -836,6 +833,16 @@ struct ExpenseFormView: View {
             }
             Log.app.error("Saving expense failed: \(String(describing: type(of: error)), privacy: .public)")
             saveError = error
+        }
+    }
+
+    /// The new expense, with its "Repeat" rule if chosen: all or nothing (BifazKit),
+    /// so a failed save leaves no expense, no rule and lets `save` remove the files.
+    private func createExpense(receipt: StoredReceiptFiles?) throws {
+        let frequency = draft.isForeignCurrency ? nil : repeatFrequency
+        let created = try ExpenseService.create(from: draft, receipt: receipt, repeating: frequency, in: context)
+        if created.rule != nil {
+            Task { await NotificationScheduler.shared.reschedule(in: context) }
         }
     }
 
