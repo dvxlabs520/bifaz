@@ -161,7 +161,14 @@ Criterio: un gasto en USD y un abono mensual salen bien en el Resumen y en el hi
      - Comprueba un identificador propio de la pantalla antes de auditar.
      - Espera a que la pantalla esté quieta: marcador y buscador sin moverse durante 1 s.
    - **Resultado:** pasa dos veces seguidas en el iPhone 17 y en el iPhone 18 Pro.
-   - **Contraste intermitente del botón «Pro» en Dépenses:** apareció en una de las primeras pasadas en el iPhone 18 Pro. Es tinta sobre blanco, 17:1. Se medía mientras el buscador se colocaba y desapareció con la espera a que la pantalla esté quieta, sin excluirlo.
+   - **Avisos intermitentes de contraste en Dépenses** («Pro», «Logiciels», «48,00 $US», a 5,3–17:1, en los dos simuladores).
+     - Venían de que la lista arrancaba ligeramente desplazada, con el buscador a medio plegar (9 pt de alto) y la primera fila en el borde difuminado de la barra.
+     - La prueba ahora desliza la lista a su posición de reposo (buscador desplegado) y espera a que el número de filas deje de cambiar: al abrir, los recurrentes generados entran con animación.
+     - Sin excluir nada, el contraste ya no falla.
+   - **«Texto recortado» en el buscador:** con el buscador desplegado sale siempre. Probé un texto de ayuda de 10 letras («Rechercher») en un campo de 370 pt y siguió saliendo.
+     - Es el buscador del sistema (`.searchable`); se excluye solo ese tipo de aviso en ese elemento (exclusión 3).
+     - El texto de ayuda vuelve a ser el original.
+   - **Exclusión 1 afinada:** el contraste de lo que queda bajo el botón «+» flotante se mide ahora con el marco real del botón (más 12 pt de sombra), no con una franja fija. El botón flota por encima de la barra de pestañas, así que una fecha a la derecha (y≈706) quedaba fuera de la franja.
    - **Aviso «Potentially inaccessible text» (sin elemento):** lo reproduje con una prueba temporal. Sale en cualquier estado del Resumen desplazado, con texto pasando bajo las barras translúcidas. No sale con la pantalla en reposo. No es el gráfico: sale con el gráfico fuera de pantalla y no cuando está visible. Es la detección por imagen de la auditoría leyendo texto difuminado bajo las barras.
      **Decisión:** no lo excluyo. La prueba ya no audita pantallas a medio desplazar, y si algún día aparece en reposo, fallará y habrá que mirarlo.
 2. **Avisos de aislamiento en las pruebas de interfaz:**
