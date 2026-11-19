@@ -1,0 +1,111 @@
+# Bifaz CI: builds the app and runs the test battery on an iOS Simulator.
+#
+# Manual only (Actions → "CI" → "Run workflow"): it does NOT run on push or on
+# pull requests. To make it automatic, add `push:` and/or `pull_request:` under `on:`.
+#
+# What runs here:
+# - BifazKit package tests (models, design, reading). The tests that need Apple's
+#   on-device model or the real receipts in TestData/Real (git-ignored) skip
+#   themselves when they are not available, as on a CI runner.
+# - The UI tests (BifazUITests) only when "ui_tests" is checked: they are slower.
+# Warnings are already errors in the project (SWIFT_TREAT_WARNINGS_AS_ERRORS).
+name: CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      xcode:
+        description: "Xcode version (e.g. 27.1). Empty = the newest Xcode on the runner"
+        required: false
+        default: ""
+        type: string
+      ui_tests:
+        description: "Also run the UI tests (slower)"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build and test
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - name: Check out
+        uses: actions/checkout@v5
+
+      - name: Select Xcode
+        env:
+          XCODE_VERSION: ${{ inputs.xcode }}
+        run: |
+          if [ -n "$XCODE_VERSION" ]; then
+            app="/Applications/Xcode_${XCODE_VERSION}.app"
+          else
+            app=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          fi
+          if [ ! -d "$app" ]; then
+            echo "::error::Xcode not found: $app. Available:"
+            ls -d /Applications/Xcode_*.app
+            exit 1
+          fi
+          sudo xcode-select -s "$app/Contents/Developer"
+          xcodebuild -version
+
+      - name: Pick an iPhone simulator
+        id: sim
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, re, subprocess
+          data = json.loads(subprocess.check_output(["xcrun", "simctl", "list", "devices", "available", "-j"]))
+          def version(runtime):
+              match = re.search(r"iOS-(\d+)-(\d+)", runtime)
+              return tuple(int(part) for part in match.groups()) if match else None
+          runtimes = sorted(((version(rt), rt) for rt in data["devices"] if version(rt)), reverse=True)
+          # A standard model ("iPhone 17") on the newest iOS that has one: the UI tests
+          # were tuned on those. Otherwise any iPhone on the newest iOS.
+          candidates = [(ios, d) for ios, rt in runtimes for d in data["devices"][rt] if d["name"].startswith("iPhone")]
+          standard = [(ios, d) for ios, d in candidates if re.fullmatch(r"iPhone \d+", d["name"])]
+          if not candidates:
+              raise SystemExit("No iPhone simulator available on this runner")
+          ios, device = (standard or candidates)[0]
+          print(f"id={device['udid']}")
+          print(f"name={device['name']} (iOS {ios[0]}.{ios[1]})")
+          PY
+          cat "$GITHUB_OUTPUT"
+
+      - name: Test (${{ steps.sim.outputs.name }})
+        env:
+          SIM_ID: ${{ steps.sim.outputs.id }}
+          UI_TESTS: ${{ inputs.ui_tests }}
+        run: |
+          skip=()
+          if [ "$UI_TESTS" != "true" ]; then skip=(-skip-testing:BifazUITests); fi
+          set +e
+          xcodebuild test \
+            -project Bifaz.xcodeproj \
+            -scheme Bifaz \
+            -destination "platform=iOS Simulator,id=$SIM_ID" \
+            -resultBundlePath TestResults.xcresult \
+            "${skip[@]}" \
+            > xcodebuild.log 2>&1
+          status=$?
+          grep -E "^Test Suite .*(passed|failed)|^Test Case .*failed|[✔✘] Test run|error:|\*\* (BUILD|TEST)" xcodebuild.log | tail -200
+          exit $status
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            TestResults.xcresult
+            xcodebuild.log
+          if-no-files-found: ignore
+          retention-days: 7
