@@ -2,9 +2,10 @@ import SwiftUI
 import BifazModels
 
 /// A row in the expense list. It sits directly on the screen background: a
-/// pastel category icon with the space badge, merchant and category (or a
-/// "Receipt missing" warning), and the amount with the date below it on the
-/// right. VoiceOver reads it as one element. At accessibility text sizes the
+/// merchant monogram with the space badge, merchant and category (or a
+/// "Receipt missing" warning), and the amount with the date (or the time, in a
+/// list grouped by day) below it on the right. VoiceOver reads it as one element.
+/// At accessibility text sizes the
 /// amount and date move under the text.
 public struct ExpenseRow: View {
     @Environment(\.locale) private var locale
@@ -21,6 +22,8 @@ public struct ExpenseRow: View {
     /// For a foreign-currency expense: the original amount ("48,00 $US"), shown
     /// under the euro amount instead of the date.
     private let originalAmount: (amount: Decimal, currencyCode: String)?
+    /// Show the time ("14:32") instead of the date: the day header already says the day.
+    private let timeOnly: Bool
 
     public init(
         merchant: String,
@@ -31,8 +34,10 @@ public struct ExpenseRow: View {
         currencyCode: String = "EUR",
         space: Space,
         receiptState: ReceiptThumbnail.State,
-        originalAmount: (amount: Decimal, currencyCode: String)? = nil
+        originalAmount: (amount: Decimal, currencyCode: String)? = nil,
+        timeOnly: Bool = false
     ) {
+        self.timeOnly = timeOnly
         self.originalAmount = originalAmount
         self.merchant = merchant
         self.categoryName = categoryName
@@ -46,12 +51,7 @@ public struct ExpenseRow: View {
 
     public var body: some View {
         HStack(alignment: dynamicTypeSize.isAccessibilitySize ? .top : .center, spacing: BifazSpacing.s) {
-            CategoryIcon(
-                icon: categoryIcon ?? .other,
-                tint: space.color,
-                background: space.tint,
-                badge: space
-            )
+            MonogramAvatar(name: merchant, space: space)
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: BifazSpacing.xs) {
                     details
@@ -105,9 +105,9 @@ public struct ExpenseRow: View {
             Group {
                 if let originalAmount {
                     Text(verbatim: originalAmount.amount.formatted(.currency(code: originalAmount.currencyCode).locale(locale))
-                         + " · " + date.formatted(.dateTime.day().month(.abbreviated).locale(locale)))
+                         + " · " + captionDate)
                 } else {
-                    Text(verbatim: date.formatted(.dateTime.day().month(.abbreviated).locale(locale)))
+                    Text(verbatim: captionDate)
                 }
             }
             .font(.bifazCaption)
@@ -116,10 +116,18 @@ public struct ExpenseRow: View {
         }
     }
 
+    private var captionDate: String {
+        timeOnly
+            ? date.formatted(.dateTime.hour().minute().locale(locale))
+            : date.formatted(.dateTime.day().month(.abbreviated).locale(locale))
+    }
+
     private var accessibilityText: String {
         let category = categoryName.flatMap { $0.isEmpty ? nil : $0 }
             ?? LocalizedStringResource("expenseRow.uncategorised", bundle: .module).resolved(in: locale)
-        let dateText = date.formatted(.dateTime.day().month(.wide).locale(locale))
+        let dateText = timeOnly
+            ? date.formatted(.dateTime.hour().minute().locale(locale))
+            : date.formatted(.dateTime.day().month(.wide).locale(locale))
         var amountText = amount.formatted(.currency(code: currencyCode).locale(locale))
         if let originalAmount {
             amountText += ", " + originalAmount.amount.formatted(.currency(code: originalAmount.currencyCode).locale(locale))
@@ -170,7 +178,13 @@ private struct ExpenseRowSamples: View {
             HairlineDivider(leadingInset: 48)
             ExpenseRow(
                 merchant: "Boulangerie Paul", categoryName: nil, categoryIcon: nil,
-                date: .now, amount: 4.30, space: .personal, receiptState: .attached
+                date: .now, amount: 4.30, space: .personal, receiptState: .attached, timeOnly: true
+            )
+            HairlineDivider(leadingInset: 48)
+            ExpenseRow(
+                merchant: "Mercadona", categoryName: "Compras", categoryIcon: .groceries,
+                date: .now, amount: 48.00, space: .personal, receiptState: .none,
+                originalAmount: (48, "USD"), timeOnly: true
             )
         }
         .padding()

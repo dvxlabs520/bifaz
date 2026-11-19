@@ -289,6 +289,78 @@
         }
       }
     },
+    "dayHeader.accessibility %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "VoiceOver label of a day header: day, total of the day.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@"
+          }
+        }
+      }
+    },
+    "dayHeader.today" : {
+      "extractionState" : "manual",
+      "comment" : "Day header in the expense history: the group of today's expenses.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd’hui"
+          }
+        }
+      }
+    },
+    "dayHeader.yesterday" : {
+      "extractionState" : "manual",
+      "comment" : "Day header in the expense history: the group of yesterday's expenses.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yesterday"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayer"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hier"
+          }
+        }
+      }
+    },
     "expenseRow.accessibility %@ %@ %@ %@" : {
       "comment" : "VoiceOver label of an expense row: merchant, category, date, amount.",
       "extractionState" : "manual",
@@ -357,6 +429,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sans catégorie"
+          }
+        }
+      }
+    },
+    "heroFigure.accessibility %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "VoiceOver label of the hero figure: label (e.g. Spent), amount.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@"
+          }
+        }
+      }
+    },
+    "optionalChip.accessibility %@ %@" : {
+      "extractionState" : "manual",
+      "comment" : "VoiceOver label of an optional-field chip that has a value: field name, value (e.g. VAT, 20 %).",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@"
           }
         }
       }
