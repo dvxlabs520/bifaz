@@ -2,7 +2,7 @@ import SwiftUI
 import BifazModels
 
 /// The merchant's avatar in v2 lists: a circle in the space's tint with the
-/// merchant's initial in the space colour and the small space badge of
+/// merchant's initial in ink and the small space badge of
 /// `CategoryIcon`. Hidden from accessibility: the row says the merchant.
 public struct MonogramAvatar: View {
     @Environment(\.locale) private var locale
@@ -24,8 +24,10 @@ public struct MonogramAvatar: View {
             .frame(width: side, height: side)
             .overlay {
                 Text(verbatim: Monogram.initial(for: name, locale: locale))
-                    .font(.system(size: side * 0.44, weight: .medium))
-                    .foregroundStyle(space.color)
+                    .font(.system(size: side * 0.44, weight: .semibold))
+                    // Ink, not the space colour: a small glyph on the tint needs the
+                    // margin (the badge already says the space).
+                    .foregroundStyle(Color.bifazInk)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
             }

@@ -30,7 +30,9 @@ public extension Font {
 
     /// Data labels in SF Mono ("GASTADO", "LÍMITE", "NOV. 2026"). Use with
     /// `.bifazDataLabel()` for the capitals, tracking and colour.
-    static let bifazData = Font.system(.caption2, design: .monospaced, weight: .medium)
+    /// Caption, not caption2: the accessibility audit reports caption2 text as
+    /// "Dynamic Type partially unsupported" (checked on three iPhones).
+    static let bifazData = Font.system(.caption, design: .monospaced, weight: .medium)
     /// Context sentences in New York ("At this pace you'll be €52 short"). Phase 6 fills them.
     static let bifazContext = Font.system(.title3, design: .serif)
     /// Title of a compact header (small, centred).

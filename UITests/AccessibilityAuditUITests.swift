@@ -39,14 +39,18 @@ final class AccessibilityAuditUITests: XCTestCase {
         // an animation: wait until the rows stop changing.
         waitUntilRowsSettle(in: app)
         sleep(1)
-        let screenFrame = app.windows.firstMatch.frame
-        let capture = app.buttons["ui.captureButton"]
-        let captureFrame = capture.exists ? capture.frame.insetBy(dx: -12, dy: -12) : .null
+        let chrome = Chrome(app: app)
+        // Every issue is collected and the test fails at the end with all of them:
+        // returning false would stop the audit at the first one and hide the rest.
+        var issues: [String] = []
         try app.performAccessibilityAudit { issue in
-            let excluded = Self.isKnownFalsePositive(issue, screen: screenFrame, captureButton: captureFrame)
-            print("BIFAZ-AUDIT [\(screen)] \(excluded ? "excluded" : "ISSUE") \(issue.auditType) · \(issue.compactDescription) · \(issue.element?.debugDescription.prefix(160) ?? "-")")
-            return excluded
+            let excluded = Self.isKnownFalsePositive(issue, chrome: chrome)
+            let line = "\(issue.auditType) · \(issue.compactDescription) · \(issue.element?.debugDescription.prefix(160) ?? "-")"
+            print("BIFAZ-AUDIT [\(screen)] \(excluded ? "excluded" : "ISSUE") \(line)")
+            if !excluded { issues.append(line) }
+            return true
         }
+        XCTAssertTrue(issues.isEmpty, "\(screen): \(issues.count) accessibility issue(s):\n" + issues.joined(separator: "\n"))
     }
 
     /// Waits until the element's frame has not changed for a second (10 s at most).
@@ -78,35 +82,60 @@ final class AccessibilityAuditUITests: XCTestCase {
         if first.exists { waitUntilStill(first) }
     }
 
-    /// Explicit exclusions, each one explained in docs/fase-4-notas.md:
-    /// 1. Contrast of content passing under the translucent tab bar (bottom 110 pt) or under
-    ///    the floating capture button and its shadow: the audit samples pixels through them.
-    /// 2. The system navigation bar (top 130 pt): Liquid Glass toolbar buttons
-    ///    ("Modifier", "Répéter", "Enregistrer") and the inline title are drawn by iOS;
-    ///    their contrast and their Dynamic Type limits are the system's.
+    /// The system chrome on screen, by its real frames (not fixed margins), so our own
+    /// text right under a compact header or right above the tab bar is still checked.
+    struct Chrome {
+        var navigationBar: CGRect
+        var tabBar: CGRect
+        var captureButton: CGRect
+
+        @MainActor
+        init(app: XCUIApplication) {
+            let bar = app.navigationBars.firstMatch
+            navigationBar = bar.exists ? bar.frame : .null
+            let tabs = app.tabBars.firstMatch
+            tabBar = tabs.exists ? tabs.frame : .null
+            let capture = app.buttons["ui.captureButton"]
+            // The button and its shadow.
+            captureButton = capture.exists ? capture.frame.insetBy(dx: -12, dy: -12) : .null
+        }
+
+        /// Inside the navigation bar (its buttons and inline title), with a point of slack.
+        @MainActor
+        func isInNavigationBar(_ frame: CGRect) -> Bool {
+            !navigationBar.isNull && navigationBar.insetBy(dx: -1, dy: -1).contains(frame)
+        }
+    }
+
+    /// Explicit exclusions, each one explained in docs/fase-5-notas.md:
+    /// 1. Contrast of what is drawn in or under the translucent tab bar (by its real frame)
+    ///    or under the floating capture button and its shadow: the audit samples pixels
+    ///    through the glass.
+    /// 2. Elements inside the system navigation bar (by its real frame): Liquid Glass
+    ///    toolbar buttons and the inline title are drawn by iOS; their contrast, Dynamic
+    ///    Type and clipping are the system's. Our own text below the bar is checked.
     /// 3. "Text clipped" on the history search field (the system's `.searchable` bar): it is
     ///    reported whatever the prompt, even "Rechercher" (10 letters in a 370 pt field).
     /// 4. Dynamic Type of the Tout / Pro / Perso chips: they grow with the text and the
-    ///    row becomes a column (`ViewThatFits`, checked by hand at AccessibilityXL); the
-    ///    audit reports the swap as "partially unsupported".
+    ///    row becomes a column (`ViewThatFits`); the audit reports the swap as
+    ///    "partially unsupported".
+    /// 5. Contrast with no element ("Contrast failed for SwiftUI.AccessibilityNode"), on
+    ///    Résumé and Dépenses at rest on all three iPhones. Not the monogram letter, its
+    ///    badge, the space selector or the mono labels (each removed in turn, still
+    ///    reported); the source is not exposed to XCUITest, so it stays excluded.
     @MainActor
-    static func isKnownFalsePositive(_ issue: XCUIAccessibilityAuditIssue, screen: CGRect, captureButton: CGRect) -> Bool {
-        guard let element = issue.element else {
-            // Contrast issues the audit cannot attach to any element come from the
-            // translucent bars (case 1); anything else must be looked at.
-            return issue.auditType == .contrast
-        }
+    static func isKnownFalsePositive(_ issue: XCUIAccessibilityAuditIssue, chrome: Chrome) -> Bool {
+        guard let element = issue.element else { return issue.auditType == .contrast }
         let frame = element.frame
         switch issue.auditType {
         case .contrast:
-            if frame.maxY > screen.maxY - 110 || frame.intersects(captureButton) { return true }
-            if ["Tout", "Pro", "Perso"].contains(element.label), frame.minY < screen.minY + 260 { return true }
-            if frame.minY < screen.minY + 130, element.elementType == .button || element.elementType == .staticText { return true }
+            if frame.intersects(chrome.tabBar) || frame.intersects(chrome.captureButton) { return true }
+            if chrome.isInNavigationBar(frame) { return true }
         case .dynamicType:
-            if frame.minY < screen.minY + 130, element.elementType == .button { return true }
-            if ["Tout", "Pro", "Perso"].contains(element.label), frame.minY < screen.minY + 260 { return true }
+            if chrome.isInNavigationBar(frame) { return true }
+            if ["Tout", "Pro", "Perso"].contains(element.label) { return true }
         case .textClipped:
-            if frame.minY < screen.minY + 130, element.elementType == .staticText { return true }
+            if chrome.isInNavigationBar(frame) { return true }
             if element.elementType == .searchField { return true }
         default:
             break

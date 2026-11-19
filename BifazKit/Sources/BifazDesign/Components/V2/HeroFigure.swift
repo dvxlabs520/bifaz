@@ -29,8 +29,12 @@ public struct HeroFigure: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: BifazSpacing.xxs) {
+            // Mono like the data labels, but as written (no capitals, no tracking): the
+            // element reads label and amount, and the accessibility audit wants the
+            // drawn text to match it (tracked capitals were reported as clipped).
             Text(label)
-                .bifazDataLabel()
+                .font(.bifazData)
+                .foregroundStyle(Color.bifazInkSecondary)
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: BifazSpacing.xs) {
                     figure

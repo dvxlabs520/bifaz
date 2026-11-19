@@ -140,7 +140,9 @@ public struct ExpenseRow: View {
             space.title.resolved(in: locale),
         ]
         if receiptState == .pending {
-            parts.append(LocalizedStringResource("receipt.pending", bundle: .module).resolved(in: locale))
+            // The same words as on screen ("Receipt missing"): the audit flags a row whose
+            // label does not say what it shows, and VoiceOver should read what is drawn.
+            parts.append(LocalizedStringResource("expenseRow.receiptMissing", bundle: .module).resolved(in: locale))
         }
         return parts.joined(separator: ", ")
     }
