@@ -4,10 +4,19 @@ import BifazDesign
 
 /// The app's exchange-rate service (one table on disk, shared by every form).
 enum ExchangeRates {
-    static let service = ExchangeRateService(
-        fileURL: (try? ExchangeRateService.defaultFileURL())
+    static let service = ExchangeRateService(fileURL: fileURL)
+
+    /// UI tests start without any stored table (a rate saved by an earlier manual run
+    /// on the same Simulator would change what the form shows).
+    private static var fileURL: URL {
+        #if DEBUG
+        if UserDefaults.standard.bool(forKey: "BifazUITesting") {
+            return FileManager.default.temporaryDirectory.appending(path: "ecb-rates-uitest-\(UUID().uuidString).json")
+        }
+        #endif
+        return (try? ExchangeRateService.defaultFileURL())
             ?? FileManager.default.temporaryDirectory.appending(path: "ecb-rates.json")
-    )
+    }
 
     /// Currencies the ECB publishes (fixed list, so the picker works offline).
     static let ecbCurrencies = [
