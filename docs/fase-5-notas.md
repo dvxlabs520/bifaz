@@ -101,7 +101,10 @@ Por la regla del usuario, nada se ha probado a mano en el simulador. Todo se con
     - agrupar la cifra con `.combine`, con etiqueta propia o sin agrupar;
     - la fecha de la fila igual a la dibujada;
     - las etiquetas de sección sin mayúsculas ni tracking.
-  - No se ha añadido ninguna exclusión para este aviso.
+  - **Decisión del manager tras la revisión: exclusión estrecha** (exclusión 6).
+    - Solo `testSummary`, solo «detección de elementos» sin elemento, y como mucho una aparición: si salen dos, falla.
+    - Evidencia: sale en reposo en el iPhone 17 y en el 18 Pro, no en el 17e ni en el iPhone Air (ejecución del manager). Desaparece al quitar secciones que desplazan todo lo de debajo, lo que apunta a la posición del texto respecto a las barras y no a un elemento concreto.
+    - Descartado, como arriba: la forma de la etiqueta de la cifra, cómo se agrupa la cifra para VoiceOver, la fecha de la fila, y las mayúsculas y el tracking de las etiquetas de sección.
 - **La auditoría se detenía en el primer problema no excluido**, y cada ejecución mostraba uno distinto, lo que parecía aleatorio. Ahora recoge todos los problemas y falla al final con la lista completa: igual de estricta, pero cada ejecución lo enseña todo.
 - **Etiquetas de datos en `caption`, no `caption2`**: con `caption2` la auditoría marcaba «Dynamic Type partially unsupported» en las etiquetas mono, también sin mono, sin mayúsculas y sin tracking. Con `caption` pasan.
 - **Etiqueta de la cifra principal** («Dépensé en novembre»):
@@ -117,6 +120,33 @@ Por la regla del usuario, nada se ha probado a mano en el simulador. Todo se con
   - iPhone 17e: 11 de 11, y la auditoría pasa dos veces seguidas;
   - iPhone 17 e iPhone 18 Pro: 10 de 11; falla solo `testSummary`, por el resto de «Potentially inaccessible text» descrito arriba.
 - Las pruebas de flujo (alta, edición y borrado, USD, regla mensual, presupuestos y la nueva del chip «Repetir») pasan en los tres simuladores.
+
+## Resultados tras las correcciones de la revisión
+
+- Paquete: 60 + 207 + 31 pruebas en verde.
+- Compilación de app, paquete y pruebas de interfaz: 0 avisos.
+- Pruebas de interfaz: 12 de 12, dos veces seguidas, en el 17e, el 17 y el 18 Pro.
+- La exclusión 6 se usó una vez en cada ejecución del 17 y del 18 Pro, y ninguna en el 17e.
+
+## Para la prueba en el simulador del usuario
+
+- Con VoiceOver en el iPhone 17: que la cifra principal del Resumen («Dépensé en novembre, …») y la sección «À vérifier» (título y filas) se lean completas. Es lo que cubre la exclusión 6.
+
+## Correcciones de la revisión del tramo 5a
+
+- **«Repetir» al guardar es todo o nada.** `ExpenseService.create(from:receipt:repeating:in:)` en BifazKit:
+  - valida el gasto y la plantilla de la regla antes de insertar nada;
+  - inserta los dos y guarda una sola vez;
+  - si falla, deshace el contexto.
+
+  Por tanto, si falla no queda ni gasto, ni regla, ni archivos de justificante (el formulario los borra), y volver a pulsar Guardar no duplica el gasto. Pruebas:
+  - éxito: gasto y regla, y la regla empieza el periodo siguiente, sin nada pendiente hoy;
+  - regla inválida (moneda extranjera): no se guarda nada;
+  - gasto inválido: no se guarda nada;
+  - sin frecuencia: gasto normal.
+
+  `RecurringRuleEditorView.template(repeating:)` usa ahora `RecurringService.Template.repeating`.
+- **Moneda extranjera borra «Repetir».** Al pasar a otra moneda, la elección se pone a nil, y al volver a euros el chip aparece vacío. Lo cubre la prueba de interfaz `testForeignCurrencyClearsRepeat`: es estado de la vista, sin lógica aparte que probar.
 
 ## No comprobado sin el simulador
 

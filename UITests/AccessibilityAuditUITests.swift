@@ -4,7 +4,7 @@ import XCTest
 /// with the debug sample data, in French (the longest strings). Each screen is reached
 /// the same way on every iPhone size (launch argument or a button always on screen)
 /// and checked by an identifier before the audit. Known false positives are excluded
-/// explicitly below and explained in docs/fase-4-notas.md.
+/// explicitly below and explained in docs/fase-5-notas.md.
 final class AccessibilityAuditUITests: XCTestCase {
     override func setUp() {
         continueAfterFailure = false
@@ -28,7 +28,8 @@ final class AccessibilityAuditUITests: XCTestCase {
 
     /// Waits for the screen's own element, lets transitions settle, then audits.
     @MainActor
-    private func audit(_ screen: String, in app: XCUIApplication, expecting marker: XCUIElement) throws {
+    private func audit(_ screen: String, in app: XCUIApplication, expecting marker: XCUIElement,
+                       toleratesOneElementlessText: Bool = false) throws {
         XCTAssertTrue(marker.waitForExistence(timeout: 10), "\(screen) is on screen before the audit")
         // Mid-transition (tab cross-fade, search bar settling) the audit measures
         // half-faded text: wait until the screen has stopped moving.
@@ -43,8 +44,14 @@ final class AccessibilityAuditUITests: XCTestCase {
         // Every issue is collected and the test fails at the end with all of them:
         // returning false would stop the audit at the first one and hide the rest.
         var issues: [String] = []
+        var elementlessText = 0
         try app.performAccessibilityAudit { issue in
-            let excluded = Self.isKnownFalsePositive(issue, chrome: chrome)
+            var excluded = Self.isKnownFalsePositive(issue, chrome: chrome)
+            // Exclusion 6 (Résumé only, at most once): see `testSummary`.
+            if !excluded, toleratesOneElementlessText, issue.element == nil, issue.auditType == .elementDetection {
+                elementlessText += 1
+                excluded = elementlessText == 1
+            }
             let line = "\(issue.auditType) · \(issue.compactDescription) · \(issue.element?.debugDescription.prefix(160) ?? "-")"
             print("BIFAZ-AUDIT [\(screen)] \(excluded ? "excluded" : "ISSUE") \(line)")
             if !excluded { issues.append(line) }
@@ -146,7 +153,12 @@ final class AccessibilityAuditUITests: XCTestCase {
     @MainActor
     func testSummary() throws {
         let app = launch()
-        try audit("Résumé", in: app, expecting: app.descendants(matching: .any)["ui.summaryHeader"])
+        // Exclusion 6: one "Potentially inaccessible text" with no element, at rest, on the
+        // iPhone 17 and 18 Pro only (not on the 17e or the Air). It goes away when sections
+        // above are removed and everything below moves: a position effect, not one element
+        // (details in docs/fase-5-notas.md). A second one still fails.
+        try audit("Résumé", in: app, expecting: app.descendants(matching: .any)["ui.summaryHeader"],
+                  toleratesOneElementlessText: true)
     }
 
     @MainActor
