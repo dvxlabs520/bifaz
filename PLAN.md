@@ -4,7 +4,7 @@ App iOS para guardar facturas profesionales y gastos personales en un mismo siti
 Simple de usar, con acabado premium y preparada para publicarse en el App Store.
 
 Estado (19-11-2026):
-- **Fases 0 y 1**: aceptadas e integradas en `main` (`838147d`).
+- **Fases 0 y 1**: aceptadas e integradas en `main` (`b60c8b6`).
 - **Fase 2**: entregada en `fase-2`, **sin aceptar**: falta probarla con facturas reales
   (`TestData/Real/`, fuera de git) y en un iPhone real (escáner, modelo de Apple, cifrado).
 - **Fase 3**: aceptada, en `fase-3`.
@@ -390,7 +390,7 @@ Lista de correcciones (todas hechas en la rama):
 5. **Tratamiento en francés**: decidido por el usuario el 17-11-2026: **"vous"**. Pasar todos los textos franceses de "tu" a "vous".
 6. **Pruebas de interfaz**: no hay ninguna automatizada; añadir al menos alta, edición y borrado de un gasto.
 
-**Fase 2, revisada por el manager en simulador (17-11-2026), rama `fase-2` (`301e7ff`):** pasan 173 pruebas
+**Fase 2, revisada por el manager en simulador (17-11-2026), rama `fase-2` (`84cd95e`):** pasan 173 pruebas
 (112 + 10 + 49 de paquete y 2 de interfaz; la de facturas reales se omite por carpeta vacía).
 Probado con toques: menú del "+", importación de una foto con el selector privado del sistema, pantalla de
 lectura y confirmación de un ticket sintético con importe, comercio y fecha correctos en unos 4 s; al cancelar
@@ -405,7 +405,7 @@ modelo responde con Apple Intelligence del Mac, así que no representa un iPhone
 Para aceptar la fase: facturas y tickets reales del usuario leídos correctamente, y prueba en iPhone real
 del escáner, del modelo y de la protección de los justificantes.
 
-**Mejoras de la fase 2, revisadas por el manager (17-11-2026), rama `fase-2` (`ea7d71b`):** las 5 están
+**Mejoras de la fase 2, revisadas por el manager (17-11-2026), rama `fase-2` (`506fe98`):** las 5 están
 hechas, cada una en su commit. Verificado: 191 pruebas en verde (122 + 10 + 57 de paquete y 2 de interfaz) y,
 con toques en el simulador en francés sobre el ticket de TotalEnergies: categoría "Transports" marcada como
 propuesta, comercio "TotalEnergies", pantalla de lectura opaca, confirmación al descartar y menú del "+" sin
@@ -428,7 +428,7 @@ Lista de mejoras (todas hechas en la rama):
 - Avisos de presupuesto dentro de la app (cerca del límite al 80 %, superado al 100 %). Las notificaciones
   del sistema se dejan para la fase 4, junto con el recordatorio de TVA.
 
-**Fase 3, revisada por el manager (17-11-2026), rama `fase-3` (`ff4aa96`):** pasan 231 pruebas
+**Fase 3, revisada por el manager (17-11-2026), rama `fase-3` (`fd587e0`):** pasan 231 pruebas
 (161 + 10 + 57 de paquete y 3 de interfaz). Comprobado en un simulador aparte, en español y con los datos de
 ejemplo: el Resumen de noviembre cuadra con el historial al céntimo en "Todo" (792,03 €), la comparación
 mensual es correcta, la TVA por tipo suma el total del mes y los presupuestos muestran sus tres estados con
@@ -443,7 +443,7 @@ Mejoras de la fase 3, a hacer al terminar la fase 4:
 3. El teclado tapa el campo del segundo importe de TVA en el formulario.
 4. Accesibilidad: auditoría automática en las pruebas de interfaz de las pantallas principales.
 
-**Fase 4 y mejoras de la fase 3, revisadas por el manager (18-11-2026), rama `fase-4` (`28365a8`):**
+**Fase 4 y mejoras de la fase 3, revisadas por el manager (18-11-2026), rama `fase-4` (`8118e0f`):**
 pasan las 265 pruebas de paquete (195 + 10 + 60) y 5 de las 6 de interfaz. Comprobado en un simulador aparte
 (iPhone 17, español): al instalar la fase 4 sobre los datos de la fase 3 los totales no cambian (792,03 €,
 Pro 474,52 €, Personal 317,51 €); el Resumen sale reordenado; un importe de 48 USD se convierte con el tipo

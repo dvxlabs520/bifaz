@@ -1,6 +1,6 @@
 # Fase 3 · Resumen y presupuestos — notas para la revisión
 
-Rama `fase-3`, creada desde `fase-2` (en `e256bc7`, el commit de `PLAN.md`). No se ha fusionado nada en `main`.
+Rama `fase-3`, creada desde `fase-2` (en `448cd67`, el commit de `PLAN.md`). No se ha fusionado nada en `main`.
 La fase 2 sigue sin aceptar: faltan las facturas reales y la prueba en iPhone.
 
 Criterio de la fase: **el resumen cuadra con el historial al céntimo**.
@@ -125,7 +125,7 @@ Criterio de la fase: **el resumen cuadra con el historial al céntimo**.
 - **Redondeo de TVA**: todos los importes de 0,01 € a 30,00 € con cada tipo, dos tipos a mano con importes extremos y 200 combinaciones aleatorias de líneas impresas.
 - **Umbrales** de presupuesto (79,99 %, 80 %, 100 %, límite 333,33 €), días restantes, un solo presupuesto por categoría y avisos que solo saltan si el estado empeora.
 - **Prueba de interfaz** (`BudgetFlowUITests`): crear un presupuesto desde la invitación, añadir gastos y ver el estado pasar a cerca del límite y a superado, con el aviso.
-- **Batería completa** del esquema `Bifaz` (última pasada sobre `bad7e13`):
+- **Batería completa** del esquema `Bifaz` (última pasada sobre `4acb850`):
   - 161 pruebas de modelos, 10 de diseño y 57 de lectura, más 3 de interfaz;
   - sin avisos del compilador (el único aviso es el habitual de `appintentsmetadataprocessor`).
 

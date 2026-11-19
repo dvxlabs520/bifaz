@@ -112,7 +112,7 @@ Por la regla del usuario, nada se ha probado a mano en el simulador. Todo se con
   - con mayúsculas y tracking dentro de un elemento con etiqueta propia, la auditoría la marcaba como «text clipped»;
   - sin tracking pero en mayúsculas, como texto no representado.
 
-## Resultados de las pruebas (sobre 4491ec9)
+## Resultados de las pruebas (sobre 92a6a23)
 
 - Paquete: 60 + 203 + 31 pruebas en verde.
 - Compilación de app, paquete y pruebas de interfaz: 0 avisos.

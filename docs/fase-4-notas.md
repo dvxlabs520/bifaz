@@ -1,6 +1,6 @@
 # Fase 4 · Etiquetas, recurrentes, multi-moneda y recordatorios: notas para la revisión
 
-Rama `fase-4`, creada desde `fase-3` en el commit `ff4aa96`, que incluye tu `PLAN.md`. Worktree en `.worktrees/fase-4`.
+Rama `fase-4`, creada desde `fase-3` en el commit `fd587e0`, que incluye tu `PLAN.md`. Worktree en `.worktrees/fase-4`.
 No se ha fusionado nada en `main`. Las fases 2 y 3 siguen sin aceptar.
 
 Criterio: un gasto en USD y un abono mensual salen bien en el Resumen y en el historial.
@@ -183,21 +183,21 @@ Criterio: un gasto en USD y un abono mensual salen bien en el Resumen y en el hi
    - Según la regla nueva, no lo he mirado en el simulador.
 
 ## Nota de proceso
-El `PLAN.md` del manager con la revisión de la fase 3 quedó dentro de mi commit `9c8ee4c` («Piezas compartidas…»), no en uno propio. Lo editó mientras yo usaba `git add -A`. El contenido es el suyo, sin tocar. No he reescrito el historial porque pidió no rebasar. Desde entonces añado solo rutas explícitas.
+El `PLAN.md` del manager con la revisión de la fase 3 quedó dentro de mi commit `f904e0c` («Piezas compartidas…»), no en uno propio. Lo editó mientras yo usaba `git add -A`. El contenido es el suyo, sin tocar. No he reescrito el historial porque pidió no rebasar. Desde entonces añado solo rutas explícitas.
 
 ## Defectos menores pendientes
 - En la pantalla de Rappels, los interruptores necesitaron una pulsación algo más larga con la herramienta de toques del simulador. Es cosa de la herramienta, no de la app. Conviene confirmarlo con el dedo en el iPhone.
 
 ## Mejoras de la revisión de la fase 3 (hechas al final de la fase 4)
-1. **Orden del Resumen** (`2cb7ccc`): total → Por revisar (solo si hay algo) → Presupuestos → Por categoría → Seis meses → TVA → Últimos gastos. Capturas 11, 11b (español, oscuro) y 11c.
-2. **Botón «+»** (`456081a`):
+1. **Orden del Resumen** (`dd29b4a`): total → Por revisar (solo si hay algo) → Presupuestos → Por categoría → Seis meses → TVA → Últimos gastos. Capturas 11, 11b (español, oscuro) y 11c.
+2. **Botón «+»** (`c099e4c`):
    - se aparta hacia abajo al desplazar hacia abajo en Resumen, Gastos y Ajustes, y vuelve al subir, al soltar o al quedarse quieto;
    - con «Reducir movimiento» solo se desvanece;
    - con VoiceOver activo nunca se oculta;
    - el desplazamiento no se resiente: comprobado en un vídeo del simulador fotograma a fotograma, solo se anima la capa del botón.
    Por diseño vuelve al detenerse, así que en reposo puede seguir tapando algo a media lista. El margen inferior de las listas garantiza que la última fila queda libre.
-3. **Teclado** (`e21a2e4`): el campo enfocado se desplaza al centro de la parte visible. Cubre importe, comercio, nota y el segundo importe de TVA, que antes quedaba tapado (captura 12). Con texto grande (AccessibilityXL) el importe queda visible. El título de la barra se corta («Nouv… »): es el comportamiento del sistema con un título en línea y dos botones.
-4. **Accesibilidad** (`77f628e`): prueba de interfaz `AccessibilityAuditUITests` con `performAccessibilityAudit` en Résumé, Dépenses, detalle, formulario, Budgets y Réglages, con los datos de ejemplo y en francés. Ha pasado dos veces seguidas. Encontró y corregí:
+3. **Teclado** (`627a817`): el campo enfocado se desplaza al centro de la parte visible. Cubre importe, comercio, nota y el segundo importe de TVA, que antes quedaba tapado (captura 12). Con texto grande (AccessibilityXL) el importe queda visible. El título de la barra se corta («Nouv… »): es el comportamiento del sistema con un título en línea y dos botones.
+4. **Accesibilidad** (`4ba240a`): prueba de interfaz `AccessibilityAuditUITests` con `performAccessibilityAudit` en Résumé, Dépenses, detalle, formulario, Budgets y Réglages, con los datos de ejemplo y en francés. Ha pasado dos veces seguidas. Encontró y corregí:
    - **un problema real:** el selector Tout/Pro/Perso se exponía a VoiceOver como un Picker cuyos marcos no coincidían con los botones visibles. Ahora VoiceOver ve los botones reales, con el estado «seleccionado», agrupados bajo la etiqueta del selector.
    **Exclusiones explícitas** (en el código de la prueba, `isKnownFalsePositive`):
    - **Contraste de lo que pasa por debajo de la barra de pestañas translúcida y del botón «+»** (110 pt inferiores): la auditoría mide el color a través del material. Ejemplos: «Restaurants», «Statut», «TVA», «Gérer».
