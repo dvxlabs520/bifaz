@@ -18,6 +18,8 @@ struct SummaryView: View {
         NavigationStack(path: $navigation.summaryPath) {
             SummaryContent(spaceFilter: $spaceFilter)
                 .navigationTitle("tab.summary")
+                // v2 compact header: a small centred title.
+                .navigationBarTitleDisplayMode(.inline)
                 .navigationDestination(for: PersistentIdentifier.self) { id in
                     ExpenseDestination(id: id)
                 }
@@ -248,13 +250,14 @@ private struct SummaryContent: View {
 
     private func header(total: Decimal?) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("summary.spentIn \(monthName(month.start))")
-                .font(.bifazCaption)
-                .foregroundStyle(.bifazInkSecondary)
-            AmountView(total ?? 0, style: .hero, tint: (total ?? 0) > 0 ? .bifazInk : .bifazInkSecondary)
-                .padding(.top, BifazSpacing.xxs)
-                .contentTransition(.numericText())
-                .redacted(reason: total == nil ? .placeholder : [])
+            // v2 hero: mono label, the month's figure and its cumulative trend.
+            HeroFigure(
+                label: "summary.spentIn \(monthName(month.start))",
+                amount: total ?? 0,
+                trend: summary?.trend ?? [],
+                tint: (total ?? 0) > 0 ? .bifazInk : .bifazInkSecondary
+            )
+            .redacted(reason: total == nil ? .placeholder : [])
             if let comparison = summary?.comparison {
                 MonthComparisonView(
                     comparison: comparison,
@@ -304,17 +307,23 @@ private struct SummaryContent: View {
         }
     }
 
+    /// v2: section titles as small mono data labels.
     private func sectionTitle(_ title: LocalizedStringResource) -> some View {
-        SectionHeader(title)
+        Text(title)
+            .bifazDataLabel()
+            .accessibilityAddTraits(.isHeader)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, BifazSpacing.xxl)
             .padding(.bottom, BifazSpacing.s)
     }
 
     private func section(_ title: LocalizedStringResource, expenses: [Expense]) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            SectionHeader(title)
+            Text(title)
+                .bifazDataLabel()
+                .accessibilityAddTraits(.isHeader)
                 .padding(.top, BifazSpacing.xxl)
-                .padding(.bottom, BifazSpacing.xxs)
+                .padding(.bottom, BifazSpacing.xs)
             if expenses.isEmpty {
                 Text("summary.latest.empty")
                     .font(.bifazCaption)

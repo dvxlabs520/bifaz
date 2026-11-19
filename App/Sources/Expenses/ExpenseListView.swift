@@ -3,7 +3,8 @@ import SwiftData
 import BifazModels
 import BifazDesign
 
-/// The grouped expense history: one section per month, newest first.
+/// The grouped expense history: one section per day (v2), newest first, with the
+/// day total in its header and the time on each row.
 struct ExpenseListView: View {
     let filter: ExpenseFilter
     let onClearFilters: () -> Void
@@ -34,12 +35,9 @@ private struct ExpenseListContent: View {
     @Query private var expenses: [Expense]
     @Environment(\.modelContext) private var modelContext
     @Environment(\.receiptStore) private var receiptStore
-    @Environment(\.locale) private var locale
     @Environment(AppNavigation.self) private var navigation
     @State private var pendingDeletion: Expense?
     @State private var deletionFailed = false
-
-    private static let monthStyle = Date.FormatStyle.dateTime.month(.wide).year()
 
     init(filter: ExpenseFilter, onClearFilters: @escaping () -> Void) {
         self.filter = filter
@@ -48,7 +46,7 @@ private struct ExpenseListContent: View {
     }
 
     var body: some View {
-        let groups = ExpenseGrouping.byMonth(expenses.filter { filter.matches($0, categoryName: { $0.displayName }) })
+        let groups = ExpenseGrouping.byDay(expenses.filter { filter.matches($0, categoryName: { $0.displayName }) })
         Group {
             if groups.isEmpty {
                 emptyState
@@ -85,13 +83,13 @@ private struct ExpenseListContent: View {
 
     // MARK: List
 
-    private func list(_ groups: [MonthGroup]) -> some View {
+    private func list(_ groups: [DayGroup]) -> some View {
         List {
             ForEach(groups) { group in
                 Section {
                     ForEach(group.expenses) { expense in
                         NavigationLink(value: expense.persistentModelID) {
-                            ExpenseRow(expense)
+                            ExpenseRow(expense, timeOnly: true)
                         }
                         .listRowBackground(Color.bifazPaper)
                         .listRowSeparatorTint(Color.bifazHairline)
@@ -112,7 +110,14 @@ private struct ExpenseListContent: View {
                         }
                     }
                 } header: {
-                    monthHeader(group)
+                    DayHeader(day: group.day, total: group.totals.total)
+                        .padding(.horizontal, BifazSpacing.screen)
+                        .padding(.top, BifazSpacing.l)
+                        .padding(.bottom, BifazSpacing.xxs)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.bifazPaper)
+                        .textCase(nil)
+                        .listRowInsets(EdgeInsets())
                 }
             }
         }
@@ -120,40 +125,6 @@ private struct ExpenseListContent: View {
         .hidesCaptureButtonWhileScrolling()
         .scrollContentBackground(.hidden)
         .background(Color.bifazPaper)
-    }
-
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-
-    private func monthHeader(_ group: MonthGroup) -> some View {
-        let title = Self.capitalized(group.month.formatted(Self.monthStyle.locale(locale)), locale: locale)
-        let total = group.totals.total.formatted(.currency(code: "EUR").locale(locale))
-        // Side by side normally; stacked at accessibility sizes so the month never hyphenates.
-        let layout = dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: BifazSpacing.xxs))
-            : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: BifazSpacing.xs))
-        return layout {
-            Text(verbatim: title)
-                .font(.bifazSectionTitle)
-                .foregroundStyle(Color.bifazInk)
-                .fixedSize(horizontal: false, vertical: true)
-            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: BifazSpacing.xs) }
-            AmountView(group.totals.total, style: .row, tint: .bifazInkSecondary)
-        }
-        .padding(.horizontal, BifazSpacing.screen)
-        .padding(.top, BifazSpacing.m)
-        .padding(.bottom, BifazSpacing.xxs)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.bifazPaper)
-        .textCase(nil)
-        .listRowInsets(EdgeInsets())
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(verbatim: "\(title), \(total)"))
-        .accessibilityAddTraits(.isHeader)
-    }
-
-    private static func capitalized(_ text: String, locale: Locale) -> String {
-        guard let first = text.first else { return text }
-        return String(first).uppercased(with: locale) + text.dropFirst()
     }
 
     // MARK: Empty states

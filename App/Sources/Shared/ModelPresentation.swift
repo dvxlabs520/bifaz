@@ -50,7 +50,8 @@ extension Expense {
 extension ExpenseRow {
     /// A row for a stored expense. Without a merchant, the category becomes
     /// the title (or "Expense" when there is none either).
-    init(_ expense: Expense) {
+    /// `timeOnly`: inside a day group, the caption shows the time instead of the date.
+    init(_ expense: Expense, timeOnly: Bool = false) {
         let hasMerchant = !expense.merchant.isEmpty
         self.init(
             merchant: hasMerchant ? expense.merchant : expense.displayTitle,
@@ -61,7 +62,8 @@ extension ExpenseRow {
             currencyCode: "EUR",
             space: expense.space,
             receiptState: expense.receiptState,
-            originalAmount: expense.isForeignCurrency ? (expense.amount, expense.currencyCode) : nil
+            originalAmount: expense.isForeignCurrency ? (expense.amount, expense.currencyCode) : nil,
+            timeOnly: timeOnly
         )
     }
 }

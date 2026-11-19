@@ -3,7 +3,7 @@ import SwiftData
 import BifazModels
 import BifazDesign
 
-/// Expenses tab: space selector, search, filters and the month-grouped history.
+/// Expenses tab: space selector, search, filters and the day-grouped history.
 struct ExpensesView: View {
     @Binding var spaceFilter: SpaceFilter
 
@@ -32,6 +32,8 @@ struct ExpensesView: View {
                 ExpenseListView(filter: filter, onClearFilters: clearFilters)
             }
             .navigationTitle("tab.expenses")
+            // v2 compact header: small centred title, search and filter in the bar.
+            .navigationBarTitleDisplayMode(.inline)
             // Declared at the root of the stack: the Summary pushes this list too, with its own.
             .navigationDestination(for: PersistentIdentifier.self) { id in
                 ExpenseDestination(id: id)
