@@ -44,6 +44,7 @@ final class AccessibilityAuditUITests: XCTestCase {
     /// 4. Dynamic Type of the Tout / Pro / Perso chips: they grow with the text and the
     ///    row becomes a column (`ViewThatFits`, checked by hand at AccessibilityXL); the
     ///    audit reports the swap as "partially unsupported".
+    @MainActor
     static func isKnownFalsePositive(_ issue: XCUIAccessibilityAuditIssue, screen: CGRect) -> Bool {
         guard let element = issue.element else {
             // Contrast issues the audit cannot attach to any element come from the

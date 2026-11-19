@@ -94,6 +94,12 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.dvxlabs.bifaz.uitests
         GENERATE_INFOPLIST_FILE: YES
+        # Warnings are errors, like the app and the package. Exception the compiler
+        # imposes: using XCTest's main-actor UI API from a nonisolated function is only
+        # *warned*, even with warnings-as-errors (no diagnostic group can upgrade it).
+        # UITestIsolationTests (BifazDesignTests) fails instead when a UI test helper
+        # is not on the main actor.
+        SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
         TARGETED_DEVICE_FAMILY: "1"
         TEST_TARGET_NAME: Bifaz
         CODE_SIGN_STYLE: Automatic

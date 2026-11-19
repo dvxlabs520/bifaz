@@ -685,6 +685,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dvxlabs.bifaz.uitests;
 				SDKROOT = iphoneos;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = Bifaz;
 			};
@@ -705,6 +706,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dvxlabs.bifaz.uitests;
 				SDKROOT = iphoneos;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = Bifaz;
 			};
