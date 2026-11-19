@@ -51,38 +51,38 @@ public struct ColorToken: Hashable, Sendable, Identifiable {
 
 // MARK: - Palette
 
-/// Bifaz colour tokens.
+/// Bifaz colour tokens, v2 "editorial cálida" (PLAN.md §3, phase 5).
 ///
-/// Calm, mostly neutral interface (white or near-black, greys, 1 pt hairlines);
-/// colour only carries meaning: the space (Pro cobalt, Personal terracotta)
-/// and status (success, warning, error). Every text pair passes WCAG AA,
-/// checked in `BifazDesignTests`.
+/// Warm paper instead of white, thin warm hairlines, a warm near-black ink; colour
+/// only carries meaning: the space (Pro cobalt, Personal terracotta) and status
+/// (success, warning, error). Every text pair passes WCAG AA, checked in
+/// `ContrastTests`.
 ///
-/// Changes from PLAN.md §3 (proposed to the manager): Paper is now white /
-/// near-black, Ink is a softer near-black, Surface is a hairline-bordered card,
-/// and grey, hairline and tint tokens were added. Success and Warning light
-/// were darkened for AA (`#1E8E5A` → `#1B7F50`, `#B7791F` → `#98641A`).
+/// Paper, Surface, Hairline, Ink and Ink secondary use the plan's starting values
+/// unchanged. Adjusted for AA on the warm paper (light only): Personal `#B8451A` →
+/// `#B24319`, Success `#1B7F50` → `#19764A`, Warning `#98641A` → `#8D5D18`, Error
+/// `#C4314B` → `#BE3049`. Surface muted (new warm value) `#ECE8DF` / `#26231E`.
 public enum BifazPalette {
     /// Main text, primary buttons, selected filter.
-    public static let ink = ColorToken("ink", light: 0x1B1C1E, dark: 0xF1F1F2)
-    /// Secondary text: subtitles, dates, captions.
-    public static let inkSecondary = ColorToken("inkSecondary", light: 0x6A6C72, dark: 0x9C9EA4)
-    /// Screen background.
-    public static let paper = ColorToken("paper", light: 0xFFFFFF, dark: 0x0F1012)
+    public static let ink = ColorToken("ink", light: 0x1A1814, dark: 0xF3EFE6)
+    /// Secondary text: subtitles, dates, captions, the decimals of a hero amount.
+    public static let inkSecondary = ColorToken("inkSecondary", light: 0x6B655A, dark: 0xA39C8F)
+    /// Screen background: warm paper.
+    public static let paper = ColorToken("paper", light: 0xF4F1EA, dark: 0x14130F)
     /// Cards and sheets (bordered with `hairline`).
-    public static let surface = ColorToken("surface", light: 0xFFFFFF, dark: 0x17181B)
-    /// Quiet fills: progress tracks, pressed rows, neutral icon circles.
-    public static let surfaceMuted = ColorToken("surfaceMuted", light: 0xF4F4F6, dark: 0x1F2023)
+    public static let surface = ColorToken("surface", light: 0xFBFAF6, dark: 0x1D1B17)
+    /// Quiet fills: progress tracks, pressed rows, round header buttons, neutral circles.
+    public static let surfaceMuted = ColorToken("surfaceMuted", light: 0xECE8DF, dark: 0x26231E)
     /// 1 pt borders and dividers. Decorative, never used for text.
-    public static let hairline = ColorToken("hairline", light: 0xE7E8EB, dark: 0x26282C)
+    public static let hairline = ColorToken("hairline", light: 0xE4DFD4, dark: 0x2E2A23)
 
     /// Everything that belongs to the Pro space.
     public static let pro = ColorToken("pro", light: 0x2747D8, dark: 0x8AA2FF)
     /// Everything that belongs to the Personal space.
-    public static let personal = ColorToken("personal", light: 0xB8451A, dark: 0xFF9466)
-    public static let success = ColorToken("success", light: 0x1B7F50, dark: 0x5BD69A)
-    public static let warning = ColorToken("warning", light: 0x98641A, dark: 0xF2C261)
-    public static let error = ColorToken("error", light: 0xC4314B, dark: 0xFF8097)
+    public static let personal = ColorToken("personal", light: 0xB24319, dark: 0xFF9466)
+    public static let success = ColorToken("success", light: 0x19764A, dark: 0x5BD69A)
+    public static let warning = ColorToken("warning", light: 0x8D5D18, dark: 0xF2C261)
+    public static let error = ColorToken("error", light: 0xBE3049, dark: 0xFF8097)
 
     /// Pastel fills behind icons (category circles, status badges).
     public static let proTint = ColorToken("proTint", light: 0xECEFFC, dark: 0x1E2747)

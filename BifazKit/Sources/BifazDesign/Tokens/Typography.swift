@@ -1,8 +1,10 @@
 import SwiftUI
 
-/// Bifaz type scale: SF Pro throughout, regular and medium weights, so the
-/// interface stays calm and the numbers carry the hierarchy. Every style is a
-/// Dynamic Type text style. Amounts always use tabular figures so they line up.
+/// Bifaz type scale, v2 (PLAN.md §3): three system voices, all Dynamic Type.
+/// - SF Pro for the interface (regular and medium; numbers carry the hierarchy);
+/// - SF Mono in small capitals for data labels ("LIMIT", "SPENT", month names);
+/// - New York only for the context sentences of the Summary and budgets (phase 6).
+/// Amounts always use tabular figures so they line up.
 public extension Font {
     /// The month total at the top of Summary. 34 pt medium, tabular.
     static let bifazAmountHero = Font.system(.largeTitle, weight: .medium).monospacedDigit()
@@ -25,4 +27,29 @@ public extension Font {
     static let bifazCaption = Font.system(.footnote)
     /// Small labels and badges.
     static let bifazLabel = Font.system(.caption, weight: .medium)
+
+    /// Data labels in SF Mono ("GASTADO", "LÍMITE", "NOV. 2026"). Use with
+    /// `.bifazDataLabel()` for the capitals, tracking and colour.
+    static let bifazData = Font.system(.caption2, design: .monospaced, weight: .medium)
+    /// Context sentences in New York ("At this pace you'll be €52 short"). Phase 6 fills them.
+    static let bifazContext = Font.system(.title3, design: .serif)
+    /// Title of a compact header (small, centred).
+    static let bifazHeaderTitle = Font.system(.subheadline, weight: .semibold)
+}
+
+public extension View {
+    /// SF Mono small capitals in secondary ink, slightly tracked: the voice of data labels.
+    func bifazDataLabel() -> some View {
+        font(.bifazData)
+            .textCase(.uppercase)
+            .tracking(0.6)
+            .foregroundStyle(Color.bifazInkSecondary)
+    }
+
+    /// A context sentence in New York (phase 6 writes them).
+    func bifazContextSentence() -> some View {
+        font(.bifazContext)
+            .foregroundStyle(Color.bifazInk)
+            .fixedSize(horizontal: false, vertical: true)
+    }
 }

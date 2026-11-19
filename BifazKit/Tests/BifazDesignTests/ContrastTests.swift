@@ -62,3 +62,38 @@ struct ContrastTests {
         )
     }
 }
+
+@Suite("Palette v2 (editorial cálida)")
+struct PaletteV2Tests {
+    @Test("Paper, surface, hairline and inks keep the plan's starting values")
+    func planValues() {
+        #expect(BifazPalette.paper.light == RGB(0xF4F1EA) && BifazPalette.paper.dark == RGB(0x14130F))
+        #expect(BifazPalette.surface.light == RGB(0xFBFAF6) && BifazPalette.surface.dark == RGB(0x1D1B17))
+        #expect(BifazPalette.hairline.light == RGB(0xE4DFD4) && BifazPalette.hairline.dark == RGB(0x2E2A23))
+        #expect(BifazPalette.ink.light == RGB(0x1A1814) && BifazPalette.ink.dark == RGB(0xF3EFE6))
+        #expect(BifazPalette.inkSecondary.light == RGB(0x6B655A) && BifazPalette.inkSecondary.dark == RGB(0xA39C8F))
+    }
+
+    @Test("Paper is warm, not white: red above blue")
+    func warmPaper() {
+        #expect(BifazPalette.paper.light.red > BifazPalette.paper.light.blue)
+        #expect(BifazPalette.paper.light != RGB(0xFFFFFF))
+    }
+}
+
+@Suite("Hero amount parts")
+struct AmountPartsTests {
+    @Test("Whole part, cents and suffix", arguments: [
+        ("1 284,50 €", ",", "1 284", ",50", " €"),
+        ("€1,284.50", ".", "€1,284", ".50", ""),
+        ("-12,00 €", ",", "-12", ",00", " €"),
+        ("¥1,280", ".", "¥1,280", "", ""),
+        ("CHF 22.80", ".", "CHF 22", ".80", ""),
+        ("0,00 €", ",", "0", ",00", " €"),
+    ])
+    func parts(formatted: String, separator: String, whole: String, decimals: String, suffix: String) {
+        let parts = AmountParts(formatted: formatted, decimalSeparator: separator)
+        #expect(parts == AmountParts(whole: whole, decimals: decimals, suffix: suffix))
+        #expect(parts.whole + parts.decimals + parts.suffix == formatted)
+    }
+}
