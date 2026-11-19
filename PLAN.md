@@ -3,10 +3,16 @@
 App iOS para guardar facturas profesionales y gastos personales en un mismo sitio.
 Simple de usar, con acabado premium y preparada para publicarse en el App Store.
 
-Estado: **fases 0 y 1 entregadas y revisadas el 17-11-2026 (commits `213828c` y `344cd4d`).
-Las 6 correcciones de la fase 1 están integradas en `main` (`838147d`). La fase 2 está entregada y revisada
-en simulador en la rama `fase-2` (`ea7d71b`, con sus 5 mejoras), sin fusionar y **sin aceptar**: falta probarla con facturas
-reales (`TestData/Real/`, fuera de git) y en un iPhone real (escáner, modelo de Apple, cifrado).**
+Estado (19-11-2026):
+- **Fases 0 y 1**: aceptadas e integradas en `main` (`838147d`).
+- **Fase 2**: entregada en `fase-2`, **sin aceptar**: falta probarla con facturas reales
+  (`TestData/Real/`, fuera de git) y en un iPhone real (escáner, modelo de Apple, cifrado).
+- **Fase 3**: aceptada, en `fase-3`.
+- **Fase 4**: entregada en `fase-4`; 3 correcciones en curso.
+- **Siguiente**: la nueva fase 5 (rediseño editorial y entrada en una frase), en `fase-5` desde `fase-4`
+  cuando las correcciones estén hechas. Las fases 5 a 13 se rehicieron el 19-11-2026 tras evaluar outlayr
+  y revisar las funciones (sección 9).
+- Nada fusionado en `main` desde la fase 1: las ramas 2, 3 y 4 están apiladas.
 
 ## 1. Decisiones cerradas
 
@@ -16,8 +22,8 @@ reales (`TestData/Real/`, fuera de git) y en un iPhone real (escáner, modelo de
 | Empresa / identificador | dvxlabs · `com.dvxlabs.bifaz` |
 | Plataforma | iOS nativo, SwiftUI, Swift 6.4 (Xcode 27.1, SDK iOS 27.1) |
 | iOS mínimo | iOS 26 |
-| Dispositivos | Solo iPhone en la versión 1 |
-| Dirección visual | Sobria, de neobanco: fondo blanco, texto alineado a la izquierda, botones tinta y color solo para distinguir Pro de Personal. Elegida por el usuario en la fase 0 tomando Qonto como referencia de sobriedad, sin copiar sus elementos de marca |
+| Dispositivos | iPhone, y Apple Watch como app complementaria (fase 11). Sin iPad en la versión 1 |
+| Dirección visual | Hasta la fase 4: sobria, de neobanco (fondo blanco, referencia Qonto). Desde la fase 5: **editorial cálida**, tomando ideas de la app de código abierto outlayr que el usuario prefiere (papel cálido, cifra protagonista, etiquetas en monoespaciada, listas por día, entrada en una frase), sin copiar su código, iconos ni textos. Detalle en la sección 3 y la evaluación en la sección 9 |
 | País fiscal | Francia: TVA 20 % / 10 % / 5,5 % / 2,1 %, moneda base EUR |
 | Idiomas | Español (de "tú"), francés (de "vous") e inglés desde el primer día |
 | Backend | Sin backend. Datos en el dispositivo, cifrados; iCloud opcional |
@@ -36,7 +42,12 @@ reales (`TestData/Real/`, fuera de git) y en un iPhone real (escáner, modelo de
 Reglas:
 - Cada tarea lleva un encargo escrito: archivos que toca y qué significa "hecho".
 - Dos agentes nunca escriben en los mismos archivos a la vez.
-- Una fase se cierra solo con compilación limpia, pruebas en verde y capturas del simulador revisadas por el manager.
+- Una fase se cierra con compilación limpia sin avisos, la batería completa en verde y la revisión del manager
+  sobre el código y las pruebas.
+- **Pruebas (regla del usuario, 19-11-2026)**: nadie prueba a mano en el simulador hasta que el usuario lo pida.
+  El trabajo se confirma con pruebas unitarias en `BifazKit` siempre que se pueda y, solo cuando no hay otra
+  forma, con pruebas de interfaz automáticas (`xcodebuild test`). Sin capturas. Cuando el usuario lo pida,
+  se prueba con él en el simulador lo trabajado, y lo que salga se corrige en la rama más alta.
 - Repositorio git desde la fase 0; los cambios de alcance se anotan primero en este plan.
 
 ## 3. Marca
@@ -102,6 +113,48 @@ Valores implementados en la fase 0; todos los pares texto/fondo pasan AA (prueba
   icono de categoría con insignia de espacio, barra de reparto Pro/Personal, cabecera de sección.
   El estado vacío es texto alineado a la izquierda con botones, sin ilustración.
 - Tokens y componentes viven en `BifazKit` con vistas previas en claro, oscuro y texto grande.
+
+### Dirección visual v2: editorial cálida (desde la fase 5)
+Sustituye a lo anterior donde choque. Ideas tomadas de outlayr (sección 9) y adaptadas a Bifaz;
+se conserva lo propio: la moneda, Pro en cobalto y Personal en terracota, iconos propios, español, francés e inglés.
+
+- **Papel cálido en lugar de blanco.** Valores de partida, a validar con `ContrastTests` (AA) y ajustables:
+
+  | Token | Claro | Oscuro |
+  |---|---|---|
+  | Papel | `#F4F1EA` | `#14130F` |
+  | Superficie | `#FBFAF6` | `#1D1B17` |
+  | Línea fina | `#E4DFD4` | `#2E2A23` |
+  | Tinta | `#1A1814` | `#F3EFE6` |
+  | Tinta secundaria | `#6B655A` | `#A39C8F` |
+
+  Cobalto, terracota, éxito, aviso y error se mantienen; se revisa su contraste sobre el papel nuevo.
+- **Un solo color de acción.** El botón principal sigue en tinta; el color se reserva para el espacio
+  (Pro/Personal) y para los estados. Nada de degradados ni sombras grandes.
+- **Tres voces tipográficas, todas del sistema:**
+  - SF Pro para la interfaz;
+  - SF Mono en mayúsculas pequeñas para etiquetas de dato ("LÍMITE", "GASTADO", "QUEDAN 12 D"), cabeceras
+    de tabla, meses y widgets;
+  - New York solo en las frases de contexto del Resumen y los presupuestos ("A este ritmo te faltarán 52 €").
+    La serif se retiró de los títulos en la fase 0; aquí es solo para esas frases. Si en la revisión visual
+    no convence, se usa SF Pro.
+- **La cifra es la protagonista.** Importe grande con la parte entera en tinta y los decimales en tinta
+  secundaria, cambio de cifras animado (`contentTransition(.numericText())`) y una línea de tendencia fina
+  al lado.
+- **Cabeceras compactas.** Título pequeño centrado con botones redondos (buscar, filtrar) y la cifra
+  principal debajo, en lugar del título grande.
+- **Listas por día.** Cabecera de día con su total ("Ayer · 93,00 €"), filas con hora, separadores finos
+  y avatar del comercio: monograma con su inicial sobre el tinte del espacio (no logos de marcas: implican
+  permisos de marca y conexión).
+- **Entrada en una frase.** Nuevo gasto como una frase con piezas que se tocan:
+  "Gasté **42,00 €** en **Carrefour** para **Supermercado** · **Personal** · **hoy**". Cada pieza abre su
+  selector abajo (teclado, comercios recientes, categorías, espacio, fecha). Debajo, chips para lo opcional:
+  TVA y cliente o proyecto (solo Pro), nota, repetir, justificante. La confirmación de una lectura usa la
+  misma frase, con el subrayado indicando la confianza (seguro, a revisar). En francés y en inglés se
+  construye con frases propias, no traduciendo palabra a palabra.
+- **Gráficos de ritmo.** En presupuestos, curva de consumo del mes con la proyección punteada hasta fin
+  de mes y el límite como referencia.
+- Se mantienen Liquid Glass en barras y controles flotantes, la barra de pestañas flotante y el botón "+".
 
 ### Splash animado
 - Pantalla de lanzamiento estática: fondo cobalto con la moneda blanca y melocotón quieta
@@ -192,12 +245,42 @@ el idioma del informe elegible aparte del de la app (app en español, informe en
 - Visible solo en iPhones con Apple Intelligence.
 
 ### Sistema
-- Widgets: gasto del mes y captura rápida.
+- Widgets de inicio y de pantalla de bloqueo: gasto del mes, presupuesto, gastos de hoy y captura rápida.
+- Control del Centro de control y del botón de acción: "Nuevo gasto" y "Escanear justificante".
+- Siri y Spotlight (App Intents): "Añadir gasto", "Escanear justificante", "Gasto del mes".
 - Ajuste "Sujeto a TVA: sí / no" (con "no" se ocultan los campos de TVA).
+
+### Mejoras de lo que ya existe (fase 6)
+Salen de la revisión de funciones del 19-11-2026 (sección 9).
+- **Gasto mixto**: un gasto con una parte Pro y otra Personal (teléfono, internet, coche), con el
+  porcentaje Pro; los totales, la TVA y los presupuestos usan la parte que toca.
+- **Presupuesto global por espacio**, además de por categoría, con arrastre opcional del sobrante
+  o del exceso al mes siguiente.
+- **Ritmo**: proyección de fin de mes ("a este ritmo terminarás en 1 240 €" o "te faltarán 52 €").
+- **Frases de contexto en el Resumen**: "Gastas menos de lo normal: a estas alturas sueles llevar 890 €",
+  comparando con la media de los meses anteriores al mismo día.
+- **Próximos cargos**: lista de los recurrentes por mes con su total mensual, y aviso unos días antes
+  de cada cargo (además del aviso del mismo día).
+- **Factur-X**: al importar una factura electrónica francesa (PDF con XML Factur-X dentro) se leen los datos
+  exactos del XML, sin OCR: proveedor, número, fecha, total y TVA por tipo.
+
+### Apple Watch (fase 11)
+App complementaria en el reloj, para lo que se hace con prisa:
+- **Añadir un gasto en segundos**: importe con la corona o el teclado, espacio, categoría entre las
+  recientes y comercio por dictado opcional.
+- **Vistazo del mes**: total, reparto Pro/Personal, presupuestos cerca del límite y justificantes pendientes.
+- **Sesión de gastos** (de la fase 9): iniciarla, verla en curso y cerrarla desde la muñeca.
+- **Complicaciones**: gasto del mes, presupuesto en anillo y botón de añadir.
+- Sin justificantes ni informes en el reloj. Necesita el iPhone: sin cuenta, sin iCloud y sin servidor.
 
 ### Fuera de la versión 1
 Conexión bancaria, emisión de facturas, contabilidad completa, equipos o multiusuario,
 ingresos, Android y web, suscripciones de pago, valor legal de "copie fiable".
+De outlayr se dejan fuera a propósito, para no convertir Bifaz en una app de finanzas personales:
+cuentas y saldos, deudas, transferencias, metas de ahorro, compras a plazos, nóminas e ingresos, y cuenta
+con inicio de sesión. Ideas para después de la v1: importación CSV, indemnités kilométriques (solo para quien
+declara gastos reales; un micro-entrepreneur no las deduce) y porcentaje de TVA deducible por categoría
+(a validar con un expert-comptable).
 
 ## 5. Arquitectura
 
@@ -207,12 +290,19 @@ ingresos, Android y web, suscripciones de pago, valor legal de "copie fiable".
   (valores por defecto u opcionales, relaciones opcionales, sin unicidad).
 - **Justificantes**: desde la fase 1 el modelo guarda solo el nombre del archivo; los archivos van a una
   carpeta propia con protección `.complete` (legibles solo con el iPhone desbloqueado). Consecuencia:
-  ya no viajan a iCloud con la base de datos, así que la fase 6 debe sincronizarlos por su cuenta.
+  ya no viajan a iCloud con la base de datos, así que la fase 8 debe sincronizarlos por su cuenta.
 - **Importes**: siempre `Decimal`.
 - **Concurrencia**: modo de lenguaje Swift 6 con comprobación estricta; lectura, informes y copia fuera del hilo principal.
 - **Apple Pay**: App Intents ("Registrar pago", "Iniciar sesión", "Cerrar sesión") que se ejecutan
   en segundo plano sin abrir la app; ActivityKit para la sesión en curso.
 - **Estructura**: paquete local `BifazKit` (modelos, persistencia, lectura, informes, seguridad, sistema de diseño).
+- **Apple Watch**: target watchOS en SwiftUI que reutiliza `BifazKit` donde puede. Sincronización con el iPhone
+  por WatchConnectivity, sin iCloud ni servidor: el iPhone envía un resumen (contexto de aplicación) cuando
+  cambian los datos, y el reloj envía los gastos nuevos por la cola garantizada (`transferUserInfo`). El iPhone
+  los guarda con `ExpenseService` de forma idempotente por identificador. El reloj solo guarda el resumen y su
+  cola de envío. Complicaciones con WidgetKit, compartiendo código con los widgets del iPhone.
+- **App Intents**: las acciones de Siri, Spotlight, controles, widgets, Apple Pay y el reloj comparten
+  las mismas intenciones de `BifazKit`.
 - **Textos**: String Catalog es / fr / en; formateadores del sistema para fechas, importes y monedas.
 - **Pruebas**: Swift Testing para el lector por reglas, TVA, recurrencias, moneda, validación y duplicados
   de pagos, emparejado de justificantes, ida y vuelta de la copia cifrada e informes.
@@ -237,7 +327,11 @@ y acceso a "Iniciar sesión de gastos" desde ese mismo botón.
 
 ## 6. Fases
 
-Cada fase termina con la app funcionando y sus pruebas en verde.
+Cada fase termina con la app compilando sin avisos y la batería completa en verde. Desde el 19-11-2026
+el "hecho cuando" se demuestra con pruebas automáticas; la prueba en el simulador o en el dispositivo se hace
+con el usuario cuando él lo pide (sección 2).
+
+**Fases 0 a 4 (hechas o en curso):**
 
 | Fase | Contenido | Hecho cuando |
 |---|---|---|
@@ -246,12 +340,20 @@ Cada fase termina con la app funcionando y sus pruebas en verde.
 | 2. Captura y lectura | Escáner, importar foto y PDF, lectura, extracción (modelo + reglas), confirmación | Una factura francesa típica se guarda con comercio, fecha, total y TVA correctos sin teclear |
 | 3. Resumen y presupuestos | Gráficos, comparación mensual, TVA acumulada, presupuestos | El resumen cuadra con el historial al céntimo |
 | 4. Funciones Pro | Etiquetas, recurrentes, multi-moneda, recordatorio de TVA | Un gasto en USD y un abono mensual salen bien en resumen e informes |
-| 5. Informes y exportación | Los 4 informes PDF, CSV, ZIP | El informe de TVA de un trimestre se puede enviar tal cual al expert-comptable, en francés |
-| 6. Seguridad y copia | Data Protection, Face ID, copia cifrada `.bifaz`, iCloud opcional | Una copia restaurada en otro simulador recupera todos los gastos y justificantes; con contraseña errónea no abre |
-| 7. Apple Pay y sesiones | App Intents, guía de conexión, validación, sesiones con actividad en vivo, emparejado de justificantes | En un iPhone real, un pago con Apple Pay aparece solo en Bifaz y su ticket escaneado después se le adjunta sin intervención |
-| 8. Extensiones | Extensión de compartir, widgets | Un PDF de Mail llega a la confirmación en dos toques |
-| 9. Asistente | Preguntas en lenguaje natural con herramientas de consulta | Responde bien un banco de 30 preguntas en los 3 idiomas |
-| 10. Splash, pulido y lanzamiento | Splash animado, bienvenida, estados vacíos, accesibilidad, rendimiento con miles de gastos, TestFlight, ficha y etiquetas de privacidad | Versión candidata en TestFlight |
+
+**Fases 5 a 13 (rehechas el 19-11-2026):**
+
+| Fase | Contenido | Hecho cuando |
+|---|---|---|
+| 5. Rediseño editorial y entrada en una frase | Sistema de diseño v2 (sección 3) en todas las pantallas; entrada y confirmación en una frase; listas por día con monogramas; cabeceras compactas con la cifra protagonista. En dos tramos: **5a** sistema de diseño, Resumen, Gastos y entrada en una frase; **5b** el resto de pantallas. Entre ambos, el usuario puede mirar la dirección visual antes de extenderla | Todas las pantallas usan los tokens v2 (prueba que lo comprueba), contraste AA en claro y oscuro, la frase se construye bien en los 3 idiomas (pruebas), las pruebas de interfaz existentes siguen pasando |
+| 6. Mejoras de lo que ya existe | Gasto mixto Pro/Personal, presupuesto global por espacio con arrastre, ritmo y proyección, frases de contexto, próximos cargos con aviso previo, lectura de Factur-X | Los totales siguen cuadrando al céntimo con gastos mixtos, la proyección es correcta en datos generados, una factura Factur-X de prueba se lee sin OCR (pruebas) |
+| 7. Informes y exportación | Los 4 informes PDF, CSV, ZIP; con el diseño v2 | El informe de TVA de un trimestre se puede enviar tal cual al expert-comptable, en francés |
+| 8. Seguridad y copia | Data Protection, Face ID, copia cifrada `.bifaz`, iCloud opcional | Una copia restaurada recupera todos los gastos y justificantes; con contraseña errónea no abre (pruebas de ida y vuelta) |
+| 9. Apple Pay y sesiones | App Intents, guía de conexión, validación, sesiones con actividad en vivo, emparejado de justificantes | En un iPhone real, un pago con Apple Pay aparece solo en Bifaz y su ticket escaneado después se le adjunta sin intervención |
+| 10. Extensiones, widgets y Siri | Extensión de compartir, widgets de inicio y bloqueo, controles, acciones de Siri y Spotlight | Un PDF de Mail llega a la confirmación en dos toques; los widgets muestran las mismas cifras que el Resumen |
+| 11. Apple Watch | App del reloj (añadir, vistazo del mes, sesiones), complicaciones, sincronización por WatchConnectivity | Un gasto añadido en el reloj llega al iPhone una sola vez aunque se reenvíe, y el resumen del reloj coincide con el del iPhone (pruebas del protocolo) |
+| 12. Asistente y dictado | Preguntas en lenguaje natural con herramientas de consulta; dictar un gasto ("comida con cliente, 42 euros") que se convierte en la frase de entrada | Responde bien un banco de 30 preguntas en los 3 idiomas; un banco de dictados se convierte en gastos correctos |
+| 13. Splash, bienvenida, pulido y lanzamiento | Splash animado, bienvenida con el régimen de TVA, estados vacíos, accesibilidad, rendimiento con miles de gastos, TestFlight, ficha y etiquetas de privacidad | Versión candidata en TestFlight |
 
 **Fase 0, revisada por el manager (17-11-2026):** compila sin errores, 48 pruebas en verde,
 pestañas y selector de espacio probados con toques en el simulador, tres idiomas completos.
@@ -341,6 +443,22 @@ Mejoras de la fase 3, a hacer al terminar la fase 4:
 3. El teclado tapa el campo del segundo importe de TVA en el formulario.
 4. Accesibilidad: auditoría automática en las pruebas de interfaz de las pantallas principales.
 
+**Fase 4 y mejoras de la fase 3, revisadas por el manager (18-11-2026), rama `fase-4` (`28365a8`):**
+pasan las 265 pruebas de paquete (195 + 10 + 60) y 5 de las 6 de interfaz. Comprobado en un simulador aparte
+(iPhone 17, español): al instalar la fase 4 sobre los datos de la fase 3 los totales no cambian (792,03 €,
+Pro 474,52 €, Personal 317,51 €); el Resumen sale reordenado; un importe de 48 USD se convierte con el tipo
+real del BCE descargado en ese momento (1 € = 1,0989 USD, 17 nov., ≈ 43,68 €) y ofrece cambiar el tipo o
+indicar los euros cargados. No comprobado por el manager (sí por el desarrollador o por pruebas): guardar el
+gasto en USD a mano, reglas recurrentes, etiquetas, notificaciones, ocultación del botón "+" y el arreglo
+del teclado. Decisión del manager: las reglas recurrentes quedan solo en euros en la versión 1.
+
+Correcciones pendientes de la fase 4:
+1. La prueba de accesibilidad falla siempre en el iPhone 17 (3 de 3) y pasa en el iPhone 18 Pro: no llega a
+   abrir la pantalla de presupuestos y audita el Resumen. Hay que hacerla fiable en cualquier simulador.
+2. `AccessibilityAuditUITests.swift` compila con 7 avisos de aislamiento al actor principal; el informe
+   decía "sin avisos". El target de pruebas de interfaz debe compilar limpio como el resto.
+3. En español, la opción del menú "+" se parte a media palabra ("Gasto sin justifican-te").
+
 **Fase 4, decisiones del manager al encargarla (17-11-2026), a petición del usuario de seguir sin esperar
 a la revisión de la fase 3:**
 - Parte de `fase-3` en una rama `fase-4`. Las correcciones que salgan de la revisión de la fase 3 se hacen
@@ -358,8 +476,11 @@ a la revisión de la fase 3:**
 - **Recurrentes**: sin backend, se generan al abrir la app, recuperando las fechas pasadas pendientes;
   los de Pro nacen con el justificante pendiente.
 
-Tras la fase 2 la app ya sirve a diario; Apple Pay va después de seguridad porque depende
-de cómo queda protegida la base de datos; el asistente va casi al final porque nada depende de él.
+Orden de las fases 5 a 13 (19-11-2026): el rediseño va primero porque cambia todas las pantallas y cada
+pantalla nueva ya nace con el diseño v2; las mejoras de la fase 6 van antes de los informes porque el gasto
+mixto cambia lo que estos suman; Apple Pay sigue después de seguridad porque depende de cómo queda protegida
+la base; el reloj va después de las sesiones y de los widgets porque reutiliza ambos; el asistente va casi al
+final porque nada depende de él.
 
 ## 7. Riesgos y cosas a tener en cuenta
 
@@ -369,18 +490,74 @@ de cómo queda protegida la base de datos; el asistente va casi al final porque 
 - **Precisión de la lectura**: tickets térmicos arrugados y facturas con varios tipos de TVA son los casos difíciles;
   la confirmación es obligatoria y se prueba con facturas reales.
 - **Modelo de Apple**: solo en iPhones con Apple Intelligence. La app debe ser completa sin él.
-- **APIs recientes**: se revisa la documentación del SDK 27.1 al empezar las fases 2, 7 y 9.
+- **APIs recientes**: se revisa la documentación del SDK 27.1 al empezar las fases 2, 9, 10, 11 y 12.
 - **Modelo de datos e iCloud**: las restricciones de CloudKit condicionan el modelo; se cierra con cuidado en la fase 0.
 - **Sincronización de justificantes**: al guardarse como archivos fuera de la base, no se sincronizan solos
-  con iCloud; la fase 6 necesita un mecanismo propio y la copia `.bifaz` debe incluirlos.
+  con iCloud; la fase 8 necesita un mecanismo propio y la copia `.bifaz` debe incluirlos.
 - **Protección de datos**: el simulador no la aplica; hay que comprobarla en un iPhone real.
 - **Copia cifrada**: si se olvida la contraseña, la copia no se puede recuperar; la app lo avisa al crearla.
 - **Valor legal de la copia digital**: la versión 1 es archivo y control; conviene conservar los originales en papel.
-- **Cuenta de desarrollador**: la cuenta de pago de Apple hace falta para iCloud y TestFlight (desde la fase 6).
+- **Cuenta de desarrollador**: la cuenta de pago de Apple hace falta para iCloud y TestFlight (desde la fase 8).
+- **Rediseño (fase 5)**: cambia todas las pantallas y el usuario ya rechazó una primera dirección visual en la
+  fase 0. Por eso va en dos tramos, con la opción de mirarlo tras el 5a antes de extenderlo.
+- **Licencia de outlayr**: es GPL-3.0. No se copia su código, iconos (Hugeicons Pro, de pago), textos ni
+  ilustraciones: solo ideas de diseño y de interacción, reimplementadas en SwiftUI.
+- **Ramas apiladas**: `fase-2` a `fase-5` siguen sin fusionar en `main` porque la fase 2 espera facturas reales
+  y un iPhone. Cuanto más crezca la pila, más cuesta integrarla; conviene cerrar la fase 2 pronto.
+- **Apple Watch**: WatchConnectivity solo funciona con el iPhone cerca y emparejado; el reloj debe guardar
+  en cola lo que no pueda enviar y mostrarlo como pendiente. La prueba real necesita un Apple Watch.
 
 ## 8. Antes de empezar
 
 1. Comprobar la disponibilidad del nombre **Bifaz** (App Store Connect, INPI, dominio).
 2. Reunir 15–20 facturas y tickets franceses reales para las pruebas de lectura.
-3. Tener a mano un iPhone real con una tarjeta en Wallet para la fase 7.
+3. Tener a mano un iPhone real con una tarjeta en Wallet para la fase 9, y un Apple Watch para la fase 11.
 4. Las herramientas de línea de comandos ya apuntan a Xcode 27.1 (hecho).
+
+## 9. Evaluación de outlayr y revisión de funciones (19-11-2026)
+
+### Qué es outlayr
+App de código abierto de gastos, presupuestos y suscripciones para iPhone y Android
+(github.com/danestves/outlayr): Expo y React Native, local primero, licencia GPL-3.0, en el App Store.
+Se evaluó por sus 10 capturas de la ficha en español y su README. No se usa nada de su código.
+
+### Qué tomamos (fase 5 salvo indicación)
+| Idea de outlayr | Cómo queda en Bifaz |
+|---|---|
+| Papel cálido, mucho aire, separadores finos | Paleta v2 (sección 3) |
+| Cifra grande con decimales atenuados y línea de tendencia | Cabecera del Resumen y de Gastos |
+| Etiquetas de dato en monoespaciada mayúscula | Presupuestos, informes, widgets, reloj |
+| Frase en serif que interpreta los datos | Frases de contexto y ritmo (fase 6) |
+| Registro agrupado por día con total diario y hora | Lista de Gastos |
+| Entrada "en una frase" con piezas tocables y chips opcionales | Nuevo gasto, edición y confirmación de lecturas |
+| Comercios recientes como chips al escribir el comercio | Selector de comercio |
+| Curva de consumo con proyección y "te van a faltar X" | Presupuestos (fase 6) |
+| Próximos cargos con total al mes y aviso antes del cargo | Recurrentes (fase 6) |
+| Menú del "+" con descripción bajo cada opción | Menú de captura |
+| Widgets sobrios con etiquetas mono | Widgets (fase 10) y complicaciones (fase 11) |
+| Dictar un registro | Asistente y dictado (fase 12) |
+
+### Qué no tomamos
+Cuentas y saldos, deudas, transferencias, metas de ahorro, compras a plazos, nóminas, 165 monedas,
+inicio de sesión y servidor (Convex), logos de marcas en las filas y un único acento rojo: Bifaz es de gastos
+y justificantes, con dos espacios que ya tienen su color.
+
+### Lo que Bifaz ya hace mejor
+- Lectura de justificantes con confianza por campo, emparejado y TVA por tipo: outlayr escanea tickets,
+  pero no trata la TVA francesa ni los espacios Pro/Personal.
+- Etiquetas de cliente y proyecto, recordatorio de TVA y, más adelante, informes para el expert-comptable.
+
+### Revisión de funciones
+**Ya existen y se mejoran** (fases 5 y 6): entrada de gastos (frase), historial (por día, monogramas),
+Resumen (cifra, tendencia, frases de contexto), presupuestos (global por espacio, arrastre, ritmo),
+recurrentes (próximos cargos y aviso previo), memoria de comercios (proponer también el espacio),
+menú de captura (descripciones).
+
+**Faltan y ya estaban en el plan**: informes y exportación (7), Face ID, copia cifrada e iCloud (8),
+Apple Pay y sesiones (9), extensión de compartir y widgets (10), asistente (12), splash y bienvenida (13).
+
+**Faltan y se añaden**: gasto mixto Pro/Personal y Factur-X (6), controles y Siri/Spotlight (10),
+Apple Watch (11), dictado (12), bienvenida que pregunta el régimen de TVA (13).
+
+**Para después de la v1**: importación CSV, indemnités kilométriques, TVA deducible por categoría,
+reglas recurrentes en otra moneda.
