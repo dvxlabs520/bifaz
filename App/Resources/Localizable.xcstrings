@@ -289,6 +289,30 @@
         }
       }
     },
+    "capture.file.detail" : {
+      "extractionState" : "manual",
+      "comment" : "Capture menu: description under 'Import a file'.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF or image from Files"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF o imagen desde Archivos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF ou image depuis Fichiers"
+          }
+        }
+      }
+    },
     "capture.hint" : {
       "comment" : "VoiceOver hint of the floating + capture button.",
       "extractionState" : "manual",
@@ -361,6 +385,30 @@
         }
       }
     },
+    "capture.manual.detail" : {
+      "extractionState" : "manual",
+      "comment" : "Capture menu: description under 'No receipt' (add an expense by hand).",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type the amount yourself"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escribes tú el importe"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous saisissez le montant"
+          }
+        }
+      }
+    },
     "capture.photo" : {
       "comment" : "Menu item on the + button: import a photo of a receipt.",
       "extractionState" : "manual",
@@ -381,6 +429,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Importer une photo"
+          }
+        }
+      }
+    },
+    "capture.photo.detail" : {
+      "extractionState" : "manual",
+      "comment" : "Capture menu: description under 'Import a photo'.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A receipt from your photos"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un justificante de tus fotos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un justificatif de vos photos"
           }
         }
       }
@@ -453,6 +525,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scanner une facture"
+          }
+        }
+      }
+    },
+    "capture.scan.detail" : {
+      "extractionState" : "manual",
+      "comment" : "Capture menu: description under 'Scan an invoice'.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Camera, with automatic cropping"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con la cámara, recorte automático"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avec l’appareil photo, recadrage auto"
           }
         }
       }

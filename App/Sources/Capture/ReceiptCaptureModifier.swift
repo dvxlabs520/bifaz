@@ -145,16 +145,26 @@ struct CaptureMenuItems: View {
     let choose: (CaptureSource) -> Void
 
     var body: some View {
+        // Each option with a line under it saying what it does (v2 menu).
         if DocumentScanner.isSupported {
             Button { choose(.scanner) } label: {
-                Label { Text("capture.scan") } icon: { BifazIcon.scan.image }
+                Label {
+                    Text("capture.scan")
+                    Text("capture.scan.detail")
+                } icon: { BifazIcon.scan.image }
             }
         }
         Button { choose(.photo) } label: {
-            Label { Text("capture.photo") } icon: { BifazIcon.camera.image }
+            Label {
+                Text("capture.photo")
+                Text("capture.photo.detail")
+            } icon: { BifazIcon.camera.image }
         }
         Button { choose(.pdf) } label: {
-            Label { Text("capture.file") } icon: { BifazIcon.import.image }
+            Label {
+                Text("capture.file")
+                Text("capture.file.detail")
+            } icon: { BifazIcon.import.image }
         }
     }
 }

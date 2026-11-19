@@ -14,6 +14,18 @@ struct CaptureMenuStringsTests {
     /// ("Gasto sin justificante" → "Gasto sin justifican-te").
     static let maxWordWhenWrapping = 9
 
+    @Test("Each item has a description line in en, es and fr (at most 40 characters)", arguments: keys)
+    func detail(key: String) throws {
+        let url = StringCatalogTests.repoRoot.appending(path: "App/Resources/Localizable.xcstrings")
+        let json = try JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [String: Any]
+        let entry = try #require((json?["strings"] as? [String: Any])?["\(key).detail"] as? [String: Any], "\(key).detail is missing")
+        let localizations = try #require(entry["localizations"] as? [String: Any])
+        for language in StringCatalogTests.languages {
+            let value = ((localizations[language] as? [String: Any])?["stringUnit"] as? [String: Any])?["value"] as? String
+            #expect(value.map { !$0.isEmpty && $0.count <= 40 } == true, "\(key).detail [\(language)]: \(value ?? "missing")")
+        }
+    }
+
     @Test("Each menu item exists in en, es and fr, translated and short", arguments: keys)
     func item(key: String) throws {
         let url = StringCatalogTests.repoRoot.appending(path: "App/Resources/Localizable.xcstrings")

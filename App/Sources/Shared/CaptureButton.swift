@@ -18,7 +18,10 @@ struct CaptureButton: View {
             Button {
                 navigation.addExpense(filter: spaceFilter)
             } label: {
-                Label { Text("capture.manual") } icon: { BifazIcon.edit.image }
+                Label {
+                    Text("capture.manual")
+                    Text("capture.manual.detail")
+                } icon: { BifazIcon.edit.image }
             }
             .accessibilityIdentifier("ui.captureManual")
         } label: {
