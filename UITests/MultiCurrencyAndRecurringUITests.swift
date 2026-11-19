@@ -88,6 +88,41 @@ final class MultiCurrencyAndRecurringUITests: XCTestCase {
         XCTAssertTrue(waitForTotal("€9.99", in: app))
     }
 
+    /// v2: the "Repeat" chip of a new expense saves it and creates a monthly rule
+    /// starting next month (so today counts once).
+    @MainActor
+    func testRepeatChipCreatesAMonthlyRule() {
+        let app = launch()
+        app.buttons["ui.captureButton"].tap()
+        let manual = app.buttons["ui.captureManual"]
+        XCTAssertTrue(manual.waitForExistence(timeout: 5))
+        manual.tap()
+        let amount = app.textFields["ui.formAmount"]
+        XCTAssertTrue(amount.waitForExistence(timeout: 5))
+        amount.tap()
+        amount.typeText("15.00")
+        app.buttons["ui.sentence.merchant"].tap()
+        let merchant = app.textFields["ui.formMerchant"]
+        XCTAssertTrue(merchant.waitForExistence(timeout: 5))
+        merchant.tap()
+        merchant.typeText("Gym Club")
+        app.buttons["ui.chip.repeat"].tap()
+        let monthly = app.buttons["ui.repeat.monthly"]
+        XCTAssertTrue(monthly.waitForExistence(timeout: 5), "The repeat chip offers frequencies")
+        monthly.tap()
+        app.buttons["ui.formSave"].tap()
+        XCTAssertTrue(app.buttons["ui.captureButton"].waitForExistence(timeout: 5), "The form closes")
+        XCTAssertTrue(waitForTotal("€15.00", in: app), "Today's expense counts once")
+
+        app.tabBars.buttons["Settings"].tap()
+        let recurring = app.descendants(matching: .any)["ui.settingsRecurring"]
+        XCTAssertTrue(recurring.waitForExistence(timeout: 5))
+        recurring.tap()
+        let row = app.descendants(matching: .any).matching(identifier: "ui.ruleRow")
+            .matching(NSPredicate(format: "label CONTAINS %@", "Gym Club")).firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "The rule is listed")
+    }
+
     @MainActor
     private func waitForTotal(_ text: String, in app: XCUIApplication) -> Bool {
         let header = app.descendants(matching: .any)["ui.summaryHeader"]

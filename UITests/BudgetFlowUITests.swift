@@ -68,6 +68,8 @@ final class BudgetFlowUITests: XCTestCase {
         amountField.tap()
         amountField.typeText(amount)
         if let category {
+            // v2: the category piece of the sentence opens the category chips.
+            app.buttons["ui.sentence.category"].tap()
             let chip = app.buttons[category].firstMatch
             XCTAssertTrue(chip.waitForExistence(timeout: 5), "The category is offered")
             chip.tap()

@@ -90,7 +90,10 @@ final class ExpenseFlowUITests: XCTestCase {
         XCTAssertTrue(amountField.waitForExistence(timeout: 5), "Quick add opens")
         amountField.tap()
         amountField.typeText(amount)
+        // v2: the merchant is a piece of the sentence; it opens its field below.
+        app.buttons["ui.sentence.merchant"].tap()
         let merchantField = app.textFields["ui.formMerchant"]
+        XCTAssertTrue(merchantField.waitForExistence(timeout: 5), "The merchant piece opens its field")
         merchantField.tap()
         merchantField.typeText(merchant)
         app.buttons["ui.formSave"].tap()

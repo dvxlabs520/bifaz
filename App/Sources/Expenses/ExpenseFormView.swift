@@ -6,11 +6,14 @@ import BifazReading
 
 /// Quick add, edit, and confirmation of a read receipt, presented as a sheet.
 ///
-/// The fast path is amount → category → Save: the amount field is focused on
-/// open, the space comes from the current filter, the merchant can prefill
-/// space and category from what Bifaz learned last time. For a captured
-/// receipt the form is prefilled with what was read and shows, per field,
-/// how sure the reader is; nothing is saved until the user confirms.
+/// v2 (phase 5): the expense is one sentence — "I spent €42.00 at Carrefour on
+/// Groceries · Personal · today" — whose pieces open their selector below
+/// (amount keypad and currency, merchant with recent ones, categories, space,
+/// date), with chips for the optional parts (VAT and client/project in Pro,
+/// note, repeat, currency). The selectors are the same sections as before, so
+/// nothing the form did is lost: ECB rates, several VAT rates, tags, proposals.
+/// For a captured receipt the sentence comes prefilled and each selector still
+/// shows how sure the reader is; nothing is saved until the user confirms.
 struct ExpenseFormView: View {
     private let expense: Expense?
     private let capture: CapturedReceipt?
@@ -48,8 +51,42 @@ struct ExpenseFormView: View {
     @State private var baseline: ExpenseDraft?
     @State private var isConfirmingDiscard = false
     @FocusState private var focus: Field?
+    /// The selector shown under the sentence.
+    @State private var panel: Panel = .amount
+    /// "Repeat" chip on a new expense: a rule is created with it when saving.
+    @State private var repeatFrequency: RecurrenceFrequency?
+    @State private var recentMerchants: [String] = []
+    /// A receipt added from the "Receipt" chip (manual or edited expense).
+    @State private var attachedReceipt: CapturedReceipt?
+    @State private var receiptSource: CaptureSource?
 
     private enum Field: Hashable { case amount, merchant, note, secondVAT }
+
+    /// What the area under the sentence shows: a piece's selector or an optional part.
+    private enum Panel: Hashable {
+        case amount, merchant, category, space, date, vat, tags, note, repeating, receipt
+
+        init(_ role: SentencePiece.Role) {
+            switch role {
+            case .amount, .words: self = .amount
+            case .merchant: self = .merchant
+            case .category: self = .category
+            case .space: self = .space
+            case .date: self = .date
+            }
+        }
+
+        var role: SentencePiece.Role? {
+            switch self {
+            case .amount: .amount
+            case .merchant: .merchant
+            case .category: .category
+            case .space: .space
+            case .date: .date
+            default: nil
+            }
+        }
+    }
     private enum ReadField { case amount, merchant, date, vat }
 
     init(editing expense: Expense? = nil, defaultSpace: Space = .personal, onDeleted: @escaping () -> Void = {}) {
@@ -106,7 +143,8 @@ struct ExpenseFormView: View {
     private var amountIsInvalid: Bool { !amountText.isEmpty && MoneyParser.parse(amountText) == nil }
     private var hasChanges: Bool { baseline.map { $0 != draft } ?? false }
     /// A read receipt or unsaved changes would be lost: ask before closing.
-    private var closingLosesWork: Bool { isConfirmingCapture || hasChanges }
+    private var closingLosesWork: Bool { isConfirmingCapture || hasChanges || attachedReceipt != nil }
+    private var hasReceipt: Bool { capture != nil || attachedReceipt != nil || expense?.receipt != nil }
 
     /// "€" as the current locale writes it.
     private static let currencySymbol: String = {
@@ -122,45 +160,16 @@ struct ExpenseFormView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     if let capture { ReadReceiptHeader(capture: capture) }
-                    amountSection
-                    field("form.space") { spacePicker }
-                    field("form.category", proposed: categoryIsProposal && draft.category != nil) { categoryPicker }
-                    if draft.space == .pro {
-                        field("form.tags", proposed: tagsAreProposal && (draft.client != nil || draft.project != nil)) {
-                            HStack(spacing: BifazSpacing.xs) {
-                                TagPicker(kind: .client, selection: $draft.client)
-                                TagPicker(kind: .project, selection: $draft.project)
-                            }
-                        }
-                    }
-                    field("form.merchant", read: .merchant) { merchantField }
-                    field("form.date", read: .date) {
-                        DatePicker(selection: $draft.date, displayedComponents: .date) {
-                            Text("form.date")
-                        }
-                        .labelsHidden()
-                        .tint(.bifazInk)
-                    }
-                    if showsVAT {
-                        field("form.vat", read: .vat) { vatPicker }
-                    } else if isVATRegistered, draft.space == .pro, draft.isForeignCurrency {
-                        Button {
-                            showsForeignVAT = true
-                        } label: {
-                            Label { Text("form.currency.addVAT") } icon: { BifazIconView(.plus, size: 16) }
-                                .font(.bifazCaption)
-                                .foregroundStyle(.bifazInk)
-                        }
-                        .buttonStyle(.plain)
-                        .padding(.bottom, BifazSpacing.l)
-                    }
-                    field("form.note", divider: false) {
-                        TextField("form.note.placeholder", text: $draft.note, axis: .vertical)
-                            .font(.bifazBody)
-                            .lineLimit(1...4)
-                            .focused($focus, equals: .note)
-                            .id(Field.note)
-                    }
+                    SentenceView(pieces: sentencePieces, focused: panel.role) { role in open(Panel(role)) }
+                        .padding(.top, BifazSpacing.l)
+                        .accessibilityIdentifier("ui.sentence")
+                    optionalChips
+                        .padding(.top, BifazSpacing.l)
+                    HairlineDivider()
+                        .padding(.top, BifazSpacing.l)
+                    panelContent
+                        .padding(.top, BifazSpacing.l)
+                        .animation(reduceMotion ? nil : .snappy(duration: 0.2), value: panel)
                     if isEditing {
                         Button(role: .destructive) {
                             isConfirmingDelete = true
@@ -232,6 +241,7 @@ struct ExpenseFormView: View {
                 if isConfirmingCapture, draft.category == nil { proposeCategory() }
             }
             .onAppear {
+                recentMerchants = MerchantMemory.recentMerchants(in: context)
                 if draft.isForeignCurrency, draft.exchangeRate == nil { lookUpRate() }
                 if isEditing, draft.isForeignCurrency, draft.vatRate != nil || draft.fixedVATLines != nil { showsForeignVAT = true }
                 if isConfirmingCapture {
@@ -244,6 +254,7 @@ struct ExpenseFormView: View {
                 }
                 if baseline == nil { baseline = draft }
             }
+            .receiptCapture(source: $receiptSource) { captured in attach(captured) }
             .interactiveDismissDisabled(closingLosesWork)
             .confirmationDialog(
                 isConfirmingCapture ? "form.discard.receipt.title" : "form.discard.changes.title",
@@ -268,6 +279,167 @@ struct ExpenseFormView: View {
                 Text("form.error.message")
             }
             .sensoryFeedback(.success, trigger: savedCount)
+        }
+    }
+
+    // MARK: Sentence
+
+    private var sentencePieces: [SentencePiece] {
+        ExpenseSentence.pieces(ExpenseSentenceInput(
+            amount: draft.amount, currencyCode: draft.currencyCode, merchant: draft.merchant,
+            categoryName: draft.category?.displayName, space: draft.space, date: draft.date
+        ))
+    }
+
+    private func open(_ newPanel: Panel) {
+        panel = newPanel
+        switch newPanel {
+        case .amount: focus = .amount
+        case .merchant: focus = .merchant
+        case .note: focus = .note
+        default: focus = nil
+        }
+    }
+
+    /// Optional parts, as chips under the sentence; each opens its selector.
+    private var optionalChips: some View {
+        FlowLayout(spacing: BifazSpacing.xs, lineSpacing: BifazSpacing.xs) {
+            if isVATRegistered, draft.space == .pro {
+                OptionalChip("form.chip.vat", icon: .percent, value: vatChipValue) {
+                    if draft.isForeignCurrency { showsForeignVAT = true }
+                    open(.vat)
+                }
+                .accessibilityIdentifier("ui.chip.vat")
+            }
+            if draft.space == .pro {
+                OptionalChip("form.chip.tags", icon: .services, value: tagsChipValue) { open(.tags) }
+                    .accessibilityIdentifier("ui.chip.tags")
+            }
+            OptionalChip("form.chip.note", icon: .note, value: draft.note.isEmpty ? nil : draft.note) { open(.note) }
+                .accessibilityIdentifier("ui.chip.note")
+            if !isEditing, !draft.isForeignCurrency {
+                OptionalChip("form.chip.repeat", icon: .calendar,
+                             value: repeatFrequency.map { String(localized: $0.title) }) { open(.repeating) }
+                    .accessibilityIdentifier("ui.chip.repeat")
+            }
+            OptionalChip("form.chip.receipt", icon: .receipt,
+                         value: hasReceipt ? String(localized: "form.chip.receipt.attached") : nil) { open(.receipt) }
+                .accessibilityIdentifier("ui.chip.receipt")
+            OptionalChip("form.chip.currency", icon: .bankFees,
+                         value: draft.isForeignCurrency ? draft.currencyCode : nil) { open(.amount) }
+                .accessibilityIdentifier("ui.chip.currency")
+        }
+    }
+
+    private var vatChipValue: String? {
+        guard showsVAT, let vat = draft.vatAmount else { return nil }
+        let lines = draft.vatLines
+        if lines.count == 1, let rate = lines.first?.frenchRate { return rate.percentText }
+        return vat.formatted(.currency(code: draft.currencyCode))
+    }
+
+    private var tagsChipValue: String? {
+        let names = [draft.client?.name, draft.project?.name].compactMap { $0 }
+        return names.isEmpty ? nil : names.joined(separator: ", ")
+    }
+
+    @ViewBuilder
+    private var panelContent: some View {
+        switch panel {
+        case .amount:
+            amountSection
+        case .merchant:
+            field("form.merchant", read: .merchant, divider: false) { merchantField }
+        case .category:
+            field("form.category", proposed: categoryIsProposal && draft.category != nil, divider: false) { categoryPicker }
+        case .space:
+            field("form.space", divider: false) { spacePicker }
+        case .date:
+            field("form.date", read: .date, divider: false) {
+                DatePicker(selection: $draft.date, displayedComponents: .date) {
+                    Text("form.date")
+                }
+                .datePickerStyle(.graphical)
+                .labelsHidden()
+                .tint(.bifazInk)
+            }
+        case .vat:
+            if showsVAT {
+                field("form.vat", read: .vat, divider: false) { vatPicker }
+            } else {
+                Text("form.chip.vat.unavailable")
+                    .font(.bifazCaption)
+                    .foregroundStyle(.bifazInkSecondary)
+            }
+        case .tags:
+            field("form.tags", proposed: tagsAreProposal && (draft.client != nil || draft.project != nil), divider: false) {
+                HStack(spacing: BifazSpacing.xs) {
+                    TagPicker(kind: .client, selection: $draft.client)
+                    TagPicker(kind: .project, selection: $draft.project)
+                }
+            }
+        case .note:
+            field("form.note", divider: false) {
+                TextField("form.note.placeholder", text: $draft.note, axis: .vertical)
+                    .font(.bifazBody)
+                    .lineLimit(1...4)
+                    .focused($focus, equals: .note)
+                    .id(Field.note)
+                    .accessibilityIdentifier("ui.formNote")
+            }
+        case .repeating:
+            field("form.chip.repeat", divider: false) { repeatPicker }
+        case .receipt:
+            field("form.chip.receipt", divider: false) { receiptPanel }
+        }
+    }
+
+    /// The receipt: the one read or added here, or the capture choices to add one.
+    @ViewBuilder
+    private var receiptPanel: some View {
+        if let receipt = capture ?? attachedReceipt {
+            HStack(spacing: BifazSpacing.m) {
+                ReceiptThumbnail(
+                    image: receipt.thumbnailData.flatMap(UIImage.init(data:)).map(Image.init(uiImage:)),
+                    state: .attached,
+                    side: 56
+                )
+                Text("form.chip.receipt.attached")
+                    .font(.bifazBody)
+                    .foregroundStyle(.bifazInk)
+                Spacer()
+                if attachedReceipt != nil {
+                    Button("form.receipt.remove") { attachedReceipt = nil }
+                        .font(.bifazCaption)
+                        .foregroundStyle(.bifazInk)
+                        .buttonStyle(.plain)
+                }
+            }
+        } else if expense?.receipt != nil {
+            Text("form.receipt.inDetail")
+                .font(.bifazCaption)
+                .foregroundStyle(.bifazInkSecondary)
+        } else {
+            VStack(alignment: .leading, spacing: BifazSpacing.s) {
+                CaptureMenuItems { receiptSource = $0 }
+                    .buttonStyle(.bifazSecondary)
+            }
+        }
+    }
+
+    /// "Repeat" on a new expense: none, or a frequency (a rule is created on save, starting next period).
+    private var repeatPicker: some View {
+        VStack(alignment: .leading, spacing: BifazSpacing.s) {
+            FlowLayout(spacing: BifazSpacing.xs, lineSpacing: BifazSpacing.xs) {
+                FilterChip("form.repeat.none", isSelected: repeatFrequency == nil) { repeatFrequency = nil }
+                ForEach(RecurrenceFrequency.allCases, id: \.self) { frequency in
+                    FilterChip(frequency.title, isSelected: repeatFrequency == frequency) { repeatFrequency = frequency }
+                        .accessibilityIdentifier("ui.repeat.\(frequency.rawValue)")
+                }
+            }
+            Text("form.repeat.caption")
+                .font(.bifazCaption)
+                .foregroundStyle(.bifazInkSecondary)
         }
     }
 
@@ -303,7 +475,6 @@ struct ExpenseFormView: View {
                     .padding(.top, BifazSpacing.xs)
             }
         }
-        .padding(.top, BifazSpacing.l)
         .padding(.bottom, BifazSpacing.l)
     }
 
@@ -348,7 +519,27 @@ struct ExpenseFormView: View {
                     merchantSuggestions = MerchantMemory.merchants(matching: text, in: context)
                         .filter { $0 != text }
                 }
-                .onSubmit { applyMemory(for: draft.merchant) }
+                .onSubmit {
+                    applyMemory(for: draft.merchant)
+                    if draft.category == nil { open(.category) }
+                }
+            if draft.merchant.isEmpty, !recentMerchants.isEmpty {
+                // Recent merchants, one tap away (they also bring back space and category).
+                Text("form.merchant.recent")
+                    .bifazDataLabel()
+                    .padding(.top, BifazSpacing.m)
+                FlowLayout(spacing: BifazSpacing.xs, lineSpacing: BifazSpacing.xs) {
+                    ForEach(recentMerchants, id: \.self) { name in
+                        FilterChip(LocalizedStringResource(stringLiteral: name), isSelected: false) {
+                            draft.merchant = name
+                            applyMemory(for: name)
+                            focus = nil
+                            if draft.category == nil { open(.category) }
+                        }
+                    }
+                }
+                .padding(.top, BifazSpacing.xs)
+            }
             if focus == .merchant {
                 ForEach(merchantSuggestions, id: \.self) { name in
                     Button {
@@ -498,7 +689,7 @@ struct ExpenseFormView: View {
         @ViewBuilder content: () -> some View
     ) -> some View {
         VStack(alignment: .leading, spacing: BifazSpacing.s) {
-            HairlineDivider()
+            if divider { HairlineDivider() }
             HStack(spacing: BifazSpacing.xs) {
                 Text(label)
                     .font(.bifazCaption)
@@ -597,7 +788,19 @@ struct ExpenseFormView: View {
         do {
             if let expense {
                 try ExpenseService.update(expense, with: draft, in: context)
-            } else if let capture {
+                if let attachedReceipt, let receiptStore {
+                    let stored = try StoredReceiptFiles.store(
+                        fileData: attachedReceipt.fileData,
+                        fileExtension: attachedReceipt.fileExtension,
+                        typeIdentifier: attachedReceipt.typeIdentifier,
+                        thumbnailData: attachedReceipt.thumbnailData,
+                        recognizedText: attachedReceipt.reading.recognizedText,
+                        in: receiptStore
+                    )
+                    storedFiles = stored
+                    try ExpenseService.attachReceipt(stored, to: expense, in: context, store: receiptStore)
+                }
+            } else if let capture = capture ?? attachedReceipt {
                 if let receiptStore {
                     storedFiles = try StoredReceiptFiles.store(
                         fileData: capture.fileData,
@@ -611,6 +814,11 @@ struct ExpenseFormView: View {
                 try ExpenseService.create(from: draft, receipt: storedFiles, in: context)
             } else {
                 try ExpenseService.create(from: draft, in: context)
+            }
+            if let repeatFrequency, !isEditing, !draft.isForeignCurrency {
+                // Starts next period: today's expense is the one just saved.
+                try RecurringService.create(RecurringRuleEditorView.template(repeating: draft, frequency: repeatFrequency), in: context)
+                Task { await NotificationScheduler.shared.reschedule(in: context) }
             }
             savedCount += 1
             if let category = draft.category,
@@ -628,6 +836,20 @@ struct ExpenseFormView: View {
             }
             Log.app.error("Saving expense failed: \(String(describing: type(of: error)), privacy: .public)")
             saveError = error
+        }
+    }
+
+    /// A receipt added from the chip: kept until saving; it fills the amount and
+    /// the merchant only when they are still empty (what the user typed stays).
+    private func attach(_ captured: CapturedReceipt) {
+        attachedReceipt = captured
+        let fields = captured.reading.fields
+        if amountText.isEmpty, let total = fields.total?.value, fields.currencyCode == draft.currencyCode {
+            amountText = total.formatted(Self.amountInputStyle)
+        }
+        if draft.merchant.isEmpty, let merchant = fields.merchant?.value {
+            draft.merchant = merchant
+            applyMemory(for: merchant)
         }
     }
 
