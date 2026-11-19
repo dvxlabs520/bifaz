@@ -1,36 +1,60 @@
 import XCTest
 
 /// Automatic accessibility audit (`performAccessibilityAudit`) on the main screens,
-/// with the debug sample data, in French (the longest strings). Known false
-/// positives are excluded explicitly below and explained in docs/fase-4-notas.md.
+/// with the debug sample data, in French (the longest strings). Each screen is reached
+/// the same way on every iPhone size (launch argument or a button always on screen)
+/// and checked by an identifier before the audit. Known false positives are excluded
+/// explicitly below and explained in docs/fase-4-notas.md.
 final class AccessibilityAuditUITests: XCTestCase {
     override func setUp() {
-        continueAfterFailure = true
+        continueAfterFailure = false
     }
 
     @MainActor
-    private func launch() -> XCUIApplication {
+    private func launch(tab: String = "summary", route: String? = nil) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = [
             "-BifazUITesting", "YES",
             "-BifazSampleData", "YES",
-            "-BifazInitialTab", "summary",
+            "-BifazInitialTab", tab,
             "-AppleLanguages", "(fr)",
             "-AppleLocale", "fr_FR",
             "-spaceFilter", "all",
         ]
+        if let route { app.launchArguments += ["-BifazInitialRoute", route] }
         app.launch()
         return app
     }
 
-    /// Audits the current screen; prints every issue, fails on the ones not excluded.
+    /// Waits for the screen's own element, lets transitions settle, then audits.
     @MainActor
-    private func audit(_ screen: String, in app: XCUIApplication) throws {
+    private func audit(_ screen: String, in app: XCUIApplication, expecting marker: XCUIElement) throws {
+        XCTAssertTrue(marker.waitForExistence(timeout: 10), "\(screen) is on screen before the audit")
+        // Mid-transition (tab cross-fade, search bar settling) the audit measures
+        // half-faded text: wait until the screen has stopped moving.
+        waitUntilStill(marker)
+        let search = app.searchFields.firstMatch
+        if search.exists { waitUntilStill(search) }
+        sleep(1)
         let screenFrame = app.windows.firstMatch.frame
         try app.performAccessibilityAudit { issue in
             let excluded = Self.isKnownFalsePositive(issue, screen: screenFrame)
             print("BIFAZ-AUDIT [\(screen)] \(excluded ? "excluded" : "ISSUE") \(issue.auditType) · \(issue.compactDescription) · \(issue.element?.debugDescription.prefix(160) ?? "-")")
             return excluded
+        }
+    }
+
+    /// Waits until the element's frame has not changed for a second (10 s at most).
+    @MainActor
+    private func waitUntilStill(_ element: XCUIElement) {
+        var last = element.frame
+        var still = 0
+        for _ in 0..<40 {
+            usleep(250_000)
+            let frame = element.frame
+            still = frame == last ? still + 1 : 0
+            last = frame
+            if still >= 4 { return }
         }
     }
 
@@ -69,44 +93,37 @@ final class AccessibilityAuditUITests: XCTestCase {
     }
 
     @MainActor
-    func testMainScreensPassTheAccessibilityAudit() throws {
+    func testSummary() throws {
         let app = launch()
-        XCTAssertTrue(app.descendants(matching: .any)["ui.summaryHeader"].waitForExistence(timeout: 10))
-        sleep(2)
-        try audit("Résumé", in: app)
+        try audit("Résumé", in: app, expecting: app.descendants(matching: .any)["ui.summaryHeader"])
+    }
 
-        app.tabBars.buttons["Dépenses"].tap()
-        // Let the tab cross-fade and the search bar settle: mid-transition the audit
-        // measures half-faded text.
-        XCTAssertTrue(app.staticTexts["Novembre 2026"].firstMatch.waitForExistence(timeout: 5) || true)
-        sleep(3)
-        try audit("Dépenses", in: app)
+    @MainActor
+    func testExpenses() throws {
+        let app = launch(tab: "expenses")
+        try audit("Dépenses", in: app, expecting: app.navigationBars["Dépenses"])
+    }
 
-        let row = app.descendants(matching: .any)
-            .matching(NSPredicate(format: "label CONTAINS %@ AND (elementType == %d OR elementType == %d)", "Monoprix",
-                                  XCUIElement.ElementType.cell.rawValue, XCUIElement.ElementType.button.rawValue))
-            .firstMatch
-        XCTAssertTrue(row.waitForExistence(timeout: 5))
-        row.tap()
-        XCTAssertTrue(app.buttons["ui.detailEdit"].waitForExistence(timeout: 5))
-        try audit("Détail", in: app)
+    @MainActor
+    func testDetailAndForm() throws {
+        let app = launch(route: "expense:Monoprix")
+        let edit = app.buttons["ui.detailEdit"]
+        try audit("Détail", in: app, expecting: edit)
+        edit.tap()
+        try audit("Formulaire", in: app, expecting: app.buttons["ui.formSave"])
+    }
 
-        app.buttons["ui.detailEdit"].tap()
-        XCTAssertTrue(app.buttons["ui.formSave"].waitForExistence(timeout: 5))
-        sleep(1)
-        try audit("Formulaire", in: app)
-        app.buttons["ui.formClose"].tap()
+    @MainActor
+    func testBudgets() throws {
+        let app = launch(route: "budgets")
+        XCTAssertTrue(app.navigationBars["Budgets"].waitForExistence(timeout: 10), "The budgets screen is open")
+        try audit("Budgets", in: app, expecting: app.buttons["ui.budgetAdd"])
+    }
 
-        app.tabBars.buttons["Résumé"].tap()
-        let manage = app.descendants(matching: .any)["ui.budgetsManage"]
-        var swipes = 0
-        while !(manage.exists && manage.isHittable), swipes < 6 { app.swipeUp(); swipes += 1 }
-        manage.tap()
-        XCTAssertTrue(app.buttons["ui.budgetAdd"].waitForExistence(timeout: 5))
-        try audit("Budgets", in: app)
-
-        app.tabBars.buttons["Réglages"].tap()
-        sleep(3)
-        try audit("Réglages", in: app)
+    @MainActor
+    func testSettings() throws {
+        let app = launch(tab: "settings")
+        XCTAssertTrue(app.navigationBars["Réglages"].waitForExistence(timeout: 10))
+        try audit("Réglages", in: app, expecting: app.descendants(matching: .any)["ui.settingsRecurring"])
     }
 }

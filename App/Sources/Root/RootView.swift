@@ -52,6 +52,9 @@ struct RootView: View {
         .task {
             NotificationScheduler.shared.install()
             NotificationScheduler.shared.onRoute = { route in open(route) }
+            #if DEBUG
+            openInitialRoute()
+            #endif
             await runMaintenance()
         }
         .onChange(of: navigation.selectedTab) { navigation.isCaptureButtonHidden = false }
@@ -91,6 +94,26 @@ struct RootView: View {
         }
         return alerts
     }
+
+    #if DEBUG
+    /// `-BifazInitialRoute budgets` or `expense:<merchant>` (Debug only): opens that
+    /// screen at launch, so UI tests reach it without scrolling or screen-size luck.
+    private func openInitialRoute() {
+        guard let raw = UserDefaults.standard.string(forKey: "BifazInitialRoute") else { return }
+        navigation.selectedTab = .summary
+        if raw == "budgets" {
+            navigation.summaryPath.append(SummaryRoute.budgets)
+        } else if raw.hasPrefix("expense:") {
+            let merchant = String(raw.dropFirst("expense:".count))
+            var descriptor = FetchDescriptor<Expense>(predicate: #Predicate { $0.merchant == merchant },
+                                                      sortBy: [SortDescriptor(\.date, order: .reverse)])
+            descriptor.fetchLimit = 1
+            if let expense = try? context.fetch(descriptor).first {
+                navigation.summaryPath.append(expense.persistentModelID)
+            }
+        }
+    }
+    #endif
 
     /// Where a tapped notification leads.
     private func open(_ route: ReminderRoute) {
